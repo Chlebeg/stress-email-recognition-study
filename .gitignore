@@ -1,0 +1,4 @@
+.meta
+backend/node_modules
+backend/data/sessions
+frontend/node_modules

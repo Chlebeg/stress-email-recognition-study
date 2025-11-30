@@ -1,0 +1,1868 @@
+body { font-family: Arial, Helvetica, sans-serif; background:#f4f6f8; color:#222; margin:0; padding:0; font-size: 1rem; }
+.app { max-width: 56.25rem; margin: 1.5rem auto; }
+.header { background:#fff; padding:0.75rem 1.125rem; border-radius:0.5rem; box-shadow:0 0.125rem 0.375rem rgba(0,0,0,0.06); }
+.header h1 { margin:0; font-size:1.125rem; }
+.small { font-size:0.75rem; color:#666; margin-top:0.375rem; }
+.card { background:#fff; padding:1.125rem; margin-top:1rem; border-radius:0.5rem; box-shadow:0 0.125rem 0.375rem rgba(0,0,0,0.04); }
+.question { margin:0.75rem 0; }
+.options { display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap; }
+button { padding:0.5rem 0.75rem; border-radius:0.375rem; border:0.0625rem solid #ccc; background:#fff; cursor:pointer; }
+button:hover { box-shadow:0 0.0625rem 0.1875rem rgba(0,0,0,0.08); }
+button:disabled { opacity:0.5; cursor:not-allowed; }
+.selected { background:#0077ff; color:white; border-color:#0066dd; }
+.nav { margin-top:0.75rem; display:flex; gap:0.5rem; }
+.muted { color:#666; margin-top:0.5rem; font-size:0.8125rem; }
+.task { margin-top:0.625rem; }
+.task-subject { margin-top:0.5rem; background:#fafafa; padding:0.5rem; border-radius:0.375rem; }
+.timer-box { margin-top:0.75rem; font-weight:bold; }
+.timeout-modal { margin-top:0.75rem; padding:0.75rem; border-radius:0.5rem; background:#fff3f3; border:0.0625rem solid #ffcccc; }
+
+/* Intro pages */
+.card { background:#fff; padding:1.125rem; margin-top:1rem; border-radius:0.5rem; box-shadow:0 0.125rem 0.375rem rgba(0,0,0,0.04); }
+.intro-content { margin:0.75rem 0; line-height:1.6; }
+.intro-content p { margin:0.5rem 0; }
+.intro-content strong { color:#667eea; font-weight: 600; }
+
+/* Styled intro pages with header */
+.card .intro-header {
+  padding-bottom: 0.75rem;
+  border-bottom: 0.0625rem solid #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.card .intro-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Instruction box for CISS */
+.instruction { background:#e7f3ff; padding:0.75rem; border-left:0.25rem solid #0077ff; border-radius:0.25rem; margin-bottom:0.75rem; }
+.instruction p { margin:0.375rem 0; font-size:0.875rem; }
+.scale-info { font-size:0.75rem; color:#666; font-style:italic; }
+
+/* Progress counter */
+.progress-info { margin:0.5rem 0; font-size:0.8125rem; color:#666; }
+.progress-info strong { color:#0077ff; }
+
+/* Error message */
+.error-message { background:#ffebee; color:#c62828; padding:0.625rem; border-left:0.25rem solid #c62828; border-radius:0.25rem; margin:0.5rem 0; font-size:0.8125rem; }
+
+/* Single-page CISS questions container */
+.questions-container { max-height:37.5rem; overflow-y:auto; border:0.0625rem solid #ddd; border-radius:0.375rem; padding:0; margin:0.75rem 0; background:#fafafa; }
+.questions-container::-webkit-scrollbar { width:0.5rem; }
+.questions-container::-webkit-scrollbar-track { background:#f1f1f1; }
+.questions-container::-webkit-scrollbar-thumb { background:#888; border-radius:0.25rem; }
+.questions-container::-webkit-scrollbar-thumb:hover { background:#555; }
+
+/* Question block styling */
+.question-block { padding:0.625rem; border-bottom:0.0625rem solid #eee; border-left:0.1875rem solid #ffc107; background:white; margin:0; }
+.question-block:last-child { border-bottom:none; }
+.question-block.answered { border-left-color:#28a745; background:#f8fff9; }
+.question-block.unanswered { border-left-color:#ffc107; background:white; }
+
+/* Question header */
+.question-header { margin-bottom:0.375rem; font-size:0.875rem; }
+.question-header strong { color:#222; }
+
+/* Radio options styling */
+.options-radio { display:flex; flex-direction:column; gap:0.25rem; margin-top:0.25rem; }
+.option-label { display:flex; align-items:center; gap:0.375rem; cursor:pointer; padding:0.2rem; border-radius:0.25rem; }
+.option-label:hover { background:#f0f0f0; }
+.option-label input[type="radio"] { cursor:pointer; margin:0; }
+.option-label span { font-size:0.8125rem; }
+
+/* Submit button special styling */
+.submit-btn { background:#28a745; color:white; border-color:#28a745; font-weight:bold; }
+.submit-btn:hover:not(:disabled) { background:#218838; border-color:#1e7e34; box-shadow:0 0.125rem 0.25rem rgba(0,0,0,0.1); }
+
+/* Footer */
+.footer { margin-top:1.5rem; padding:0.75rem; text-align:center; font-size:0.75rem; color:#666; }
+.footer a { color:#0077ff; text-decoration:none; }
+.footer a:hover { text-decoration:underline; }
+
+/* LOGIN PAGE STYLING */
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.login-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.15);
+  max-width: 37.5rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.login-header {
+  background: linear-gradient(135deg, #8b9fff 0%, #9d7bc4 100%);
+  color: white;
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.login-header h1 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+.login-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+.login-form {
+  padding: 2.5rem;
+}
+
+.form-section h2 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.375rem;
+  color: #222;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.875rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 0.125rem solid #e0e0e0;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.1875rem rgba(102, 126, 234, 0.1);
+}
+
+.form-help {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.form-error {
+  background: #ffebee;
+  color: #c62828;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-left: 0.25rem solid #c62828;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.625rem 1.25rem rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-large {
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+}
+
+.login-info {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 0.0625rem solid #e0e0e0;
+}
+
+.info-box {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border-left: 0.25rem solid #667eea;
+}
+
+.info-box h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.info-box ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: none;
+}
+
+.info-box li {
+  margin-bottom: 0.625rem;
+  font-size: 0.8125rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.info-box li strong {
+  color: #667eea;
+}
+
+.info-note {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.login-footer {
+  background: #f8f9fa;
+  padding: 1rem 2.5rem;
+  text-align: center;
+  border-top: 0.0625rem solid #e0e0e0;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+/* SUMMARY PAGE STYLING */
+.summary-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 2.5rem 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.15);
+  max-width: 37.5rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.summary-header {
+  background: linear-gradient(135deg, #8b9fff 0%, #9d7bc4 100%);
+  color: white;
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.summary-header h2 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.625rem;
+  font-weight: bold;
+}
+
+.summary-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.95;
+}
+
+.summary-content {
+  padding: 2.5rem;
+}
+
+.summary-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 0.125rem solid #e0e0e0;
+}
+
+.progress-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.progress-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+  flex-shrink: 0;
+  font-size: 1.125rem;
+}
+
+.progress-item.completed .progress-number {
+  background: #667eea;
+  color: white;
+}
+
+.progress-item.active .progress-number {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.progress-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 0.125rem;
+}
+
+.progress-text strong {
+  color: #333;
+  font-size: 0.875rem;
+}
+
+.progress-text span {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.summary-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.stress-scale {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.stress-button {
+  padding: 0.75rem;
+  border: 0.125rem solid #e0e0e0;
+  border-radius: 0.375rem;
+  background: white;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.stress-button:hover {
+  border-color: #667eea;
+  background: #f0f3ff;
+}
+
+.stress-button.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #999;
+  margin-bottom: 1.5rem;
+}
+
+.summary-note {
+  background: #f0f3ff;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  border-left: 0.25rem solid #667eea;
+  margin-top: 1.5rem;
+}
+
+.summary-note p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ============================================================================= */
+/* Unified Container Styles - used across all content pages */
+/* ============================================================================= */
+
+.page-container {
+  max-width: 56.25rem;
+  margin: 1rem auto;
+  padding: 0.75rem;
+}
+
+.page-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================================================= */
+/* Intro Pages - with gradient background */
+/* ============================================================================= */
+
+.intro-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.intro-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.15);
+  max-width: 37.5rem;
+  width: 100%;
+  padding: 1rem 1rem;
+  overflow: auto;
+  max-height: calc(100vh - 1rem);
+  box-sizing: border-box;
+}
+
+.intro-header {
+  padding-bottom: 0.5rem;
+  border-bottom: 0.125rem solid #f0f0f0;
+  margin-bottom: 0.75rem;
+}
+
+.intro-header h2 {
+  margin: 0;
+  font-size: 1.375rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.intro-content {
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+.intro-content p {
+  margin: 0.35rem 0;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.intro-content strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.intro-card .nav {
+  display: flex;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.intro-card .nav button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8125rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.intro-card .nav button:hover {
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.625rem 1.25rem rgba(102, 126, 234, 0.3);
+}
+
+/* ============================================================================= */
+/* Content Pages - CISS, Phishing, End */
+/* ============================================================================= */
+
+.page-container .content-header {
+  padding: 1rem 1rem 0.75rem 1rem;
+  border-bottom: 0.125rem solid #f0f0f0;
+}
+
+.page-container .content-header h2 {
+  margin: 0;
+  font-size: 1.375rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.page-container .content-body {
+  padding: 1rem;
+}
+
+/* CISS specific styling */
+.page-card .instruction {
+  background: #e7f3ff;
+  padding: 0.5rem;
+  border-left: 0.25rem solid #667eea;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-card .instruction p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+.page-card .progress-info {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+.page-card .error-message {
+  margin: 0 0 0.75rem 0;
+  background: #ffebee;
+  color: #c62828;
+  padding: 0.625rem;
+  border-left: 0.25rem solid #c62828;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+.questions-full-page {
+  padding: 0;
+  margin: 0;
+}
+
+.questions-full-page::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.questions-full-page::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.questions-full-page::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 0.25rem;
+}
+
+.questions-full-page::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.ciss-submit {
+  padding: 1rem 0 0 0;
+  margin-top: 0.75rem;
+  border-top: 0.0625rem solid #eee;
+}
+
+/* Phishing specific styling */
+.task-progress {
+  font-size: 0.8125rem;
+  color: #999;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* End page specific styling */
+.end-content {
+  text-align: center;
+  padding: 0.75rem 0;
+}
+
+.end-content p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+  margin: 0.5rem 0;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #999;
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+.end-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.btn-secondary {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.625rem 1.25rem rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* ============================================================================= */
+/* RESPONSIVE DESIGN - Mobile and Tablet Breakpoints */
+/* ============================================================================= */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 64rem) {
+  .app {
+    max-width: 95%;
+    margin: 1rem auto;
+  }
+
+  .page-container {
+    max-width: 100%;
+    margin: 1rem auto;
+    padding: 0.75rem;
+  }
+
+  .page-card {
+    border-radius: 0.625rem;
+  }
+
+  .page-container .content-header {
+    padding: 1.25rem 1.25rem 0.75rem 1.25rem;
+  }
+
+  .page-container .content-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .page-container .content-body {
+    padding: 1.25rem;
+  }
+
+  .intro-card {
+    padding: 2rem 1.5rem;
+    max-width: 90%;
+  }
+
+  .login-card {
+    padding: 2rem 1.5rem;
+    max-width: 90%;
+  }
+
+  .summary-card {
+    padding: 2rem 1.5rem;
+    max-width: 90%;
+  }
+
+  .question-block {
+    padding: 0.625rem;
+  }
+
+  .option-label {
+    font-size: 0.8125rem;
+  }
+
+  button {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .intro-card .nav button,
+  .login-card .nav button,
+  .summary-card .nav button,
+  .btn-secondary {
+    padding: 0.6875rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Mobile (480px - 768px) */
+@media (max-width: 48rem) {
+  body {
+    background: #f8f9fa;
+  }
+
+  .app {
+    max-width: 100%;
+    margin: 0.375rem auto;
+    padding: 0;
+  }
+
+  .header {
+    padding: 0.625rem 0.75rem;
+    margin: 0.375rem 0.375rem 0 0.375rem;
+    border-radius: 0.375rem;
+  }
+
+  .header h1 {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .small {
+    font-size: 0.625rem;
+    margin-top: 0.125rem;
+  }
+
+  .main {
+    padding: 0;
+  }
+
+  /* ========== Container Adjustments ========== */
+
+  .page-container {
+    max-width: 100%;
+    margin: 0.375rem auto;
+    padding: 0.5rem;
+  }
+
+  .page-card {
+    border-radius: 0.375rem;
+    box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.1);
+  }
+
+  .page-container .content-header {
+    padding: 0.75rem;
+    border-bottom: 0.125rem solid #f0f0f0;
+  }
+
+  .page-container .content-header h2 {
+    font-size: 1.125rem;
+    margin: 0;
+  }
+
+  .page-container .content-body {
+    padding: 0.75rem;
+  }
+
+  /* ========== Form Pages (Login, Summary) ========== */
+
+  .login-container,
+  .summary-container {
+    min-height: 100vh;
+    padding: 0.5rem;
+  }
+
+  .login-card,
+  .summary-card {
+    max-width: 100%;
+    padding: 1.25rem 1rem;
+    border-radius: 0.375rem;
+  }
+
+  .login-header h2,
+  .summary-header h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .summary-subtitle {
+    font-size: 0.75rem;
+    margin: 0;
+  }
+
+  /* ========== Intro Pages ========== */
+
+  .intro-container {
+    min-height: 100vh;
+    padding: 0.5rem;
+  }
+
+  .intro-card {
+    max-width: 100%;
+    padding: 1.25rem 1rem;
+    border-radius: 0.375rem;
+  }
+
+  .intro-header h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .intro-content {
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+  }
+
+  .intro-content p {
+    margin: 0.375rem 0;
+    font-size: 0.875rem;
+  }
+
+  /* ========== CISS Page ========== */
+
+  .page-card .instruction {
+    padding: 0.625rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .page-card .instruction p {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    margin: 0.25rem 0;
+  }
+
+  .question-block {
+    padding: 0.5rem;
+    border-left-width: 0.1875rem;
+    margin: 0;
+  }
+
+  .question-header {
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+  }
+
+  .options-radio {
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  .option-label {
+    gap: 0.25rem;
+    padding: 0.125rem;
+    font-size: 0.8125rem;
+    margin: 0.125rem 0;
+  }
+
+  .option-label input[type="radio"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* ========== Phishing Page ========== */
+
+  .task-subject {
+    padding: 0.375rem;
+    font-size: 0.8125rem;
+    margin-top: 0.375rem;
+  }
+
+  .task-body {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    padding: 0.375rem 0;
+    margin-top: 0.375rem;
+  }
+
+  .task-progress {
+    font-size: 0.6875rem;
+    margin-top: 0.25rem;
+    color: #999;
+  }
+
+  .timer-box {
+    font-size: 0.8125rem;
+    font-weight: bold;
+    color: #d9534f;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0;
+  }
+
+  .timeout-modal {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  .timeout-message {
+    font-size: 0.75rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .answers {
+    display: flex;
+    gap: 0.375rem;
+    margin-top: 0.625rem;
+    flex-wrap: wrap;
+  }
+
+  .answers button {
+    flex: 1;
+    min-width: 4.0625rem;
+    padding: 0.5625rem 0.375rem;
+    font-size: 0.75rem;
+  }
+
+  /* ========== End Page ========== */
+
+  .end-content {
+    padding: 0.75rem 0;
+  }
+
+  .end-content p {
+    font-size: 0.875rem;
+    margin: 0.5rem 0;
+    line-height: 1.4;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  /* ========== Button Styling ========== */
+
+  button {
+    padding: 0.5625rem 0.75rem;
+    font-size: 0.8125rem;
+    border-radius: 0.3125rem;
+    min-width: 3.75rem;
+    min-height: 2.5rem;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:active {
+    transform: scale(0.98);
+  }
+
+  .nav {
+    margin-top: 0.625rem;
+    display: flex;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+  }
+
+  .nav button {
+    flex: 1;
+    min-width: 5.3125rem;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .intro-card .nav button,
+  .login-card .nav button,
+  .summary-card .nav button {
+    width: 100%;
+    padding: 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .intro-card .nav,
+  .login-card .nav,
+  .summary-card .nav {
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-top: 0.625rem;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    margin-top: 0.625rem;
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-0.0625rem);
+  }
+
+  .btn-secondary:active {
+    transform: translateY(0);
+  }
+
+  /* ========== Form Fields ========== */
+
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+
+  .form-group label {
+    font-size: 0.8125rem;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"] {
+    font-size: 0.875rem;
+    padding: 0.5625rem 0.625rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ========== Progress and Status Messages ========== */
+
+  .progress-info {
+    font-size: 0.75rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .error-message {
+    padding: 0.5rem;
+    margin: 0.375rem 0;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+  }
+
+  .muted {
+    font-size: 0.6875rem;
+    margin-top: 0.375rem;
+  }
+
+  .info-box,
+  .summary-note {
+    padding: 0.625rem;
+    margin-top: 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  .info-box p,
+  .summary-note p {
+    margin: 0.125rem 0;
+  }
+
+  /* ========== Progress Bar ========== */
+
+  .progress-bar {
+    height: 0.375rem;
+    margin: 0.625rem 0;
+  }
+
+  .progress-text {
+    font-size: 0.625rem;
+    margin-top: 0.25rem;
+  }
+
+  /* ========== Stress Scale ========== */
+
+  .stress-scale {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.3125rem;
+    margin-top: 0.5rem;
+  }
+
+  .stress-button {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.6875rem;
+    border-radius: 0.25rem;
+    min-height: 2.25rem;
+  }
+
+  /* ========== Footer ========== */
+
+  .footer {
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    font-size: 0.625rem;
+  }
+
+  .footer a {
+    margin: 0 0.1875rem;
+  }
+}
+
+/* Small Mobile (below 480px) */
+@media (max-width: 30rem) {
+  .app {
+    margin: 0.5rem auto;
+    padding: 0;
+  }
+
+  .header {
+    margin: 0.5rem;
+    padding: 0.625rem 0.75rem;
+  }
+
+  .header h1 {
+    font-size: 0.9375rem;
+  }
+
+  .small {
+    font-size: 0.625rem;
+  }
+
+  /* ========== Container Adjustments ========== */
+
+  .page-container {
+    margin: 0.5rem auto;
+    padding: 0.625rem;
+  }
+
+  .page-container .content-header {
+    padding: 0.875rem;
+  }
+
+  .page-container .content-header h2 {
+    font-size: 1.0625rem;
+  }
+
+  .page-container .content-body {
+    padding: 0.875rem;
+  }
+
+  /* ========== Form Pages ========== */
+
+  .login-container,
+  .summary-container,
+  .intro-container {
+    padding: 0.75rem;
+  }
+
+  .login-card,
+  .summary-card,
+  .intro-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .login-header h2,
+  .summary-header h2,
+  .intro-header h2 {
+    font-size: 1.125rem;
+  }
+
+  /* ========== Text Sizing ========== */
+
+  .intro-content p,
+  .end-content p {
+    font-size: 0.8125rem;
+  }
+
+  .question-header {
+    font-size: 0.75rem;
+  }
+
+  .option-label {
+    font-size: 0.75rem;
+  }
+
+  .task-body {
+    font-size: 0.8125rem;
+  }
+
+  /* ========== Button Sizing ========== */
+
+  button {
+    min-height: 2.5rem;
+    padding: 0.5625rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .submit-btn,
+  .intro-card .nav button,
+  .login-card .nav button,
+  .summary-card .nav button,
+  .btn-secondary {
+    padding: 0.6875rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .answers button {
+    min-width: 3.75rem;
+    padding: 0.5625rem 0.375rem;
+    font-size: 0.6875rem;
+  }
+
+  /* ========== Spacing Adjustments ========== */
+
+  .muted {
+    font-size: 0.6875rem;
+  }
+
+  .error-message {
+    padding: 0.5rem;
+    font-size: 0.6875rem;
+  }
+
+  .progress-info {
+    font-size: 0.6875rem;
+  }
+
+  /* ========== Questions Layout ========== */
+
+  .question-block {
+    padding: 0.5rem;
+    margin: 0;
+  }
+
+  .options-radio {
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  .option-label {
+    padding: 0.125rem;
+    gap: 0.25rem;
+  }
+
+  /* ========== Footer ========== */
+
+  .footer {
+    font-size: 0.625rem;
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .footer a {
+    margin: 0 0.125rem;
+  }
+}
+
+/* Landscape Mode Adjustments (768px height limit) */
+@media (max-height: 31.25rem) and (orientation: landscape) {
+  .header {
+    margin: 0.25rem 0;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .page-container {
+    margin: 0.5rem auto;
+    padding: 0.625rem;
+  }
+
+  .page-container .content-header {
+    padding: 0.75rem;
+  }
+
+  .page-container .content-body {
+    padding: 0.75rem;
+    max-height: calc(100vh - 9.375rem);
+    overflow-y: auto;
+  }
+
+  .intro-card,
+  .login-card,
+  .summary-card {
+    padding: 1rem;
+  }
+
+  button {
+    padding: 0.5rem 0.75rem;
+    min-height: auto;
+  }
+
+  .submit-btn,
+  .intro-card .nav button,
+  .login-card .nav button,
+  .summary-card .nav button {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .questions-full-page {
+    max-height: calc(100vh - 12.5rem);
+    overflow-y: auto;
+  }
+
+  .question-block {
+    padding: 0.375rem;
+  }
+}
+
+/* ============================================================================= */
+/* Touch-Friendly Adjustments (All Mobile Devices) */
+/* ============================================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch target sizes */
+  button,
+  .option-label {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
+
+  /* Remove hover effects, use active states instead */
+  button:hover {
+    box-shadow: none;
+    background: unchanged;
+  }
+
+  button:active {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+
+  .stress-button:hover {
+    border-color: unchanged;
+  }
+
+  .stress-button:active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+  }
+
+  /* Simplified animations for touch */
+  .btn-secondary:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-secondary:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+
+  /* Remove tap highlight color */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow text selection on inputs and content */
+  input,
+  textarea,
+  .question-header,
+  .task-body,
+  .intro-content,
+  .end-content,
+  .email-header,
+  .email-body {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* ===== EMAIL VIEW STYLING ===== */
+
+.email-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.email-view.email-hazed .email-header,
+.email-view.email-hazed .email-body,
+.email-view.email-hazed .timer-box,
+.email-view.email-hazed .phishing-question-container {
+  filter: blur(0.5rem);
+  pointer-events: none;
+}
+
+/* Email Header Section */
+.email-header {
+  background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%);
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.875rem;
+}
+
+.email-header-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.email-header-row:last-child {
+  margin-bottom: 0;
+}
+
+.email-label {
+  font-weight: 600;
+  color: #333;
+  min-width: 3rem;
+  flex-shrink: 0;
+}
+
+.email-value {
+  color: #555;
+  word-break: break-word;
+  flex: 1;
+}
+
+.email-header-row.email-subject {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #ccc;
+}
+
+.email-header-row.email-subject .email-value {
+  font-weight: 600;
+  color: #222;
+  font-size: 0.9375rem;
+}
+
+/* Email Body Section */
+.email-body {
+  padding: 1rem;
+  line-height: 1.6;
+  color: #333;
+  font-size: 0.875rem;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 20rem;
+}
+
+.email-body p {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.email-body p:first-child {
+  margin-top: 0;
+}
+
+.email-body p:last-of-type {
+  margin-bottom: 1rem;
+}
+
+/* Email Image Support */
+.email-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.375rem;
+  margin: 0.75rem 0;
+  display: block;
+}
+
+/* Call-to-Action Button in Body */
+.email-cta {
+  background: #f9f9f9;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.375rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.cta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.cta-item:last-child {
+  margin-bottom: 0;
+}
+
+.cta-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  width: 100%;
+  max-width: 20rem;
+}
+
+.cta-button:hover {
+  opacity: 0.9;
+}
+
+.cta-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cta-url {
+  font-size: 0.75rem;
+  color: #666;
+  word-break: break-all;
+  margin-top: 0.25rem;
+  font-family: monospace;
+  max-width: 100%;
+}
+
+/* Timer Display - Fixed Alignment */
+.timer-box {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border-left: 4px solid #dc3545;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 1rem 0;
+  border-radius: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #dc3545;
+  text-align: center;
+  width: calc(100% - 2rem);
+  box-sizing: border-box;
+}
+
+.timer-label {
+  font-size: 0.8125rem;
+  color: #999;
+  margin-bottom: 0.25rem;
+}
+
+.timer-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.timer-box.timer-warning {
+  background: linear-gradient(135deg, #ffeaa7 0%, #ffcc7a 100%);
+  border-left-color: #e0b70a;
+  color: #a08000;
+}
+
+/* Phishing Question and Answer Section */
+.phishing-question-container {
+  border-top: 1px solid #eee;
+  padding: 1rem;
+  background: #fafafa;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.phishing-question {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+/* Phishing Detection Answer Buttons - Contained */
+.phishing-answers {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-phishing,
+.btn-legitimate {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 6rem;
+  max-width: 100%;
+}
+
+.btn-phishing {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-phishing:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.btn-phishing:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-phishing:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-legitimate {
+  background: #28a745;
+  color: white;
+}
+
+.btn-legitimate:hover:not(:disabled) {
+  background: #218838;
+}
+
+.btn-legitimate:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-legitimate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Timeout Overlay - Hazed Background */
+.timeout-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: none;
+}
+
+.timeout-box {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 2rem 1.5rem;
+  max-width: 28rem;
+  width: 100%;
+  box-shadow: 0 2rem 3.75rem rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  position: relative;
+  z-index: 1001;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timeout-message {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #dc3545;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.timeout-box .phishing-answers {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.timeout-box .btn-phishing,
+.timeout-box .btn-legitimate {
+  flex: none;
+  width: 100%;
+}
+
+/* Mobile Responsive - Email View */
+@media (max-width: 48rem) {
+  .email-view {
+    border: none;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .email-header {
+    padding: 0.75rem;
+  }
+
+  .email-header-row {
+    margin-bottom: 0.375rem;
+    gap: 0.5rem;
+  }
+
+  .email-label {
+    min-width: 2.5rem;
+  }
+
+  .email-body {
+    padding: 0.75rem;
+    max-height: 15rem;
+  }
+
+  .email-body p {
+    margin: 0.375rem 0;
+    font-size: 0.8125rem;
+  }
+
+  .email-cta {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .cta-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .cta-url {
+    font-size: 0.6875rem;
+  }
+
+  .timer-box {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8125rem;
+    margin: 0.5rem 0.75rem 0;
+    width: calc(100% - 1.5rem);
+  }
+
+  .timer-value {
+    font-size: 1.25rem;
+  }
+
+  .phishing-question-container {
+    padding: 0.75rem;
+  }
+
+  .phishing-question {
+    font-size: 0.9375rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .phishing-answers {
+    gap: 0.5rem;
+  }
+
+  .btn-phishing,
+  .btn-legitimate {
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+    min-width: 5rem;
+  }
+
+  .timeout-box {
+    padding: 1.5rem 1rem;
+  }
+
+  .timeout-message {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .email-header-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .email-label {
+    min-width: auto;
+  }
+
+  .email-body {
+    max-height: 12rem;
+  }
+
+  .phishing-answers {
+    flex-direction: column;
+  }
+
+  .btn-phishing,
+  .btn-legitimate {
+    width: 100%;
+  }
+
+  .timeout-box .phishing-answers {
+    flex-direction: column;
+  }
+
+  .timeout-box .btn-phishing,
+  .timeout-box .btn-legitimate {
+    width: 100%;
+  }
+}
+
+/* Feedback Modal - Negative Feedback */
+.feedback-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.feedback-box {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  min-width: 20rem;
+  max-width: 30rem;
+  animation: popIn 0.3s ease-out;
+}
+
+.feedback-box.feedback-negative {
+  border-left: 5px solid #DC3545;
+}
+
+.feedback-message {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #DC3545;
+  letter-spacing: 0.05em;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
