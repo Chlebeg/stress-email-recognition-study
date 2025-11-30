@@ -33,7 +33,8 @@ export default function Summary(){
     const s = { wiek, ocena_stresu: ocena, inne: { cissCount: cissAnswers.length, phishingCount: phishingAnswers.length } };
     
     try {
-      await fetch('http://localhost:4000/api/summary', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+      await fetch(`${API_URL}/api/summary`, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ user_id: user.user_id, summary: s })

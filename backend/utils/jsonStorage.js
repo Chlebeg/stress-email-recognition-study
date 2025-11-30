@@ -1,0 +1,161 @@
+// backend/utils/jsonStorage.js
+const fs = require('fs');
+const path = require('path');
+
+const DATA_DIR = path.join(__dirname, '../data');
+const SESSIONS_DIR = path.join(DATA_DIR, 'sessions');
+
+// Ensure directories exist
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+if (!fs.existsSync(SESSIONS_DIR)) {
+  fs.mkdirSync(SESSIONS_DIR, { recursive: true });
+}
+
+// Get session file path for user (creates if doesn't exist, reuses if exists same day)
+function getSessionPath(user_id) {
+  try {
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const files = fs.readdirSync(SESSIONS_DIR);
+    
+    // Look for existing session file for this user created today
+    const existingFile = files.find(f => 
+      f.startsWith(user_id + '_') && 
+      f.endsWith('.json') &&
+      f.includes(today)
+    );
+    
+    if (existingFile) {
+      return path.join(SESSIONS_DIR, existingFile);
+    }
+    
+    // Create new session file
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+    const filename = `${user_id}_${timestamp}.json`;
+    const filePath = path.join(SESSIONS_DIR, filename);
+    
+    const sessionData = {
+      user_id,
+      timestamp_start: new Date().toISOString(),
+      ciss_answers: null,
+      phishing_answers: null,
+      summary_data: null,
+      timestamp_end: null
+    };
+    
+    fs.writeFileSync(filePath, JSON.stringify(sessionData, null, 2), 'utf8');
+    return filePath;
+  } catch (e) {
+    console.error('Error getting session path:', e);
+    throw e;
+  }
+}
+
+// Load session data from filepath
+function loadSessionFromPath(filePath) {
+  try {
+    const data = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch (e) {
+    console.error('Error loading session:', e);
+    return null;
+  }
+}
+
+// Save session data to filepath
+function saveSessionToPath(filePath, sessionData) {
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(sessionData, null, 2), 'utf8');
+    return true;
+  } catch (e) {
+    console.error('Error saving session:', e);
+    throw e;
+  }
+}
+
+// Initialize session if not exists (for backward compatibility)
+function initSession(user_id) {
+  const filePath = getSessionPath(user_id);
+  return loadSessionFromPath(filePath);
+}
+
+// Append CISS answers using filepath
+function appendCISSWithPath(filePath, answers) {
+  let session = loadSessionFromPath(filePath);
+  session.ciss_answers = answers;
+  session.timestamp_ciss = new Date().toISOString();
+  saveSessionToPath(filePath, session);
+}
+
+// Append CISS answers using user_id (legacy)
+function appendCISS(user_id, answers) {
+  const filePath = getSessionPath(user_id);
+  appendCISSWithPath(filePath, answers);
+}
+
+// Append Phishing answers using filepath
+function appendPhishingWithPath(filePath, answers) {
+  let session = loadSessionFromPath(filePath);
+  session.phishing_answers = answers;
+  session.timestamp_phishing = new Date().toISOString();
+  saveSessionToPath(filePath, session);
+}
+
+// Append Phishing answers using user_id (legacy)
+function appendPhishing(user_id, answers) {
+  const filePath = getSessionPath(user_id);
+  appendPhishingWithPath(filePath, answers);
+}
+
+// Append Summary data using filepath
+function appendSummaryWithPath(filePath, data) {
+  let session = loadSessionFromPath(filePath);
+  session.summary_data = data;
+  session.timestamp_end = new Date().toISOString();
+  saveSessionToPath(filePath, session);
+}
+
+// Append Summary data using user_id (legacy)
+function appendSummary(user_id, data) {
+  const filePath = getSessionPath(user_id);
+  appendSummaryWithPath(filePath, data);
+}
+
+// Get all sessions
+function getAllSessions() {
+  try {
+    const files = fs.readdirSync(SESSIONS_DIR)
+      .filter(f => f.endsWith('.json'))
+      .sort();
+    
+    const sessions = [];
+    files.forEach(file => {
+      try {
+        const filePath = path.join(SESSIONS_DIR, file);
+        const data = fs.readFileSync(filePath, 'utf8');
+        sessions.push(JSON.parse(data));
+      } catch (e) {
+        console.error(`Error reading ${file}:`, e);
+      }
+    });
+    return sessions;
+  } catch (e) {
+    console.error('Error getting all sessions:', e);
+    return [];
+  }
+}
+
+module.exports = {
+  initSession,
+  appendCISS,
+  appendPhishing,
+  appendSummary,
+  getAllSessions,
+  getSessionPath,
+  loadSessionFromPath,
+  saveSessionToPath,
+  appendCISSWithPath,
+  appendPhishingWithPath,
+  appendSummaryWithPath
+};

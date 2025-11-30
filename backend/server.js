@@ -2,20 +2,61 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { initSession, appendCISS, appendPhishing, appendSummary, getAllSessions } = require("./utils/jsonStorage");
+const { 
+  getSessionPath, 
+  loadSessionFromPath,
+  appendCISSWithPath, 
+  appendPhishingWithPath, 
+  appendSummaryWithPath,
+  getAllSessions 
+} = require("./utils/jsonStorage");
 const { generateCsvExport } = require("./utils/csvExport");
 
 const app = express();
-app.use(cors());
+
+// CORS configuration for Render deployment
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:4000',
+  process.env.FRONTEND_URL
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+    
+    // Allow if in allowedOrigins
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      // For production on Render, accept any onrender.com domain
+      if (origin.includes('onrender.com')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  },
+  credentials: true
+}));
 app.use(bodyParser.json());
+
+// Store active session paths per user
+const activeSessions = {};
 
 app.post("/api/login", async (req, res) => {
   const { user_id } = req.body;
   if (!user_id) return res.status(400).json({ error: "user_id required" });
 
   try {
-    initSession(user_id);
-    res.json({ ok: true, user_id });
+    const sessionPath = getSessionPath(user_id);
+    activeSessions[user_id] = sessionPath;
+    const sessionData = loadSessionFromPath(sessionPath);
+    res.json({ ok: true, user_id, session: sessionData });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "server error" });
@@ -27,7 +68,11 @@ app.post("/api/ciss", async (req, res) => {
   if (!user_id || !answers) return res.status(400).json({ error: "user_id and answers required" });
 
   try {
-    appendCISS(user_id, answers);
+    const sessionPath = activeSessions[user_id];
+    if (!sessionPath) {
+      return res.status(400).json({ error: "session not initialized" });
+    }
+    appendCISSWithPath(sessionPath, answers);
     res.json({ ok: true });
   } catch (e) {
     console.error(e);
@@ -40,7 +85,11 @@ app.post("/api/phishing", async (req, res) => {
   if (!user_id || !answers) return res.status(400).json({ error: "user_id and answers required" });
 
   try {
-    appendPhishing(user_id, answers);
+    const sessionPath = activeSessions[user_id];
+    if (!sessionPath) {
+      return res.status(400).json({ error: "session not initialized" });
+    }
+    appendPhishingWithPath(sessionPath, answers);
     res.json({ ok: true });
   } catch (e) {
     console.error(e);
@@ -53,7 +102,11 @@ app.post("/api/summary", async (req, res) => {
   if (!user_id || !summary) return res.status(400).json({ error: "user_id and summary required" });
 
   try {
-    appendSummary(user_id, summary);
+    const sessionPath = activeSessions[user_id];
+    if (!sessionPath) {
+      return res.status(400).json({ error: "session not initialized" });
+    }
+    appendSummaryWithPath(sessionPath, summary);
     res.json({ ok: true });
   } catch (e) {
     console.error(e);

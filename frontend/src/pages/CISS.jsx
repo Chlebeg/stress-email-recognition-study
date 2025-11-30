@@ -43,7 +43,8 @@ export default function CISS(){
         odpowiedz: cissAnswers[q.id]
       }));
 
-      await fetch('http://localhost:4000/api/ciss', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+      await fetch(`${API_URL}/api/ciss`, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ user_id: user.user_id, answers: answerArray })

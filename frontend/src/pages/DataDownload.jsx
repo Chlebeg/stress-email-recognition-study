@@ -11,7 +11,8 @@ export default function DataDownload() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:4000/api/export');
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+      const response = await fetch(`${API_URL}/api/export`);
       const data = await response.json();
       if (data.ok) {
         setExportData(data.data);
@@ -26,7 +27,8 @@ export default function DataDownload() {
   };
 
   const downloadCSV = (sheet) => {
-    const url = `http://localhost:4000/api/export/${sheet}`;
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    const url = `${API_URL}/api/export/${sheet}`;
     const a = document.createElement('a');
     a.href = url;
     a.click();

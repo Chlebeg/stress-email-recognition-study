@@ -15,7 +15,8 @@ export default function Login(){
     }
     
     try {
-      await fetch("http://localhost:4000/api/login", {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+      await fetch(`${API_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: id.trim() }),

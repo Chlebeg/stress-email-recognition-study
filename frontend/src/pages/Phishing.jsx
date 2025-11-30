@@ -148,7 +148,8 @@ export default function Phishing(){
         if (index < tasks.length - 1) {
           setIndex(index + 1);
         } else {
-          fetch('http://localhost:4000/api/phishing', {
+          const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+          fetch(`${API_URL}/api/phishing`, {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({ user_id: user.user_id, answers: arr })
@@ -159,7 +160,8 @@ export default function Phishing(){
       if (index < tasks.length -1) {
         setIndex(index+1);
       } else {
-        fetch('http://localhost:4000/api/phishing', {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+        fetch(`${API_URL}/api/phishing`, {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ user_id: user.user_id, answers: arr })

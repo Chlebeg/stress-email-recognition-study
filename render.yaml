@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: ciss-phishing-backend
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+
+  - type: web
+    runtime: static
+    name: ciss-phishing-frontend
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://ciss-phishing-backend.onrender.com
