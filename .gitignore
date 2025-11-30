@@ -1,4 +1,36 @@
-.meta
-backend/node_modules
-backend/data/sessions
-frontend/node_modules
+# Documentation (local/meta)
+.meta/
+
+# Backend
+backend/node_modules/
+backend/data/
+backend/dist/
+backend/*.log
+backend/.env
+backend/.env.local
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Misc
+.DS_Store
+*.xlsx
+*.csv
+*.json~
