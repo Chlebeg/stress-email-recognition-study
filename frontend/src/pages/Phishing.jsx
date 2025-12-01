@@ -187,7 +187,7 @@ export default function Phishing(){
       <div className="page-card">
         <div className="content-header">
           <h2>Zadania: Rozpoznawanie Phishingu</h2>
-          <div className="task-progress">Wiadomość {index+1} z {tasks.length}</div>
+          <div className="task-progress">E-mail {index+1} z {tasks.length}</div>
         </div>
 
         <div className={`email-view ${timedOut ? 'email-hazed' : ''}`}>
@@ -321,8 +321,6 @@ export default function Phishing(){
               }}
             />
           )}
-
-          <div className="muted">W tej części nie można wracać do poprzednich zadań.</div>
         </div>
       </div>
     </div>

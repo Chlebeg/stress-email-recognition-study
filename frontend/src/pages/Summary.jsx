@@ -6,6 +6,8 @@ export default function Summary(){
   const { user, summary = {}, setSummary, cissAnswers, phishingAnswers } = useApp();
   const [age, setAge] = useState((summary && summary.age) || '');
   const [stressRating, setStressRating] = useState((summary && summary.stress_rating) || '');
+  const [stressImpactFactor, setStressImpactFactor] = useState((summary && summary.stress_impact_factor) || '');
+  const [stressImpactNotes, setStressImpactNotes] = useState((summary && summary.stress_impact_factor_notes) || '');
   const [error, setError] = useState('');
   const nav = useNavigate();
 
@@ -30,7 +32,13 @@ export default function Summary(){
       return;
     }
 
-    const s = { age, stress_rating: stressRating, notes: { ciss_count: cissAnswers.length, phishing_count: phishingAnswers.length } };
+    // Validate stress impact factor
+    if (!stressImpactFactor.trim()) {
+      setError('Wybierz czynnik wpływający na stres, aby kontynuować');
+      return;
+    }
+
+    const s = { age, stress_rating: stressRating, stress_impact_factor: stressImpactFactor, stress_impact_factor_notes: stressImpactNotes, notes: { ciss_count: cissAnswers.length, phishing_count: phishingAnswers.length } };
     
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
@@ -130,6 +138,72 @@ export default function Summary(){
                 <span>Maksymalny stres</span>
               </div>
             </div>
+
+            <div className="form-group">
+              <label className="form-label">
+                Który czynnik wpłynął na Twój stres najbardziej?
+              </label>
+              <div className="stress-factors">
+                {[
+                  { value: 'timer', label: 'Czas (czas)' },
+                  { value: 'negative_feedback', label: 'Błędna informacja zwrotna' },
+                  { value: 'permission_popup', label: 'Popup-y' },
+                  { value: 'other', label: 'Inne' }
+                ].map(factor => (
+                  <label key={factor.value} className="factor-option">
+                    <input
+                      type="radio"
+                      name="stress-factor"
+                      value={factor.value}
+                      checked={stressImpactFactor === factor.value}
+                      onChange={(e) => {
+                        setStressImpactFactor(e.target.value);
+                        setError('');
+                      }}
+                    />
+                    <span>{factor.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {stressImpactFactor === 'other' && (
+              <div className="form-group">
+                <label htmlFor="stress-notes" className="form-label">
+                  Opisz jaki był inny czynnik (opcjonalne):
+                </label>
+                <textarea
+                  id="stress-notes"
+                  className="form-input"
+                  value={stressImpactNotes}
+                  onChange={(e) => {
+                    setStressImpactNotes(e.target.value);
+                    setError('');
+                  }}
+                  placeholder="Opisz inny czynnik wpływający na stres..."
+                  rows="4"
+                />
+              </div>
+            )}
+
+            {stressImpactFactor && stressImpactFactor !== 'other' && (
+              <div className="form-group">
+                <label htmlFor="stress-notes" className="form-label">
+                  Dodatkowe uwagi (opcjonalne):
+                </label>
+                <textarea
+                  id="stress-notes"
+                  className="form-input"
+                  value={stressImpactNotes}
+                  onChange={(e) => {
+                    setStressImpactNotes(e.target.value);
+                    setError('');
+                  }}
+                  placeholder="Podziel się dodatkowymi uwagami..."
+                  rows="3"
+                />
+              </div>
+            )}
 
             {error && (
               <div className="form-error">
