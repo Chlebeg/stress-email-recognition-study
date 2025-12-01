@@ -9,7 +9,7 @@
       "date": "30 listopada 2025, 04:15",
       "body": "Szanowny Kliencie,\n\nW dniu dzisiejszym o godzinie 04:15 odnotowaliśmy próbę logowania do Twojego konta bankowego z nieznanego urządzenia zlokalizowanego w: Moskwa, Rosja (IP: 194.55.12.11).\n\nZe względów bezpieczeństwa, zgodnie z naszym regulaminem (§ 14 ust. 3), dostęp do bankowości elektronicznej został tymczasowo zablokowany.\n\nAby odblokować konto i uniknąć trwałego zamrożenia środków, prosimy o natychmiastowe potwierdzenie swojej tożsamości poprzez poniższy bezpieczny formularz:\n\n[BUTTON: POTWIERDŹ TOŻSAMOŚĆ I ODBLOKUJ KONTO → http://pko-autoryzacja-klienta.com/login]\n\nMasz 24 godziny na wykonanie weryfikacji. Po tym czasie konieczna będzie osobista wizyta w oddziale banku.\n\nZ poważaniem,\nZespół Bezpieczeństwa PKO Bank Polski\nul. Puławska 15, 02-515 Warszawa",
       "correct": "phishing",
-      "stressors": ["timer", "negative_feedback"]
+      "stressors": ["timer", "permission_popup"]
     },
     {
       "id": "p2",
@@ -20,7 +20,7 @@
       "date": "28 września 2025, 10:30",
       "body": "Szanowny Panie/Pani,\n\nW załączeniu przesyłamy fakturę PDF za wykonaną usługę.\n\nProszę o potwierdzenie otrzymania dokumentu.\n\nPozdrawiamy,\nDział Sprzedaży",
       "correct": "normalny",
-      "stressors": []
+      "stressors": ["permission_popup"]
     },
     {
       "id": "p3",

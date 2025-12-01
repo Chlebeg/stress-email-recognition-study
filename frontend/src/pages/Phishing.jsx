@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
 import useClockSound from '../hooks/useClockSound';
+import PermissionPopup from '../components/PermissionPopup';
 
 export default function Phishing(){
   const { user, settings, phishingAnswers, setPhishingAnswers } = useApp();
@@ -10,8 +11,11 @@ export default function Phishing(){
   const [timerLeft, setTimerLeft] = useState(null);
   const [timedOut, setTimedOut] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const [permissionPopup, setPermissionPopup] = useState(null);
+  const [permissionResponse, setPermissionResponse] = useState(null);
   const timerRef = useRef(null);
   const feedbackTimerRef = useRef(null);
+  const permissionPopupTimeoutRef = useRef(null);
   const { playTick, playTock } = useClockSound();
   const soundCounterRef = useRef(0);
   const nav = useNavigate();
@@ -32,18 +36,30 @@ export default function Phishing(){
   useEffect(() => {
     return () => {
       clearInterval(feedbackTimerRef.current);
+      clearTimeout(permissionPopupTimeoutRef.current);
     };
   }, []);
 
   useEffect(() => {
     setTimedOut(false);
     setFeedbackMessage(null);
+    setPermissionPopup(null);
+    setPermissionResponse(null);
     clearTimer();
     clearInterval(feedbackTimerRef.current);
+    clearTimeout(permissionPopupTimeoutRef.current);
     const t = tasks[index];
     if (!t) return;
-    if (settings.stress_timer_enabled && (t.stressors || []).includes('timer')) {
-      setTimerLeft(settings.stress_timer_duration);
+    
+    // Trigger permission popup if in task stressors
+    if ((t.stressors || []).includes('permission_popup')) {
+      setTimeout(() => {
+        setPermissionPopup(true);
+      }, 300);
+    }
+    
+    if (settings.task_timer_enabled && (t.stressors || []).includes('timer')) {
+      setTimerLeft(settings.task_timer_duration);
       soundCounterRef.current = 0;
       timerRef.current = setInterval(()=> {
         setTimerLeft(prev => {
@@ -60,7 +76,7 @@ export default function Phishing(){
           let volume = currentTime <= 3 ? 0.3 + (1 - (currentTime / 3)) * 0.2 : 0.1; // 0.1 normally, 0.3-0.5 in last 3 seconds
           
           // Only play sound in last 10 seconds or if less than 25% time remaining
-          if (currentTime <= 10 || currentTime <= (settings.stress_timer_duration * 0.25)) {
+          if (currentTime <= 10 || currentTime <= (settings.task_timer_duration * 0.25)) {
             // Alternate between tick and tock
             soundCounterRef.current += 1;
             if (soundCounterRef.current % 2 === 0) {
@@ -130,8 +146,8 @@ export default function Phishing(){
       date: t.date,
       correct_answer: t.correct,
       user_answer: ans,
-      stress_timer_active: settings.stress_timer_enabled,
-      stress_timer_duration: settings.stress_timer_duration,
+      stress_timer_active: settings.task_timer_enabled,
+      stress_timer_duration: settings.task_timer_duration,
       stressors: t.stressors || [],
       after_timeout: afterTimeout
     };
@@ -225,7 +241,7 @@ export default function Phishing(){
           </div>
 
           {/* Timer Display */}
-          {(settings.stress_timer_enabled && (t.stressors || []).includes('timer')) && (
+          {(settings.task_timer_enabled && (t.stressors || []).includes('timer')) && (
             <div className={`timer-box ${timerLeft <= 10 ? 'timer-warning' : ''}`}>
               <div className="timer-label">Pozostały czas:</div>
               <div className="timer-value">{timerLeft > 0 ? timerLeft : 0}s</div>
@@ -284,6 +300,32 @@ export default function Phishing(){
                 <div className="feedback-message">{feedbackMessage}</div>
               </div>
             </div>
+          )}
+
+          {/* Permission Popup */}
+          {permissionPopup && (
+            <PermissionPopup
+              onAllow={() => {
+                setPermissionResponse('allow');
+                // Wait 7 seconds total (2s popup dismiss + 5s confirmation) before clearing
+                clearTimeout(permissionPopupTimeoutRef.current);
+                permissionPopupTimeoutRef.current = setTimeout(() => {
+                  setPermissionPopup(null);
+                }, 7000);
+              }}
+              onBlock={() => {
+                setPermissionResponse('block');
+                // Wait 7 seconds total (2s popup dismiss + 5s confirmation) before clearing
+                clearTimeout(permissionPopupTimeoutRef.current);
+                permissionPopupTimeoutRef.current = setTimeout(() => {
+                  setPermissionPopup(null);
+                }, 7000);
+              }}
+              onTimeout={() => {
+                setPermissionResponse('timeout');
+                setPermissionPopup(null);
+              }}
+            />
           )}
 
           <div className="muted">W tej części nie można wracać do poprzednich zadań.</div>

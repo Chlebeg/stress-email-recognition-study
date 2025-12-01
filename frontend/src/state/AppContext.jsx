@@ -6,8 +6,8 @@ export function AppProvider({ children }) {
   // Global application settings
   const [user, setUser] = useState(null);
   const [settings, setSettings] = useState({
-    stress_timer_enabled: true,
-    stress_timer_duration: 8, // seconds
+    task_timer_enabled: true,
+    task_timer_duration: 30, // seconds
     stress_negative_feedback_enabled: true
   });
 

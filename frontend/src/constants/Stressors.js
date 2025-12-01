@@ -8,11 +8,13 @@
  * Available stressors:
  * - TIMER: Countdown timer that forces answer submission after time expires
  * - NEGATIVE_FEEDBACK: False negative feedback shown regardless of actual answer correctness
+ * - PERMISSION_POPUP: Browser-mimicking permission request popup (microphone/camera)
  */
 
 export const Stressors = {
   TIMER: 'timer',
-  NEGATIVE_FEEDBACK: 'negative_feedback'
+  NEGATIVE_FEEDBACK: 'negative_feedback',
+  PERMISSION_POPUP: 'permission_popup'
 };
 
 /**

@@ -96,7 +96,6 @@ export default function Login(){
             }
             
             setUser({ user_id: newId });
-            setSettings(s => ({...s, stress_timer_enabled: true, stress_timer_duration: 8}));
             nav('/ciss-intro');
           } catch (e) {
             console.error('Retry error:', e);
@@ -114,7 +113,6 @@ export default function Login(){
       }
 
       setUser({ user_id: generatedId });
-      setSettings(s => ({...s, stress_timer_enabled: true, stress_timer_duration: 8}));
       nav('/ciss-intro');
     } catch (error) {
       console.error('Login error:', error);
