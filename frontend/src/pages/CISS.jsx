@@ -39,8 +39,8 @@ export default function CISS(){
     try {
       // Send answers to backend
       const answerArray = questions.map(q => ({
-        pytanie_id: q.id,
-        odpowiedz: cissAnswers[q.id]
+        question_id: q.id,
+        answer: cissAnswers[q.id]
       }));
 
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';

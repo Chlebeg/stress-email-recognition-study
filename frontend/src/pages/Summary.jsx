@@ -4,33 +4,33 @@ import { useApp } from '../state/AppContext';
 
 export default function Summary(){
   const { user, summary, setSummary, cissAnswers, phishingAnswers } = useApp();
-  const [wiek, setWiek] = useState(summary.wiek || '');
-  const [ocena, setOcena] = useState(summary.ocena_stresu || '');
+  const [age, setAge] = useState(summary.age || '');
+  const [stressRating, setStressRating] = useState(summary.stress_rating || '');
   const [error, setError] = useState('');
   const nav = useNavigate();
 
   const submit = async () => {
     // Validate age
-    if (!wiek.trim()) {
+    if (!age.trim()) {
       setError('Wpisz swój wiek, aby kontynuować');
       return;
     }
-    if (isNaN(wiek) || parseInt(wiek) < 1 || parseInt(wiek) > 150) {
+    if (isNaN(age) || parseInt(age) < 1 || parseInt(age) > 150) {
       setError('Wik musi być liczbą od 1 do 150');
       return;
     }
 
     // Validate stress rating
-    if (!ocena.trim()) {
+    if (!stressRating.trim()) {
       setError('Oceń swój poziom stresu, aby kontynuować');
       return;
     }
-    if (isNaN(ocena) || parseInt(ocena) < 1 || parseInt(ocena) > 10) {
+    if (isNaN(stressRating) || parseInt(stressRating) < 1 || parseInt(stressRating) > 10) {
       setError('Ocena stresu musi być liczbą od 1 do 10');
       return;
     }
 
-    const s = { wiek, ocena_stresu: ocena, inne: { cissCount: cissAnswers.length, phishingCount: phishingAnswers.length } };
+    const s = { age, stress_rating: stressRating, notes: { ciss_count: cissAnswers.length, phishing_count: phishingAnswers.length } };
     
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
@@ -94,9 +94,9 @@ export default function Summary(){
                 id="age"
                 type="number"
                 className="form-input"
-                value={wiek}
+                value={age}
                 onChange={(e) => {
-                  setWiek(e.target.value);
+                  setAge(e.target.value);
                   setError('');
                 }}
                 onKeyPress={handleKeyPress}
@@ -115,9 +115,9 @@ export default function Summary(){
                   <button
                     key={num}
                     type="button"
-                    className={`stress-button ${parseInt(ocena) === num ? 'selected' : ''}`}
+                    className={`stress-button ${parseInt(stressFactor) === num ? 'selected' : ''}`}
                     onClick={() => {
-                      setOcena(String(num));
+                      setStressFactor(String(num));
                       setError('');
                     }}
                   >

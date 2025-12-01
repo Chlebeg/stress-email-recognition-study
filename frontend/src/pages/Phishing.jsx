@@ -122,7 +122,7 @@ export default function Phishing(){
 
   const answerNow = (ans, afterTimeout=false) => {
     const row = {
-      zadanie_id: t.id,
+      task_id: t.id,
       from: t.from,
       fromEmail: t.fromEmail,
       to: t.to,
@@ -132,8 +132,8 @@ export default function Phishing(){
       user_answer: ans,
       stress_timer_active: settings.stress_timer_enabled,
       stress_timer_duration: settings.stress_timer_duration,
-      stressors_per_question: t.stressors || [],
-      czy_odpowiedziano_po_timeout: afterTimeout
+      stressors: t.stressors || [],
+      after_timeout: afterTimeout
     };
     const arr = [...phishingAnswers, row];
     setPhishingAnswers(arr);

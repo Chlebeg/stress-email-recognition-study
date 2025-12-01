@@ -171,7 +171,7 @@ app.get("/api/export/:sheet", (req, res) => {
     const csv = csvData[sheetKey];
     
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename="badanie_${sheet}_${new Date().toISOString().split('T')[0]}.csv"`);
+    res.setHeader('Content-Disposition', `attachment; filename="exam_${sheet}_${new Date().toISOString().split('T')[0]}.csv"`);
     res.send(csv);
   } catch (e) {
     console.error(e);
