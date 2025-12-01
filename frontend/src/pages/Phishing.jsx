@@ -139,15 +139,9 @@ export default function Phishing(){
   const answerNow = (ans, afterTimeout=false) => {
     const row = {
       task_id: t.id,
-      from: t.from,
-      fromEmail: t.fromEmail,
-      to: t.to,
       subject: t.subject,
-      date: t.date,
-      correct_answer: t.correct,
-      user_answer: ans,
-      stress_timer_active: settings.task_timer_enabled,
-      stress_timer_duration: settings.task_timer_duration,
+      is_phishing: t.correct === 'phishing',
+      user_is_phishing: ans === 'phishing',
       stressors: t.stressors || [],
       after_timeout: afterTimeout
     };

@@ -40,7 +40,7 @@ function cissToCsv(sessions) {
 function phishingToCsv(sessions) {
   if (sessions.length === 0) return '';
 
-  const headers = ['user_id', 'timestamp_start', 'timestamp_phishing', 'task_id', 'user_answer', 'stressors', 'after_timeout'];
+  const headers = ['user_id', 'timestamp_start', 'timestamp_phishing', 'task_id', 'subject', 'is_phishing', 'user_is_phishing', 'stressors', 'after_timeout'];
   let rows = [headers.map(escapeCSV).join(',')];
 
   sessions.forEach(session => {
@@ -51,7 +51,9 @@ function phishingToCsv(sessions) {
           escapeCSV(session.timestamp_start),
           escapeCSV(session.timestamp_phishing),
           escapeCSV(answer.task_id),
-          escapeCSV(answer.user_answer),
+          escapeCSV(answer.subject),
+          escapeCSV(answer.is_phishing),
+          escapeCSV(answer.user_is_phishing),
           escapeCSV(JSON.stringify(answer.stressors || [])),
           escapeCSV(answer.after_timeout)
         ].join(','));
