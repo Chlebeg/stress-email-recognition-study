@@ -7,7 +7,8 @@ export function AppProvider({ children }) {
   const [user, setUser] = useState(null);
   const [settings, setSettings] = useState({
     stress_timer_enabled: true,
-    stress_timer_duration: 8 // seconds
+    stress_timer_duration: 8, // seconds
+    stress_negative_feedback_enabled: true
   });
 
   // Temporary answer collections

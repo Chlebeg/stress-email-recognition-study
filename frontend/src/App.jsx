@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import CISSIntro from './pages/CISSIntro';
 import CISS from './pages/CISS';
@@ -8,16 +8,13 @@ import Phishing from './pages/Phishing';
 import Summary from './pages/Summary';
 import End from './pages/End';
 import DataDownload from './pages/DataDownload';
-import { useApp } from './state/AppContext';
 
 export default function App() {
-  const { settings } = useApp();
 
   return (
     <div className="app">
       <header className="header">
-        <h1>MVP — Badanie: stres &amp; decyzje cyber</h1>
-        <div className="small">Timer aktywny: {settings.stress_timer_enabled ? 'TAK' : 'NIE'} • Długość: {settings.stress_timer_duration}s</div>
+        <h1>Badanie: Analiza wpływu stylu radzenia sobie ze stresem na decyzje związane z cyberbezpieczeństwem</h1>
       </header>
 
       <main className="main">
@@ -34,7 +31,7 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <Link to="/">Logowanie</Link> — <Link to="/ciss-intro">CISS</Link> — <Link to="/phishing-intro">Phishing</Link> — <Link to="/summary">Podsumowanie</Link> — <Link to="/download">Pobierz dane</Link>
+        <p>© Chlebeg 2025</p>
       </footer>
     </div>
   );

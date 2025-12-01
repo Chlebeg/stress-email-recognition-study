@@ -10,6 +10,8 @@ const generateSessionID = () => {
   return `${timestamp}_${random}`;
 };
 
+const isDev = import.meta.env.MODE === 'development';
+
 export default function Login(){
   const [generatedId, setGeneratedId] = useState('');
   const [displayId, setDisplayId] = useState('');
@@ -131,17 +133,21 @@ export default function Login(){
 
         <div className="login-form">
           <div className="form-section">
-            <h2>Identyfikator sesji</h2>
-            
-            <div className="form-group">
-              <p className="form-help">Twój unikalny identyfikator sesji:</p>
-              <div className="session-id-display">
-                <code>{displayId}</code>
-              </div>
-              <p className="form-help" style={{marginTop: '1rem', fontSize: '0.9rem'}}>
-                Zanotuj ten numer. Będzie Ci potrzebny do śledzenia postępu badania.
-              </p>
-            </div>
+            {isDev && (
+              <>
+                <h2>Identyfikator sesji</h2>
+                
+                <div className="form-group">
+                  <p className="form-help">Twój unikalny identyfikator sesji:</p>
+                  <div className="session-id-display">
+                    <code>{displayId}</code>
+                  </div>
+                  <p className="form-help" style={{marginTop: '1rem', fontSize: '0.9rem'}}>
+                    Zanotuj ten numer. Będzie Ci potrzebny do śledzenia postępu badania.
+                  </p>
+                </div>
+              </>
+            )}
 
             {error && (
               <div className="form-error">

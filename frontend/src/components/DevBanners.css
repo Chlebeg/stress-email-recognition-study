@@ -1,0 +1,76 @@
+/* Dev Mode Banners */
+
+.dev-top-banner {
+  background-color: #1a1a1a;
+  color: #ff6b6b;
+  padding: 8px 12px;
+  border-bottom: 2px solid #ff6b6b;
+  font-size: 12px;
+  font-family: monospace;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  position: relative;
+}
+
+.dev-bottom-banner {
+  background-color: #1a1a1a;
+  color: #4ecdc4;
+  padding: 8px 12px;
+  border-top: 2px solid #4ecdc4;
+  font-size: 12px;
+  font-family: monospace;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.dev-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.dev-badge {
+  background-color: #ff6b6b;
+  color: #1a1a1a;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.dev-bottom-banner .dev-badge {
+  background-color: #4ecdc4;
+}
+
+.dev-info {
+  color: #ff6b6b;
+  white-space: nowrap;
+}
+
+.dev-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dev-link {
+  color: #4ecdc4;
+  text-decoration: none;
+  padding: 2px 6px;
+  border: 1px solid #4ecdc4;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.dev-link:hover {
+  background-color: #4ecdc4;
+  color: #1a1a1a;
+}

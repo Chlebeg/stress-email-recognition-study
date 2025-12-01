@@ -3,9 +3,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
 
 export default function Summary(){
-  const { user, summary, setSummary, cissAnswers, phishingAnswers } = useApp();
-  const [age, setAge] = useState(summary.age || '');
-  const [stressRating, setStressRating] = useState(summary.stress_rating || '');
+  const { user, summary = {}, setSummary, cissAnswers, phishingAnswers } = useApp();
+  const [age, setAge] = useState((summary && summary.age) || '');
+  const [stressRating, setStressRating] = useState((summary && summary.stress_rating) || '');
   const [error, setError] = useState('');
   const nav = useNavigate();
 
@@ -115,9 +115,9 @@ export default function Summary(){
                   <button
                     key={num}
                     type="button"
-                    className={`stress-button ${parseInt(stressFactor) === num ? 'selected' : ''}`}
+                    className={`stress-button ${parseInt(stressRating) === num ? 'selected' : ''}`}
                     onClick={() => {
-                      setStressFactor(String(num));
+                      setStressRating(String(num));
                       setError('');
                     }}
                   >
