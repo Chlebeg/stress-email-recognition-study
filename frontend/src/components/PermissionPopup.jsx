@@ -13,11 +13,15 @@ import './PermissionPopup.css';
  * - onAllow: callback when user clicks Allow
  * - onBlock: callback when user clicks Block
  * - onTimeout: callback when popup auto-dismisses after 10 seconds (no interaction)
+ * - onMount: callback(permissionType) called when component mounts with 'microphone' or 'video'
+ * - onConfirmationShow: callback called when confirmation message appears (after user interaction or timeout)
  */
 export default function PermissionPopup({
   onAllow,
   onBlock,
-  onTimeout
+  onTimeout,
+  onMount,
+  onConfirmationShow
 }) {
   const [showPopup, setShowPopup] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -32,7 +36,7 @@ export default function PermissionPopup({
   const ANIMATION_DURATION = 300;
   
   // Randomly choose between microphone and video (50/50)
-  const randomType = useRef(Math.random() < 0.5 ? 'microphone' : 'video').current;
+  const randomType = useRef(Math.random() < 1 ? 'microphone' : 'video').current;
   const isMicrophone = randomType === 'microphone';
 
   // Helper: Clear all active timeouts
@@ -58,6 +62,11 @@ export default function PermissionPopup({
     clearAllTimeouts();
     setShowConfirmation(true);
     
+    // Notify parent that confirmation is showing
+    if (onConfirmationShow) {
+      onConfirmationShow();
+    }
+    
     // Hide popup after 2 seconds
     scheduleWithAnimation(
       POPUP_DISMISS_AFTER_INTERACTION,
@@ -77,15 +86,34 @@ export default function PermissionPopup({
   };
 
   useEffect(() => {
+    // Notify parent of permission type
+    if (onMount) {
+      onMount(randomType);
+    }
+
     // Auto-dismiss after 10 seconds if no user interaction
-    scheduleWithAnimation(
-      PERMISSION_POPUP_NO_INTERACTION,
-      () => setHidePopup(true),
-      () => {
-        setShowPopup(false);
-        onTimeout && onTimeout();
+    const autoTimeoutId = setTimeout(() => {
+      // Show confirmation on timeout
+      setShowPopup(false);
+      setShowConfirmation(true);
+      
+      // Notify parent that confirmation is showing (timeout case)
+      if (onConfirmationShow) {
+        onConfirmationShow();
       }
-    );
+      
+      // Hide confirmation after 5 seconds
+      scheduleWithAnimation(
+        CONFIRMATION_MESSAGE_DURATION,
+        () => setHideConfirmation(true),
+        () => {
+          setShowConfirmation(false);
+          onTimeout && onTimeout();
+        }
+      );
+    }, PERMISSION_POPUP_NO_INTERACTION * 1000);
+    
+    timerRefs.current.push(autoTimeoutId);
 
     return () => clearAllTimeouts();
   }, []);

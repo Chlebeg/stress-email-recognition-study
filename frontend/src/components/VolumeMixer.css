@@ -1,0 +1,120 @@
+/* Volume Mixer - Microphone level visualization */
+
+.volume-mixer-container {
+  flex-shrink: 0;
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.volume-mixer {
+  background: white;
+  border: 0.0625rem solid #dadce0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: 5rem;
+}
+
+.mixer-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mixer-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.mixer-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #202124;
+}
+
+.mixer-bars {
+  display: flex;
+  gap: 0.375rem;
+  align-items: flex-end;
+  height: 6rem;
+  justify-content: center;
+}
+
+.mixer-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  min-width: 0.375rem;
+}
+
+.mixer-bar-background {
+  width: 100%;
+  height: 100%;
+  background: #f0f0f0;
+  border-radius: 0.1875rem;
+  overflow: hidden;
+  border: 0.0625rem solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.mixer-bar-fill {
+  width: 100%;
+  background: #34a853;
+  transition: height 0.3s ease-out;
+  border-radius: 0.1875rem;
+}
+
+.mixer-bar-fill.spike {
+  background: #34a853;
+}
+
+.mixer-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.625rem;
+  color: #999;
+  margin-top: 0.375rem;
+}
+
+/* Mobile responsive - adjust sizing */
+@media (max-width: 48rem) {
+  .volume-mixer {
+    padding: 0.75rem;
+    min-width: 4rem;
+  }
+
+  .mixer-bars {
+    height: 5rem;
+    gap: 0.25rem;
+  }
+
+  .mixer-label {
+    font-size: 0.75rem;
+  }
+
+  .mixer-icon {
+    font-size: 1.25rem;
+  }
+}
+
+/* Extra small screens - stack vertically */
+@media (max-width: 30rem) {
+  .volume-mixer {
+    padding: 0.75rem;
+    min-width: 4rem;
+  }
+
+  .mixer-bars {
+    height: 4rem;
+  }
+}

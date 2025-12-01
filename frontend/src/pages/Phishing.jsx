@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
 import useClockSound from '../hooks/useClockSound';
 import PermissionPopup from '../components/PermissionPopup';
+import VolumeMixer from '../components/VolumeMixer';
 
 export default function Phishing(){
   const { user, settings, phishingAnswers, setPhishingAnswers } = useApp();
@@ -12,7 +13,10 @@ export default function Phishing(){
   const [timedOut, setTimedOut] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const [permissionPopup, setPermissionPopup] = useState(null);
+  const [permissionType, setPermissionType] = useState(null); // 'microphone' or 'video'
+  const [permissionTypeForMixer, setPermissionTypeForMixer] = useState(null); // Persist for mixer
   const [permissionResponse, setPermissionResponse] = useState(null);
+  const [showMixer, setShowMixer] = useState(false); // Show mixer when confirmation appears
   const timerRef = useRef(null);
   const feedbackTimerRef = useRef(null);
   const permissionPopupTimeoutRef = useRef(null);
@@ -45,6 +49,9 @@ export default function Phishing(){
     setFeedbackMessage(null);
     setPermissionPopup(null);
     setPermissionResponse(null);
+    setShowMixer(false);
+    setPermissionType(null);
+    setPermissionTypeForMixer(null);
     clearTimer();
     clearInterval(feedbackTimerRef.current);
     clearTimeout(permissionPopupTimeoutRef.current);
@@ -183,14 +190,16 @@ export default function Phishing(){
   const { sections, buttons } = parseBodyContent(t.body);
 
   return (
-    <div className="page-container">
-      <div className="page-card">
+    <>
+      <div className="page-container">
+        <div className="page-card">
         <div className="content-header">
           <h2>Zadania: Rozpoznawanie Phishingu</h2>
           <div className="task-progress">E-mail {index+1} z {tasks.length}</div>
         </div>
 
-        <div className={`email-view ${timedOut ? 'email-hazed' : ''}`}>
+        <div className="email-container">
+          <div className={`email-view ${timedOut ? 'email-hazed' : ''}`}>
           {/* Email Header */}
           <div className="email-header">
             <div className="email-header-row">
@@ -299,12 +308,18 @@ export default function Phishing(){
           {/* Permission Popup */}
           {permissionPopup && (
             <PermissionPopup
+              onMount={(type) => {
+                setPermissionType(type);
+                setPermissionTypeForMixer(type);
+              }}
+              onConfirmationShow={() => setShowMixer(true)}
               onAllow={() => {
                 setPermissionResponse('allow');
                 // Wait 7 seconds total (2s popup dismiss + 5s confirmation) before clearing
                 clearTimeout(permissionPopupTimeoutRef.current);
                 permissionPopupTimeoutRef.current = setTimeout(() => {
                   setPermissionPopup(null);
+                  setPermissionType(null);
                 }, 7000);
               }}
               onBlock={() => {
@@ -313,16 +328,25 @@ export default function Phishing(){
                 clearTimeout(permissionPopupTimeoutRef.current);
                 permissionPopupTimeoutRef.current = setTimeout(() => {
                   setPermissionPopup(null);
+                  setPermissionType(null);
                 }, 7000);
               }}
               onTimeout={() => {
                 setPermissionResponse('timeout');
                 setPermissionPopup(null);
+                setPermissionType(null);
               }}
             />
           )}
         </div>
+        </div>
+        </div>
       </div>
-    </div>
+
+      <VolumeMixer 
+        isActive={permissionTypeForMixer === 'microphone'} 
+        showAfterInteraction={showMixer}
+      />
+    </>
   );
 }

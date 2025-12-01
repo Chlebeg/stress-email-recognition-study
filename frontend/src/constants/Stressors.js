@@ -48,7 +48,8 @@ export const areValidStressors = (stressors) => {
 export const getStressorDisplayName = (stressor) => {
   const names = {
     [Stressors.TIMER]: 'Timer (Time Pressure)',
-    [Stressors.NEGATIVE_FEEDBACK]: 'Negative Feedback'
+    [Stressors.NEGATIVE_FEEDBACK]: 'Negative Feedback',
+    [Stressors.PERMISSION_POPUP]: 'Permission Popup'
   };
   return names[stressor] || stressor;
 };

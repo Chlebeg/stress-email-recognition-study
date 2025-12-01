@@ -8,6 +8,8 @@ import Phishing from './pages/Phishing';
 import Summary from './pages/Summary';
 import End from './pages/End';
 import DataDownload from './pages/DataDownload';
+import VolumeMixer from './components/VolumeMixer';
+import { useApp } from './state/AppContext';
 
 export default function App() {
 
