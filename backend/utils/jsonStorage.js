@@ -63,7 +63,7 @@ function loadSessionFromPath(filePath) {
   }
 }
 
-// Save session data to filepath
+// Save session data to filepath (internal use only)
 function saveSessionToPath(filePath, sessionData) {
   try {
     fs.writeFileSync(filePath, JSON.stringify(sessionData, null, 2), 'utf8');
@@ -74,24 +74,12 @@ function saveSessionToPath(filePath, sessionData) {
   }
 }
 
-// Initialize session if not exists (for backward compatibility)
-function initSession(user_id) {
-  const filePath = getSessionPath(user_id);
-  return loadSessionFromPath(filePath);
-}
-
 // Append CISS answers using filepath
 function appendCISSWithPath(filePath, answers) {
   let session = loadSessionFromPath(filePath);
   session.ciss_answers = answers;
   session.timestamp_ciss = new Date().toISOString();
   saveSessionToPath(filePath, session);
-}
-
-// Append CISS answers using user_id (legacy)
-function appendCISS(user_id, answers) {
-  const filePath = getSessionPath(user_id);
-  appendCISSWithPath(filePath, answers);
 }
 
 // Append Phishing answers using filepath
@@ -102,24 +90,12 @@ function appendPhishingWithPath(filePath, answers) {
   saveSessionToPath(filePath, session);
 }
 
-// Append Phishing answers using user_id (legacy)
-function appendPhishing(user_id, answers) {
-  const filePath = getSessionPath(user_id);
-  appendPhishingWithPath(filePath, answers);
-}
-
 // Append Summary data using filepath
 function appendSummaryWithPath(filePath, data) {
   let session = loadSessionFromPath(filePath);
   session.summary_data = data;
   session.timestamp_end = new Date().toISOString();
   saveSessionToPath(filePath, session);
-}
-
-// Append Summary data using user_id (legacy)
-function appendSummary(user_id, data) {
-  const filePath = getSessionPath(user_id);
-  appendSummaryWithPath(filePath, data);
 }
 
 // Get all sessions
@@ -147,15 +123,10 @@ function getAllSessions() {
 }
 
 module.exports = {
-  initSession,
-  appendCISS,
-  appendPhishing,
-  appendSummary,
-  getAllSessions,
   getSessionPath,
   loadSessionFromPath,
-  saveSessionToPath,
   appendCISSWithPath,
   appendPhishingWithPath,
-  appendSummaryWithPath
+  appendSummaryWithPath,
+  getAllSessions
 };
