@@ -49,13 +49,25 @@ app.use(bodyParser.json());
 const activeSessions = {};
 
 app.post("/api/login", async (req, res) => {
-  const { user_id } = req.body;
+  const { user_id, device_type, browser } = req.body;
   if (!user_id) return res.status(400).json({ error: "user_id required" });
 
   try {
-    const sessionPath = getSessionPath(user_id);
+    const result = getSessionPath(user_id, device_type, browser);
+    const sessionPath = result.path;
+    
+    if (result.collision) {
+      // User ID already exists for today - ask frontend to retry with new ID
+      return res.json({ ok: false, shouldRetry: true, user_id });
+    }
+    
     activeSessions[user_id] = sessionPath;
     const sessionData = loadSessionFromPath(sessionPath);
+    
+    // Log session start for new session
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] User ${user_id} STARTED questionnaire (device: ${device_type}, browser: ${browser})`);
+    
     res.json({ ok: true, user_id, session: sessionData });
   } catch (e) {
     console.error(e);
@@ -107,6 +119,11 @@ app.post("/api/summary", async (req, res) => {
       return res.status(400).json({ error: "session not initialized" });
     }
     appendSummaryWithPath(sessionPath, summary);
+    
+    // Log completion
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] User ${user_id} FINISHED questionnaire`);
+    
     res.json({ ok: true });
   } catch (e) {
     console.error(e);

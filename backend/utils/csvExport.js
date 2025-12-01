@@ -94,14 +94,16 @@ function summaryToCsv(sessions) {
 function usersToCsv(sessions) {
   if (sessions.length === 0) return '';
 
-  const headers = ['user_id', 'timestamp_start', 'timestamp_end'];
+  const headers = ['user_id', 'timestamp_start', 'timestamp_end', 'device_type', 'browser'];
   let rows = [headers.map(escapeCSV).join(',')];
 
   sessions.forEach(session => {
     rows.push([
       escapeCSV(session.user_id),
       escapeCSV(session.timestamp_start),
-      escapeCSV(session.timestamp_end)
+      escapeCSV(session.timestamp_end),
+      escapeCSV(session.device_type || 'unknown'),
+      escapeCSV(session.browser || 'unknown')
     ].join(','));
   });
 

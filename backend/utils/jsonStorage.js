@@ -14,7 +14,8 @@ if (!fs.existsSync(SESSIONS_DIR)) {
 }
 
 // Get session file path for user (creates if doesn't exist, reuses if exists same day)
-function getSessionPath(user_id) {
+// Returns {path, isNewSession, collision} or throws on error
+function getSessionPath(user_id, device_type = null, browser = null) {
   try {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
     const files = fs.readdirSync(SESSIONS_DIR);
@@ -27,7 +28,12 @@ function getSessionPath(user_id) {
     );
     
     if (existingFile) {
-      return path.join(SESSIONS_DIR, existingFile);
+      // Session file already exists for this user today
+      return {
+        path: path.join(SESSIONS_DIR, existingFile),
+        isNewSession: false,
+        collision: true
+      };
     }
     
     // Create new session file
@@ -38,6 +44,8 @@ function getSessionPath(user_id) {
     const sessionData = {
       user_id,
       timestamp_start: new Date().toISOString(),
+      device_type: device_type || 'unknown',
+      browser: browser || 'unknown',
       ciss_answers: null,
       phishing_answers: null,
       summary_data: null,
@@ -45,7 +53,12 @@ function getSessionPath(user_id) {
     };
     
     fs.writeFileSync(filePath, JSON.stringify(sessionData, null, 2), 'utf8');
-    return filePath;
+    
+    return {
+      path: filePath,
+      isNewSession: true,
+      collision: false
+    };
   } catch (e) {
     console.error('Error getting session path:', e);
     throw e;
