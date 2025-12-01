@@ -15,8 +15,8 @@ export default function Summary(){
       setError('Wpisz swój wiek, aby kontynuować');
       return;
     }
-    if (isNaN(age) || parseInt(age) < 1 || parseInt(age) > 150) {
-      setError('Wik musi być liczbą od 1 do 150');
+    if (isNaN(age) || parseInt(age) < 1 || parseInt(age) > 100) {
+      setError('Wiek musi być liczbą od 1 do 100');
       return;
     }
 
@@ -102,7 +102,7 @@ export default function Summary(){
                 onKeyPress={handleKeyPress}
                 placeholder="np. 28"
                 min="1"
-                max="150"
+                max="100"
               />
             </div>
 
