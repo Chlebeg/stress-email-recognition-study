@@ -147,7 +147,7 @@ export default function Phishing(){
     const row = {
       task_id: t.id,
       subject: t.subject,
-      is_phishing: t.correct === 'phishing',
+      is_phishing: t.is_phishing,
       user_is_phishing: ans === 'phishing',
       stressors: t.stressors || [],
       after_timeout: afterTimeout

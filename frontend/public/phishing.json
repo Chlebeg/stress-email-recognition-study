@@ -8,8 +8,8 @@
       "subject": "PILNE: Wykryto próbę nieautoryzowanego dostępu. Twoje konto zostało tymczasowo zablokowane.",
       "date": "30 listopada 2025, 04:15",
       "body": "Szanowny Kliencie,\n\nW dniu dzisiejszym o godzinie 04:15 odnotowaliśmy próbę logowania do Twojego konta bankowego z nieznanego urządzenia zlokalizowanego w: Moskwa, Rosja (IP: 194.55.12.11).\n\nZe względów bezpieczeństwa, zgodnie z naszym regulaminem (§ 14 ust. 3), dostęp do bankowości elektronicznej został tymczasowo zablokowany.\n\nAby odblokować konto i uniknąć trwałego zamrożenia środków, prosimy o natychmiastowe potwierdzenie swojej tożsamości poprzez poniższy bezpieczny formularz:\n\n[BUTTON: POTWIERDŹ TOŻSAMOŚĆ I ODBLOKUJ KONTO → http://pko-autoryzacja-klienta.com/login]\n\nMasz 24 godziny na wykonanie weryfikacji. Po tym czasie konieczna będzie osobista wizyta w oddziale banku.\n\nZ poważaniem,\nZespół Bezpieczeństwa PKO Bank Polski\nul. Puławska 15, 02-515 Warszawa",
-      "correct": "phishing",
-      "stressors": ["timer", "permission_popup"]
+      "is_phishing": true,
+      "stressors": []
     },
     {
       "id": "p2",
@@ -19,7 +19,7 @@
       "subject": "Faktura za usługi — 21/09",
       "date": "28 września 2025, 10:30",
       "body": "Szanowny Panie/Pani,\n\nW załączeniu przesyłamy fakturę PDF za wykonaną usługę.\n\nProszę o potwierdzenie otrzymania dokumentu.\n\nPozdrawiamy,\nDział Sprzedaży",
-      "correct": "normalny",
+      "is_phishing": false,
       "stressors": ["permission_popup"]
     },
     {
@@ -30,7 +30,7 @@
       "subject": "Aktualizacja oprogramowania dostępna",
       "date": "29 listopada 2025, 14:20",
       "body": "Cześć,\n\nNowa wersja oprogramowania jest dostępna. Aktualizacja zawiera ważne poprawki bezpieczeństwa.\n\nAby zainstalować, przejdź do sekcji ustawień lub kliknij poniżej:\n\n[BUTTON: Pobierz aktualizację → http://trusted-company.com/download/latest]\n\nZespół Wsparcia Technicznego\ntrusted-company.com",
-      "correct": "normalny",
+      "is_phishing": false,
       "stressors": []
     },
     {
@@ -41,7 +41,7 @@
       "subject": "ALERT: Nieautoryzowana transakcja — Działaj natychmiast!",
       "date": "30 listopada 2025, 08:45",
       "body": "Uwaga!\n\nZdetekowaliśmy podejrzaną transakcję na Twoim koncie:\n- Kwota: 5 000 PLN\n- Odbiornik: Nieznany\n- Czas: dziś, 08:30\n\nJeśli to nie Ty, kliknij poniżej, aby zablokować transakcję:\n\n[BUTTON: Zablokuj transakcję teraz → http://bank-security-verify.com/transaction-block]\n\nMasz 30 minut na działanie, zanim transakcja zostanie ostatecznie przetworzena.\n\nAutomated Security Alert System",
-      "correct": "phishing",
+      "is_phishing": true,
       "stressors": ["timer"]
     }
   ]
