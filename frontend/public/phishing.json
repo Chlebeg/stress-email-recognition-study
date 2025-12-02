@@ -1,48 +1,160 @@
 {
   "tasks": [
     {
-      "id": "p1",
-      "from": "Zespół Bezpieczeństwa PKO BP",
-      "fromEmail": "security@pkobp-weryfikacja24.pl",
+      "id": "1",
+      "from": "Allegro",
+      "fromEmail": "powiadomienia@allegro.pl",
       "to": "[Imie_Nazwisko_Uczestnika]",
-      "subject": "PILNE: Wykryto próbę nieautoryzowanego dostępu. Twoje konto zostało tymczasowo zablokowane.",
-      "date": "30 listopada 2025, 04:15",
-      "body": "Szanowny Kliencie,\n\nW dniu dzisiejszym o godzinie 04:15 odnotowaliśmy próbę logowania do Twojego konta bankowego z nieznanego urządzenia zlokalizowanego w: Moskwa, Rosja (IP: 194.55.12.11).\n\nZe względów bezpieczeństwa, zgodnie z naszym regulaminem (§ 14 ust. 3), dostęp do bankowości elektronicznej został tymczasowo zablokowany.\n\nAby odblokować konto i uniknąć trwałego zamrożenia środków, prosimy o natychmiastowe potwierdzenie swojej tożsamości poprzez poniższy bezpieczny formularz:\n\n[BUTTON: POTWIERDŹ TOŻSAMOŚĆ I ODBLOKUJ KONTO → http://pko-autoryzacja-klienta.com/login]\n\nMasz 24 godziny na wykonanie weryfikacji. Po tym czasie konieczna będzie osobista wizyta w oddziale banku.\n\nZ poważaniem,\nZespół Bezpieczeństwa PKO Bank Polski\nul. Puławska 15, 02-515 Warszawa",
-      "is_phishing": true,
-      "stressors": []
-    },
-    {
-      "id": "p2",
-      "from": "Dział Sprzedaży",
-      "fromEmail": "sales@company.pl",
-      "to": "user@company.pl",
-      "subject": "Faktura za usługi — 21/09",
-      "date": "28 września 2025, 10:30",
-      "body": "Szanowny Panie/Pani,\n\nW załączeniu przesyłamy fakturę PDF za wykonaną usługę.\n\nProszę o potwierdzenie otrzymania dokumentu.\n\nPozdrawiamy,\nDział Sprzedaży",
+      "subject": "Potwierdzenie zakupu oferty nr 829102321: Słuchawki Bezprzewodowe Noise Cancelling",
+      "date": "28 listopada 2025, 14:22",
+      "body": "[LAYOUT: HEADER_WHITE_WITH_ORANGE_ACCENT]\n[LOGO_ALIGN_LEFT: /images/logos/allegro]\n\nCześć!\n\nDziękujemy za zakupy na Allegro. Właśnie przekazaliśmy sprzedającemu Twoje zamówienie.\n\n[SECTION: ORDER_SUMMARY_BOX]\n**Szczegóły zamówienia**\nPrzedmiot: Słuchawki Bezprzewodowe Sony WH-1000XM5\nSprzedający: ElectroWorld_PL\nKwota: 1 399,00 zł\nDostawa: Allegro One Box (zielony automat)\n[END_SECTION]\n\n[BANNER_IMG: /images/banners/allegro_smart]\n\nStatus swojego zamówienia możesz sprawdzić w zakładce Moje Zakupy.\n\n[BUTTON_ORANGE_CENTER: ZOBACZ SZCZEGÓŁY ZAMÓWIENIA -> https://allegro.pl/moje-allegro/zakupy/kupione/829102321]\n\nPozdrawiamy,\nZespół Allegro\n\nTo jest wiadomość automatyczna, prosimy na nią nie odpowiadać.",
       "is_phishing": false,
-      "stressors": ["permission_popup"]
+      "stressors": [],
+      "style": {
+        "fontFamily": "'Open Sans', sans-serif",
+        "backgroundColor": "#ffffff",
+        "containerBorderTop": "4px solid #FF5A00",
+        "primaryColor": "#FF5A00",
+        "button": {
+          "backgroundColor": "#FF5A00",
+          "color": "#ffffff",
+          "borderRadius": "4px",
+          "fontWeight": "600",
+          "padding": "12px 24px"
+        },
+        "link": {
+          "color": "#00a790",
+          "textDecoration": "none"
+        }
+      }
     },
     {
-      "id": "p3",
-      "from": "Wsparcie Techniczne",
-      "fromEmail": "support@trusted-company.com",
-      "to": "user@trusted-company.com",
-      "subject": "Aktualizacja oprogramowania dostępna",
-      "date": "29 listopada 2025, 14:20",
-      "body": "Cześć,\n\nNowa wersja oprogramowania jest dostępna. Aktualizacja zawiera ważne poprawki bezpieczeństwa.\n\nAby zainstalować, przejdź do sekcji ustawień lub kliknij poniżej:\n\n[BUTTON: Pobierz aktualizację → http://trusted-company.com/download/latest]\n\nZespół Wsparcia Technicznego\ntrusted-company.com",
+      "id": "2",
+      "from": "PGE Obrót S.A.",
+      "fromEmail": "bok@gkpge.pl",
+      "to": "[Imie_Nazwisko_Uczestnika]",
+      "subject": "eFaktura za energię elektryczną - nowa faktura nr 22/11/2025",
+      "date": "29 listopada 2025, 08:05",
+      "body": "[LAYOUT: HEADER_WHITE_CLEAN]\n[LOGO_ALIGN_LEFT: /images/logos/pge]\n[SEPARATOR_LINE_BLUE]\n\nSzanowny Kliencie,\n\nInformujemy, że została wystawiona nowa faktura nr 22/11/2025 za usługi dystrybucji i sprzedaży energii elektrycznej.\n\n**Kwota do zapłaty: 142,50 zł**\nTermin płatności: 14.12.2025\n\nFakturę w formacie PDF oraz szczegółowe rozliczenie zużycia znajdziesz po zalogowaniu do serwisu PGE eBOK.\n\n[BUTTON_BLUE_LEFT: ZALOGUJ SIĘ DO eBOK -> https://ebok.gkpge.pl/logowanie]\n\nDziękujemy za korzystanie z eFaktury – wspólnie dbamy o środowisko.\n\nZ poważaniem,\nPGE Obrót S.A.",
       "is_phishing": false,
-      "stressors": []
+      "stressors": [
+        "timer",
+        "negative_feedback"
+      ],
+      "style": {
+        "fontFamily": "Arial, Helvetica, sans-serif",
+        "backgroundColor": "#ffffff",
+        "primaryColor": "#002D5C",
+        "separatorColor": "#002D5C",
+        "button": {
+          "backgroundColor": "#002D5C",
+          "color": "#ffffff",
+          "borderRadius": "2px",
+          "fontWeight": "bold",
+          "padding": "10px 20px"
+        },
+        "link": {
+          "color": "#002D5C",
+          "textDecoration": "underline"
+        }
+      }
     },
     {
-      "id": "p4",
-      "from": "Alerting System",
-      "fromEmail": "alerts@suspicious-bank-security.com",
-      "to": "user@example.com",
-      "subject": "ALERT: Nieautoryzowana transakcja — Działaj natychmiast!",
-      "date": "30 listopada 2025, 08:45",
-      "body": "Uwaga!\n\nZdetekowaliśmy podejrzaną transakcję na Twoim koncie:\n- Kwota: 5 000 PLN\n- Odbiornik: Nieznany\n- Czas: dziś, 08:30\n\nJeśli to nie Ty, kliknij poniżej, aby zablokować transakcję:\n\n[BUTTON: Zablokuj transakcję teraz → http://bank-security-verify.com/transaction-block]\n\nMasz 30 minut na działanie, zanim transakcja zostanie ostatecznie przetworzena.\n\nAutomated Security Alert System",
+      "id": "3",
+      "from": "InPost Obsługa Klienta",
+      "fromEmail": "powiadomienia@inpost-paczka24-update.net",
+      "to": "[Imie_Nazwisko_Uczestnika]",
+      "subject": "WAŻNE: Twoja paczka została wstrzymana z powodu niedopłaty (2,50 PLN)",
+      "date": "30 listopada 2025, 09:15",
+      "body": "[LAYOUT: HEADER_FULL_WIDTH_YELLOW]\n[LOGO_ALIGN_CENTER: /images/logos/inpost]\n[END_HEADER]\n\nWitaj,\n\nTwoja paczka o numerze śledzenia **62000192839201** dotarła do lokalnego oddziału sortowni, ale jej dostarczenie zostało wstrzymane.\n\nPowód: **Przekroczenie wagi gabarytowej o 0.4 kg.**\n\nAby wznowić proces dostawy i odebrać paczkę w Paczkomacie, prosimy o uregulowanie niedopłaty w wysokości 2,50 PLN. Brak wpłaty w ciągu 4 godzin skutkować będzie zwrotem przesyłki do nadawcy.\n\n[BUTTON_YELLOW_CENTER: OPŁAĆ 2,50 PLN I ODBIERZ PACZKĘ -> http://inpost-bramka-platnosci.net/pay/order/62000]\n\nZespół InPost",
       "is_phishing": true,
-      "stressors": ["timer"]
+      "stressors": [
+        "timer"
+      ],
+      "style": {
+        "fontFamily": "'Montserrat', 'Verdana', sans-serif",
+        "backgroundColor": "#ffffff",
+        "headerBackgroundColor": "#FFCC00",
+        "primaryColor": "#1D1D1B",
+        "button": {
+          "backgroundColor": "#FFCC00",
+          "color": "#1D1D1B",
+          "borderRadius": "25px",
+          "fontWeight": "800",
+          "padding": "15px 30px",
+          "boxShadow": "0 2px 5px rgba(0,0,0,0.1)"
+        },
+        "link": {
+          "color": "#1D1D1B",
+          "textDecoration": "underline"
+        }
+      }
+    },
+    {
+      "id": "4",
+      "from": "mBank S.A.",
+      "fromEmail": "powiadomienia@mbank.pl",
+      "to": "[Imie_Nazwisko_Uczestnika]",
+      "subject": "Twoje miesięczne wyciągi elektroniczne są gotowe do pobrania",
+      "date": "01 grudnia 2025, 03:00",
+      "body": "[LAYOUT: HEADER_WHITE_WITH_COLOR_STRIP]\n[LOGO_ALIGN_RIGHT: /images/logos/mbank]\n\nWitaj,\n\nTwoje wyciągi za miesiąc listopad są już gotowe. Dokumenty w formacie PDF czekają na Ciebie w serwisie transakcyjnym.\n\n**Jak pobrać wyciąg?**\n1. Zaloguj się na swoje konto.\n2. Wejdź w zakładkę Finanse -> Wyciągi.\n\n[BUTTON_WHITE_BORDER_RED: PRZEJDŹ DO SERWISU TRANSAKCYJNEGO -> https://online.mbank.pl/pl/login]\n\n*Pamiętaj: mBank nigdy nie prosi o podanie pełnego hasła do logowania ani kodu PIN w wiadomościach e-mail.*\n\nPozdrawiamy,\nZespół mBanku\n\n[BANNER_BOTTOM: /images/banners/mbank_okazje]",
+      "is_phishing": false,
+      "stressors": [
+        "timer",
+        "negative_feedback",
+        "permission_popup"
+      ],
+      "style": {
+        "fontFamily": "'Roboto', 'Arial', sans-serif",
+        "backgroundColor": "#ffffff",
+        "primaryColor": "#000000",
+        "accentColor": "#E60000",
+        "button": {
+          "backgroundColor": "transparent",
+          "color": "#E60000",
+          "border": "1px solid #E60000",
+          "borderRadius": "2px",
+          "fontWeight": "normal",
+          "padding": "8px 16px",
+          "textTransform": "uppercase"
+        },
+        "link": {
+          "color": "#0073e6",
+          "textDecoration": "none"
+        }
+      }
+    },
+    {
+      "id": "5",
+      "from": "Netflix Support",
+      "fromEmail": "support@netflix-account-verify.com",
+      "to": "[Imie_Nazwisko_Uczestnika]",
+      "subject": "Twoje konto zostało zawieszone. Zaktualizuj płatność.",
+      "date": "01 grudnia 2025, 19:45",
+      "body": "[LAYOUT: BODY_WHITE_CLEAN]\n[LOGO_ALIGN_LEFT: /images/logos/netflix]\n\nCześć,\n\nNiestety nie udało nam się pobrać opłaty za Twój kolejny okres rozliczeniowy. Twoja subskrypcja została tymczasowo zawieszona.\n\nOznacza to, że stracisz dostęp do swoich ulubionych filmów i seriali, jeśli nie zaktualizujesz metody płatności w ciągu 24 godzin.\n\nNie pozwól, aby ominęły Cię nowości! Kliknij poniżej, aby zaktualizować dane karty:\n\n[BUTTON_RED_WIDE: ZAKTUALIZUJ PŁATNOŚĆ I WZNÓW SUBSKRYPCJĘ -> http://netflix-secure-billing.com/login]\n\nJesteśmy tu, aby pomóc,\nZespół Netflix",
+      "is_phishing": true,
+      "stressors": [
+        "timer",
+        "permission_popup"
+      ],
+      "style": {
+        "fontFamily": "'Helvetica Neue', Helvetica, Arial, sans-serif",
+        "backgroundColor": "#ffffff",
+        "primaryColor": "#333333",
+        "button": {
+          "backgroundColor": "#E50914",
+          "color": "#ffffff",
+          "borderRadius": "2px",
+          "fontWeight": "bold",
+          "padding": "12px 24px",
+          "width": "100%",
+          "textAlign": "center"
+        },
+        "link": {
+          "color": "#0080ff",
+          "textDecoration": "underline"
+        }
+      }
     }
   ]
 }

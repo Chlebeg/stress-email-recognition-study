@@ -1511,9 +1511,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   line-height: 1.6;
   color: #333;
   font-size: 0.875rem;
-  flex: 1;
-  overflow-y: auto;
-  max-height: 20rem;
 }
 
 .email-body p {
@@ -1536,6 +1533,57 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   height: auto;
   border-radius: 0.375rem;
   margin: 0.75rem 0;
+  display: block;
+}
+
+/* Email Logos */
+.email-logos {
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.email-logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* Logo Alignment Containers */
+.email-logo-container {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.email-logo-align-left {
+  text-align: left;
+}
+
+.email-logo-align-center {
+  text-align: center;
+}
+
+.email-logo-align-right {
+  text-align: right;
+}
+
+/* Email Banners */
+.email-banners {
+  text-align: center;
+  margin: 1rem 0;
+  padding: 0.5rem 0;
+}
+
+.email-banner-container {
+  text-align: center;
+}
+
+.email-banner {
+  max-width: 100%;
+  height: auto;
+  max-height: 150px;
+  margin: 0.5rem auto;
   display: block;
 }
 
@@ -1783,7 +1831,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 
   .email-body {
     padding: 0.75rem;
-    max-height: 15rem;
   }
 
   .email-body p {
@@ -1853,10 +1900,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 
   .email-label {
     min-width: auto;
-  }
-
-  .email-body {
-    max-height: 12rem;
   }
 
   .phishing-answers {

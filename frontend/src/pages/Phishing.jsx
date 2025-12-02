@@ -5,6 +5,36 @@ import useClockSound from '../hooks/useClockSound';
 import PermissionPopup from '../components/PermissionPopup';
 import VolumeMixer from '../components/VolumeMixer';
 
+// Component to try loading image with multiple extensions
+function ImageWithFallback({ basePath, alt, className }) {
+  const extensions = ['.png', '.jpg', '.jpeg', '.svg'];
+  const [currentExtIndex, setCurrentExtIndex] = useState(0);
+  const [failed, setFailed] = useState(false);
+
+  // Remove existing extension from basePath if present
+  const cleanBasePath = basePath.replace(/\.(png|jpg|jpeg|svg)$/i, '');
+
+  const handleError = () => {
+    const nextIndex = currentExtIndex + 1;
+    if (nextIndex < extensions.length) {
+      setCurrentExtIndex(nextIndex);
+    } else {
+      setFailed(true);
+    }
+  };
+
+  if (failed) return null;
+
+  return (
+    <img 
+      src={`${cleanBasePath}${extensions[currentExtIndex]}`} 
+      alt={alt}
+      className={className}
+      onError={handleError}
+    />
+  );
+}
+
 export default function Phishing(){
   const { user, settings, phishingAnswers, setPhishingAnswers } = useApp();
   const [tasks, setTasks] = useState([]);
@@ -114,32 +144,119 @@ export default function Phishing(){
     }
   };
 
-  // Parse body content for button markers and images
+  // Parse body content for the new format with layout directives, logos, banners, buttons, and sections
   const parseBodyContent = (bodyText) => {
-    const parts = [];
-    const buttonRegex = /\[BUTTON:\s*(.+?)\s*→\s*(.+?)\]/g;
-    const imageRegex = /\[IMAGE:\s*(.+?)\]/g;
-    
-    let lastIndex = 0;
-    let match;
+    const parts = {
+      layout: null,
+      logoAlign: null,
+      logoUrl: null,
+      separatorLine: false,
+      separatorColor: null,
+      sections: [],
+      buttons: [],
+      banners: [],
+      headerEnd: false
+    };
 
-    // Process buttons first
-    const matches = [...bodyText.matchAll(buttonRegex)];
-    const imageMatches = [...bodyText.matchAll(imageRegex)];
+    const lines = bodyText.split('\n');
+    let currentSection = [];
 
-    // Simple parser - split by button markers
-    const sections = bodyText.split(/\[BUTTON:[^\]]+\]/);
-    const buttons = [];
-    
-    while ((match = buttonRegex.exec(bodyText)) !== null) {
-      buttons.push({
-        text: match[1].trim(),
-        url: match[2].trim()
-      });
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+
+      // Layout directive
+      if (line.startsWith('[LAYOUT:')) {
+        const match = line.match(/\[LAYOUT:\s*(.+?)\]/);
+        if (match) parts.layout = match[1].trim();
+      }
+      // Logo with alignment
+      else if (line.startsWith('[LOGO_ALIGN_')) {
+        const match = line.match(/\[LOGO_ALIGN_(\w+):\s*(.+?)\]/);
+        if (match) {
+          // Save current section before logo
+          if (currentSection.length > 0) {
+            parts.sections.push(currentSection.join('\n'));
+            currentSection = [];
+          }
+          parts.logoAlign = match[1].toLowerCase();
+          parts.logoUrl = match[2].trim();
+        }
+      }
+      // Separator line
+      else if (line.startsWith('[SEPARATOR_LINE_')) {
+        const match = line.match(/\[SEPARATOR_LINE_(\w+)\]/);
+        if (match) {
+          parts.separatorLine = true;
+          parts.separatorColor = match[1].toLowerCase();
+        }
+      }
+      // Section markers
+      else if (line.startsWith('[SECTION:')) {
+        // Save current section before starting new one
+        if (currentSection.length > 0) {
+          parts.sections.push(currentSection.join('\n'));
+          currentSection = [];
+        }
+      }
+      else if (line === '[END_SECTION]') {
+        // End of section - save it
+        if (currentSection.length > 0) {
+          parts.sections.push(currentSection.join('\n'));
+          currentSection = [];
+        }
+      }
+      else if (line === '[END_HEADER]') {
+        parts.headerEnd = true;
+      }
+      // Banner with position
+      else if (line.startsWith('[BANNER_')) {
+        const match = line.match(/\[BANNER_(?:IMG|BOTTOM):\s*(.+?)\]/);
+        if (match) {
+          // Save current section before banner
+          if (currentSection.length > 0) {
+            parts.sections.push(currentSection.join('\n'));
+            currentSection = [];
+          }
+          parts.banners.push({
+            url: match[1].trim(),
+            position: line.includes('BOTTOM') ? 'bottom' : 'inline'
+          });
+        }
+      }
+      // Button with style
+      else if (line.startsWith('[BUTTON_')) {
+        const match = line.match(/\[BUTTON_[A-Z_]+:\s*(.+?)\s*->\s*(.+?)\]/);
+        if (match) {
+          // Save current section before button
+          if (currentSection.length > 0) {
+            parts.sections.push(currentSection.join('\n'));
+            currentSection = [];
+          }
+          // Extract button style from marker
+          const styleMatch = line.match(/\[BUTTON_([A-Z_]+):/);
+          parts.buttons.push({
+            text: match[1].trim(),
+            url: match[2].trim(),
+            style: styleMatch ? styleMatch[1].toLowerCase() : 'default'
+          });
+        }
+      }
+      // Regular text content
+      else if (line && !line.startsWith('[')) {
+        currentSection.push(line);
+      }
+      // Empty line - add to current section as paragraph break
+      else if (!line) {
+        currentSection.push('');
+      }
     }
 
-    // Return sections and buttons separately
-    return { sections, buttons };
+    // Push final section if any
+    if (currentSection.length > 0) {
+      parts.sections.push(currentSection.join('\n'));
+    }
+
+    return parts;
   };
 
   if (!user) return <div>Nie jesteś zalogowany. <Link to="/">Wróć</Link></div>;
@@ -191,7 +308,34 @@ export default function Phishing(){
     }
   };
 
-  const { sections, buttons } = parseBodyContent(t.body);
+  const parsed = parseBodyContent(t.body);
+  
+  // Generate inline styles from task.style
+  const emailBodyStyle = {
+    fontFamily: t.style?.fontFamily || 'Arial, sans-serif',
+    color: t.style?.primaryColor || '#000',
+    ...(t.style?.containerBorderTop && { borderTop: t.style.containerBorderTop })
+  };
+
+  const buttonStyle = (btnStyle) => {
+    const base = t.style?.button || {};
+    return {
+      background: base.backgroundColor || '#000',
+      backgroundColor: base.backgroundColor || '#000',
+      color: base.color || '#fff',
+      borderRadius: base.borderRadius || '4px',
+      fontWeight: base.fontWeight || 'normal',
+      padding: base.padding || '10px 20px',
+      border: base.border || 'none',
+      ...(base.boxShadow && { boxShadow: base.boxShadow }),
+      ...(base.width && { width: base.width }),
+      ...(base.textTransform && { textTransform: base.textTransform }),
+      textAlign: base.textAlign || 'center',
+      cursor: 'not-allowed',
+      fontSize: '14px',
+      display: 'inline-block'
+    };
+  };
 
   return (
     <>
@@ -225,26 +369,93 @@ export default function Phishing(){
           </div>
 
           {/* Email Body */}
-          <div className="email-body">
-            {sections.map((section, i) => (
-              <div key={i}>
-                {section.split('\n').map((line, lineIdx) => (
-                  <p key={lineIdx}>{line || '\u00A0'}</p>
-                ))}
+          <div className="email-body" style={emailBodyStyle}>
+            {/* Render logo with alignment */}
+            {parsed.logoUrl && (
+              <div className={`email-logo-container email-logo-align-${parsed.logoAlign || 'left'}`}>
+                <ImageWithFallback 
+                  basePath={parsed.logoUrl}
+                  alt="Logo"
+                  className="email-logo"
+                />
+              </div>
+            )}
+
+            {/* Separator line */}
+            {parsed.separatorLine && (
+              <div 
+                style={{
+                  borderTop: `1px solid ${t.style?.separatorColor || '#ccc'}`,
+                  margin: '10px 0'
+                }}
+              />
+            )}
+
+            {/* Body sections */}
+            {parsed.sections.map((section, i) => (
+              <div key={i} className="email-section">
+                {section.split('\n').map((line, lineIdx) => {
+                  if (!line) return <p key={lineIdx}>&nbsp;</p>;
+                  
+                  // Handle bold text (**text**) and italic (*text*)
+                  const parts = line.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/);
+                  return (
+                    <p key={lineIdx}>
+                      {parts.map((part, pIdx) => {
+                        if (part.startsWith('**') && part.endsWith('**')) {
+                          return <strong key={pIdx}>{part.slice(2, -2)}</strong>;
+                        } else if (part.startsWith('*') && part.endsWith('*') && !part.startsWith('**')) {
+                          return <em key={pIdx}>{part.slice(1, -1)}</em>;
+                        }
+                        return <span key={pIdx}>{part}</span>;
+                      })}
+                    </p>
+                  );
+                })}
               </div>
             ))}
 
-            {/* Display buttons from body */}
-            {buttons.length > 0 && (
-              <div className="email-cta">
-                {buttons.map((btn, i) => (
-                  <div key={i} className="cta-item">
-                    <button className="cta-button" disabled>{btn.text}</button>
-                    <div className="cta-url">{btn.url}</div>
+            {/* Display buttons from body - BEFORE banners */}
+            {parsed.buttons.length > 0 && (
+              <div className="email-cta" style={{ background: 'transparent', border: 'none', padding: '0' }}>
+                {parsed.buttons.map((btn, i) => (
+                  <div key={i} className="cta-item" style={{ margin: '15px 0' }}>
+                    <button 
+                      className="cta-button" 
+                      disabled
+                      style={buttonStyle(btn.style)}
+                    >
+                      {btn.text}
+                    </button>
+                    <div className="cta-url" style={{ fontSize: '11px', marginTop: '5px', color: '#999' }}>
+                      {btn.url}
+                    </div>
                   </div>
                 ))}
               </div>
             )}
+
+            {/* Inline banners */}
+            {parsed.banners.filter(b => b.position === 'inline').map((banner, i) => (
+              <div key={i} className="email-banner-container" style={{ margin: '15px 0' }}>
+                <ImageWithFallback 
+                  basePath={banner.url}
+                  alt="Banner"
+                  className="email-banner"
+                />
+              </div>
+            ))}
+
+            {/* Bottom banners */}
+            {parsed.banners.filter(b => b.position === 'bottom').map((banner, i) => (
+              <div key={i} className="email-banner-container" style={{ margin: '15px 0', marginTop: '20px' }}>
+                <ImageWithFallback 
+                  basePath={banner.url}
+                  alt="Banner"
+                  className="email-banner"
+                />
+              </div>
+            ))}
           </div>
 
           {/* Timer Display */}

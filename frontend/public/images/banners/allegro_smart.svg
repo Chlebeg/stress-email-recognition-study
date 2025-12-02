@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF5A00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8533;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:0.5" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="200" fill="url(#bg1)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="700" cy="50" r="80" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="750" cy="150" r="60" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="650" cy="120" r="40" fill="rgba(255,255,255,0.12)"/>
+  
+  <!-- Decorative wave pattern -->
+  <path d="M 0 150 Q 100 130 200 150 T 400 150 T 600 150 T 800 150 L 800 200 L 0 200 Z" 
+        fill="url(#accent1)" opacity="0.4"/>
+  
+  <!-- Package/delivery icon -->
+  <g transform="translate(60, 70)">
+    <rect x="0" y="10" width="50" height="40" fill="white" opacity="0.9" rx="3"/>
+    <path d="M 0 10 L 25 0 L 50 10" fill="white" opacity="0.95"/>
+    <line x1="25" y1="0" x2="25" y2="50" stroke="#FF5A00" stroke-width="2"/>
+    <line x1="0" y1="30" x2="50" y2="30" stroke="#FF5A00" stroke-width="2"/>
+  </g>
+  
+  <!-- Text content -->
+  <text x="140" y="85" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white">
+    Allegro Smart
+  </text>
+  <text x="140" y="115" font-family="Arial, sans-serif" font-size="18" fill="white" opacity="0.95">
+    Darmowa dostawa • Darmowe zwroty • Bez limitu
+  </text>
+  <text x="140" y="145" font-family="Arial, sans-serif" font-size="20" font-weight="600" fill="#FFD700">
+    Wypróbuj przez 30 dni za darmo!
+  </text>
+</svg>
