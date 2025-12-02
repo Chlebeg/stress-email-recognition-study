@@ -1595,14 +1595,14 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 
 /* Timer Display - Fixed Alignment */
 .timer-box {
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
-  border-left: 4px solid #dc3545;
+  background: linear-gradient(135deg, #ffeaa7 0%, #ffcc7a 100%);
+  border-left: 4px solid #e0b70a;
   padding: 0.75rem 1rem;
   margin: 0.75rem 1rem 0;
   border-radius: 0.375rem;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #dc3545;
+  color: #a08000;
   text-align: center;
   width: calc(100% - 2rem);
   box-sizing: border-box;
@@ -1620,9 +1620,9 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 }
 
 .timer-box.timer-warning {
-  background: linear-gradient(135deg, #ffeaa7 0%, #ffcc7a 100%);
-  border-left-color: #e0b70a;
-  color: #a08000;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border-left-color: #dc3545;
+  color: #dc3545;
 }
 
 /* Phishing Question and Answer Section */

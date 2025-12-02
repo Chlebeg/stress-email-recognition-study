@@ -78,19 +78,23 @@ export default function Phishing(){
             return 0;
           }
           
-          // Play tick/tock sound - increase volume only in last 3 seconds
-          // Volume increases as timer gets lower
-          let volume = currentTime <= 3 ? 0.3 + (1 - (currentTime / 3)) * 0.2 : 0.1; // 0.1 normally, 0.3-0.5 in last 3 seconds
+          // Play tick/tock sound for entire duration
+          // Volume: 10% for entire duration except last 10 seconds
+          // Last 10 seconds: linear ramp from 10% to 50%
+          let volume = 0.1; // Base volume
           
-          // Only play sound in last 10 seconds or if less than 25% time remaining
-          if (currentTime <= 10 || currentTime <= (settings.task_timer_duration * 0.25)) {
-            // Alternate between tick and tock
-            soundCounterRef.current += 1;
-            if (soundCounterRef.current % 2 === 0) {
-              playTick(volume);
-            } else {
-              playTock(volume);
-            }
+          if (currentTime <= 10) {
+            // Linear interpolation: 10% at 10 seconds, 50% at 0 seconds
+            // Formula: 0.1 + (50 - 10) / 10 * (10 - currentTime) / 100
+            volume = 0.1 + (0.5 - 0.1) * (10 - currentTime) / 10;
+          }
+          
+          // Play sound every second (alternating tick/tock)
+          soundCounterRef.current += 1;
+          if (soundCounterRef.current % 2 === 0) {
+            playTick(volume);
+          } else {
+            playTock(volume);
           }
           
           return currentTime;
