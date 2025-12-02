@@ -83,11 +83,8 @@ export default function CISS(){
         <div className="instruction">
           <p>
             <strong>Instrukcja:</strong> Poniższe zadania opisują różne reakcje ludzi na trudne, 
-            przykre, stresujące sytuacje w życiu. Dla każdego zdania wskaż, w jakim stopniu 
-            odpowiada Ci ta reakcja, używając poniższej skali.
-          </p>
-          <p className="scale-info">
-            Skala: Nigdy → Bardzo rzadko → Czasami → Często → Bardzo często
+            przykre, stresujące sytuacje. Wybierz najbardziej pasującą odpowiedź przy każdym stwierdzeniu.
+            Określ w ten sposób, jak bardzo angażujesz się w te czynności, gdy znajdujesz się w trudnej, przykrej, stresującej sytuacji.
           </p>
         </div>
 

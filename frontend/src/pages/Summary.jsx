@@ -74,14 +74,12 @@ export default function Summary(){
               <div className="progress-number">✓</div>
               <div className="progress-text">
                 <strong>Kwestionariusz CISS</strong>
-                <span>48 pytań uzupełnionych</span>
               </div>
             </div>
             <div className="progress-item completed">
               <div className="progress-number">✓</div>
               <div className="progress-text">
-                <strong>Zadania Phishingowe</strong>
-                <span>4 zadania ukończone</span>
+                <strong>Zadania Phishingowe</strong> 
               </div>
             </div>
             <div className="progress-item active">
@@ -145,9 +143,9 @@ export default function Summary(){
               </label>
               <div className="stress-factors">
                 {[
-                  { value: 'timer', label: 'Czas' },
-                  { value: 'negative_feedback', label: 'Błędna informacja zwrotna' },
-                  { value: 'permission_popup', label: 'Popup-y' },
+                  { value: 'timer', label: 'Ograniczony czas' },
+                  { value: 'negative_feedback', label: 'Błędna informacja zwrotna (informacja o błędnej odpowiedzi, mimo poprawnej klasyfikacji)' },
+                  { value: 'permission_popup', label: 'Popup-y na stronie' },
                   { value: 'other', label: 'Inne' }
                 ].map(factor => (
                   <label key={factor.value} className="factor-option">

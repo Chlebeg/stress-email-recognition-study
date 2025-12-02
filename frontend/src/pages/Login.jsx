@@ -125,8 +125,9 @@ export default function Login(){
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h1>Badanie: Stres &amp; Decyzje Cyberbezpieczeństwa</h1>
-          <p className="login-subtitle">Analiza wpływu stylu radzenia sobie ze stresem na decyzje związane z cyberbezpieczeństwem</p>
+          <h1>Badanie: Analiza wpływu stylu radzenia sobie ze stresem na decyzje związane z cyberbezpieczeństwem</h1>
+          <p className="login-subtitle">Ankieta ta jest częścią badania realizowanego w ramach pracy magisterskiej pod tytułem: Analiza wpływu stylu radzenia sobie ze stresem na decyzje związane z cyberbezpieczeństwem. Proszę odpowiedzieć na wszystkie pytania zgodnie z własnymi odczuciami i doświadczeniami.</p>
+          <p className='login-subtitle'>Badanie prowadzone jest w ramach studiów 2 stopnia na kierunku Cyberbezpieczeństwo w Instytucie Telekomunikacji na Wydziale Informatyki, Elektroniki i Telekomunikacji na Akademii Górniczo-Hutniczej im. Stanisława Staszica w Krakowie. <br /> Kontakt - mplich@student.agh.edu.pl</p>
         </div>
 
         <div className="login-form">
@@ -167,16 +168,16 @@ export default function Login(){
               <h3>Co Cię czeka?</h3>
               <ul>
                 <li><strong>Krok 1:</strong> Kwestionariusz CISS (48 pytań, ~8 min)</li>
-                <li><strong>Krok 2:</strong> Zadania phishingowe (4 emaile, ~3 min)</li>
+                <li><strong>Krok 2:</strong> Zadania phishingowe (5 email-i, ~3 min)</li>
                 <li><strong>Krok 3:</strong> Ankieta podsumowująca (1 min)</li>
               </ul>
-              <p className="info-note">Całe badanie zajmie około <strong>15-20 minut</strong>. Twoje odpowiedzi będą anonimowe i będą wykorzystane wyłącznie do badań naukowych.</p>
+              <p className="info-note">Całe badanie zajmie do <strong>15 minut</strong>. Twoje odpowiedzi będą anonimowe i będą wykorzystane wyłącznie do badań naukowych.</p>
             </div>
           </div>
         </div>
 
         <div className="login-footer">
-          <p className="footer-text">Bezpieczne badanie • Bez przechowywania danych osobowych • Dane anonimowe</p>
+          <p className="footer-text">Ankieta jest w pełni anonimowa i nie są zbierane ani przechowywane dane osobiste ani kontaktowe osób ankietowanych.</p>
         </div>
       </div>
     </div>

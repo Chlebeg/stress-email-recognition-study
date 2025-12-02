@@ -117,10 +117,11 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 }
 
 .login-subtitle {
-  margin: 0;
+  margin: 0 0 1rem 0;
   font-size: 0.875rem;
   opacity: 0.95;
   line-height: 1.5;
+  text-align: left;
 }
 
 .login-form {
