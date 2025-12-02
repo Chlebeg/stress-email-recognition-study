@@ -1,5 +1,5 @@
 {
   "items": [
-    { "id": 1, "text": "Lepiej planuję swój czas", "options": ["Nigdy", "Bardzo rzadko", "Czasami", "Często", "Bardzo często"] }
+    { "id": 1, "text": "Lepiej planuję swój czas" }
   ]
 }

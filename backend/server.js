@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
+const path = require("path");
+const archiver = require("archiver");
 const { 
   getSessionPath, 
   loadSessionFromPath,
@@ -189,6 +191,51 @@ app.get("/api/export/:sheet", (req, res) => {
     res.send(csv);
   } catch (e) {
     logEvent(`Error in /api/export/:sheet: ${e.message}`);
+    res.status(500).json({ error: "export error" });
+  }
+});
+
+// Download all session JSON files as ZIP
+app.get("/api/export/sessions/zip", (req, res) => {
+  try {
+    const sessionsDir = path.join(__dirname, 'data', 'sessions');
+    
+    if (!fs.existsSync(sessionsDir)) {
+      return res.status(404).json({ error: "sessions directory not found" });
+    }
+    
+    const files = fs.readdirSync(sessionsDir).filter(f => f.endsWith('.json'));
+    
+    if (files.length === 0) {
+      return res.status(404).json({ error: "no session files found" });
+    }
+    
+    const timestamp = new Date().toISOString().split('T')[0];
+    const zipFilename = `sessions_${timestamp}.zip`;
+    
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${zipFilename}"`);
+    
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    
+    archive.on('error', (err) => {
+      logEvent(`Error creating ZIP archive: ${err.message}`);
+      res.status(500).json({ error: "archive error" });
+    });
+    
+    archive.pipe(res);
+    
+    // Add each session file to the archive
+    files.forEach(file => {
+      const filePath = path.join(sessionsDir, file);
+      archive.file(filePath, { name: file });
+    });
+    
+    archive.finalize();
+    
+    logEvent(`ZIP export: ${files.length} session files`);
+  } catch (e) {
+    logEvent(`Error in /api/export/sessions/zip: ${e.message}`);
     res.status(500).json({ error: "export error" });
   }
 });

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
 
+// CISS answer options (same for all 48 questions)
+const CISS_OPTIONS = ['Nigdy', 'Bardzo rzadko', 'Czasami', 'Często', 'Bardzo często'];
+
 export default function CISS(){
   const { user, cissAnswers, setCissAnswers } = useApp();
   const [questions, setQuestions] = useState([]);
@@ -37,17 +40,27 @@ export default function CISS(){
     if (!validateAllAnswered()) return;
 
     try {
-      // Send answers to backend
-      const answerArray = questions.map(q => ({
-        question_id: q.id,
-        answer: cissAnswers[q.id]
-      }));
+      // Map answer text to numeric value (1-5)
+      const answerToNumber = {
+        'Nigdy': 1,
+        'Bardzo rzadko': 2,
+        'Czasami': 3,
+        'Często': 4,
+        'Bardzo często': 5
+      };
+
+      // Convert to object format: {q1: 1, q2: 5, ...}
+      const answersObject = {};
+      questions.forEach(q => {
+        const textAnswer = cissAnswers[q.id];
+        answersObject[`q${q.id}`] = answerToNumber[textAnswer];
+      });
 
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
       await fetch(`${API_URL}/api/ciss`, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ user_id: user.user_id, answers: answerArray })
+        body: JSON.stringify({ user_id: user.user_id, answers: answersObject })
       });
       nav('/phishing-intro');
     } catch (error) {
@@ -102,7 +115,7 @@ export default function CISS(){
                       <strong>{idx + 1}. </strong>{q.text}
                     </div>
                     <div className="options-radio">
-                      {q.options.map(opt => (
+                      {CISS_OPTIONS.map(opt => (
                         <label key={opt} className="option-label">
                           <input
                             type="radio"

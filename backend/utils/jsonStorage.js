@@ -46,7 +46,7 @@ function getSessionPath(user_id, device_type = null, browser = null) {
       timestamp_start: new Date().toISOString(),
       device_type: device_type || 'unknown',
       browser: browser || 'unknown',
-      ciss_answers: null,
+      ciss_answers: {},
       phishing_answers: null,
       summary_data: null,
       timestamp_end: null

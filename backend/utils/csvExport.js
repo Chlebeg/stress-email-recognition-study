@@ -12,35 +12,37 @@ function escapeCSV(value) {
   return str;
 }
 
-// Convert CISS answers to CSV rows
+// Convert CISS answers to CSV rows (wide format with Q1-Q48 columns)
 function cissToCsv(sessions) {
   if (sessions.length === 0) return '';
 
-  const headers = ['user_id', 'timestamp_start', 'timestamp_ciss', 'question_id', 'answer'];
+  // Build header: user_id, q1, q2, ..., q48
+  const headers = ['user_id'];
+  for (let i = 1; i <= 48; i++) {
+    headers.push(`q${i}`);
+  }
   let rows = [headers.map(escapeCSV).join(',')];
 
   sessions.forEach(session => {
-    if (session.ciss_answers && Array.isArray(session.ciss_answers)) {
-      session.ciss_answers.forEach(answer => {
-        rows.push([
-          escapeCSV(session.user_id),
-          escapeCSV(session.timestamp_start),
-          escapeCSV(session.timestamp_ciss),
-          escapeCSV(answer.question_id),
-          escapeCSV(answer.answer)
-        ].join(','));
-      });
+    if (session.ciss_answers && typeof session.ciss_answers === 'object') {
+      // Build row: user_id followed by q1-q48 values
+      const rowData = [escapeCSV(session.user_id)];
+      for (let i = 1; i <= 48; i++) {
+        rowData.push(escapeCSV(session.ciss_answers[`q${i}`] || ''));
+      }
+      
+      rows.push(rowData.join(','));
     }
   });
 
   return rows.join('\n');
 }
 
-// Convert Phishing answers to CSV rows
+// Convert Phishing answers to CSV rows (no timestamps)
 function phishingToCsv(sessions) {
   if (sessions.length === 0) return '';
 
-  const headers = ['user_id', 'timestamp_start', 'timestamp_phishing', 'task_id', 'subject', 'is_phishing', 'user_is_phishing', 'stressors', 'after_timeout'];
+  const headers = ['user_id', 'task_id', 'subject', 'is_phishing', 'user_is_phishing', 'stressors', 'after_timeout'];
   let rows = [headers.map(escapeCSV).join(',')];
 
   sessions.forEach(session => {
@@ -48,8 +50,6 @@ function phishingToCsv(sessions) {
       session.phishing_answers.forEach(answer => {
         rows.push([
           escapeCSV(session.user_id),
-          escapeCSV(session.timestamp_start),
-          escapeCSV(session.timestamp_phishing),
           escapeCSV(answer.task_id),
           escapeCSV(answer.subject),
           escapeCSV(answer.is_phishing),
@@ -64,44 +64,25 @@ function phishingToCsv(sessions) {
   return rows.join('\n');
 }
 
-// Convert Summary data to CSV rows
-function summaryToCsv(sessions) {
-  if (sessions.length === 0) return '';
-
-  const headers = ['user_id', 'timestamp_start', 'timestamp_end', 'age', 'stress_rating', 'notes'];
-  let rows = [headers.map(escapeCSV).join(',')];
-
-  sessions.forEach(session => {
-    if (session.summary_data) {
-      const summary = session.summary_data;
-      rows.push([
-        escapeCSV(session.user_id),
-        escapeCSV(session.timestamp_start),
-        escapeCSV(session.timestamp_end),
-        escapeCSV(summary.age),
-        escapeCSV(summary.stress_rating),
-        escapeCSV(summary.notes)
-      ].join(','));
-    }
-  });
-
-  return rows.join('\n');
-}
-
-// Convert Users to CSV rows
+// Convert Users + Summary data to single CSV (merged)
 function usersToCsv(sessions) {
   if (sessions.length === 0) return '';
 
-  const headers = ['user_id', 'timestamp_start', 'timestamp_end', 'device_type', 'browser'];
+  const headers = ['user_id', 'age', 'stress_rating', 'stress_impact_factor', 'stress_impact_factor_notes', 'device_type', 'browser', 'timestamp_start', 'timestamp_end'];
   let rows = [headers.map(escapeCSV).join(',')];
 
   sessions.forEach(session => {
+    const summary = session.summary_data || {};
     rows.push([
       escapeCSV(session.user_id),
-      escapeCSV(session.timestamp_start),
-      escapeCSV(session.timestamp_end),
+      escapeCSV(summary.age || ''),
+      escapeCSV(summary.stress_rating || ''),
+      escapeCSV(summary.stress_impact_factor || ''),
+      escapeCSV(summary.stress_impact_factor_notes || ''),
       escapeCSV(session.device_type || 'unknown'),
-      escapeCSV(session.browser || 'unknown')
+      escapeCSV(session.browser || 'unknown'),
+      escapeCSV(session.timestamp_start),
+      escapeCSV(session.timestamp_end || '')
     ].join(','));
   });
 
@@ -114,7 +95,7 @@ function generateCsvExport(sessions) {
     USERS: usersToCsv(sessions),
     CISS: cissToCsv(sessions),
     PHISHING: phishingToCsv(sessions),
-    SUMMARY: summaryToCsv(sessions)
+    SUMMARY: usersToCsv(sessions) // Summary is now merged with users
   };
 }
 
@@ -122,7 +103,6 @@ module.exports = {
   generateCsvExport,
   cissToCsv,
   phishingToCsv,
-  summaryToCsv,
   usersToCsv,
   escapeCSV
 };

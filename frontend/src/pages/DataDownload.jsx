@@ -34,6 +34,14 @@ export default function DataDownload() {
     a.click();
   };
 
+  const downloadSessionsZip = () => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    const url = `${API_URL}/api/export/sessions/zip`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.click();
+  };
+
   return (
     <div className="page-container" style={{ minHeight: '100vh' }}>
       <div className="page-card" style={{ maxWidth: '56.25rem' }}>
@@ -75,7 +83,7 @@ export default function DataDownload() {
           </div>
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
           <button
             onClick={() => downloadCSV('users')}
             style={{
@@ -92,7 +100,7 @@ export default function DataDownload() {
             onMouseOver={(e) => e.target.style.background = '#5568d3'}
             onMouseOut={(e) => e.target.style.background = '#667eea'}
           >
-            Użytkownicy (CSV)
+            Użytkownicy + Podsumowanie (CSV)
           </button>
 
           <button
@@ -132,25 +140,6 @@ export default function DataDownload() {
           >
             Phishing (CSV)
           </button>
-
-          <button
-            onClick={() => downloadCSV('summary')}
-            style={{
-              padding: '0.75rem 1.5rem',
-              background: '#667eea',
-              color: 'white',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              fontSize: '0.9375rem',
-              fontWeight: 500,
-              transition: 'background 0.3s'
-            }}
-            onMouseOver={(e) => e.target.style.background = '#5568d3'}
-            onMouseOut={(e) => e.target.style.background = '#667eea'}
-          >
-            Podsumowanie (CSV)
-          </button>
         </div>
 
         <button
@@ -166,7 +155,8 @@ export default function DataDownload() {
             fontSize: '0.9375rem',
             fontWeight: 500,
             width: '100%',
-            transition: 'background 0.3s'
+            transition: 'background 0.3s',
+            marginBottom: '1rem'
           }}
           onMouseOver={(e) => !loading && (e.target.style.background = '#218838')}
           onMouseOut={(e) => !loading && (e.target.style.background = '#28A745')}
@@ -174,13 +164,35 @@ export default function DataDownload() {
           {loading ? 'Ładowanie...' : 'Załaduj wszystkie dane'}
         </button>
 
+        <button
+          onClick={downloadSessionsZip}
+          style={{
+            padding: '0.75rem 1.5rem',
+            background: '#FFC107',
+            color: '#333',
+            border: 'none',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            fontSize: '0.9375rem',
+            fontWeight: 500,
+            width: '100%',
+            transition: 'background 0.3s'
+          }}
+          onMouseOver={(e) => e.target.style.background = '#FFB300'}
+          onMouseOut={(e) => e.target.style.background = '#FFC107'}
+        >
+          📦 Pobierz wszystkie sesje (ZIP)
+        </button>
+
         <div style={{ marginTop: '1.5rem', fontSize: '0.8125rem', color: '#666', lineHeight: 1.6 }}>
           <p><strong>Informacje:</strong></p>
           <ul style={{ marginLeft: '1.25rem' }}>
-            <li>Każdy plik CSV zawiera dane w oddzielnym arkuszu</li>
+            <li><strong>Użytkownicy + Podsumowanie:</strong> Dane demograficzne, ocena stresu, czynnik wpływu stresu i timestampy</li>
+            <li><strong>CISS:</strong> Format szeroki (user_id, q1-q48) z wartościami numerycznymi 1-5</li>
+            <li><strong>Phishing:</strong> Odpowiedzi użytkowników bez timestampów (aby uniknąć duplikacji)</li>
             <li>Pliki można otworzyć w Excel, Google Sheets lub dowolnym edytorze tekstu</li>
             <li>Dane są zapisywane automatycznie w trakcie badania</li>
-            <li>Przechowywane w formacie JSON na serwerze (niezawodne, bez blokad pliku)</li>
+            <li><strong>ZIP z sesjami:</strong> Zawiera wszystkie pliki JSON z surowymi danymi sesji - przydatne do własnej analizy</li>
           </ul>
         </div>
       </div>
