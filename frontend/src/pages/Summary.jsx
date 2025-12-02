@@ -145,7 +145,7 @@ export default function Summary(){
               </label>
               <div className="stress-factors">
                 {[
-                  { value: 'timer', label: 'Czas (czas)' },
+                  { value: 'timer', label: 'Czas' },
                   { value: 'negative_feedback', label: 'Błędna informacja zwrotna' },
                   { value: 'permission_popup', label: 'Popup-y' },
                   { value: 'other', label: 'Inne' }

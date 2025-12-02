@@ -1,6 +1,4 @@
 // backend/utils/csvExport.js
-const fs = require('fs');
-const path = require('path');
 
 // Escape CSV values
 function escapeCSV(value) {
@@ -94,15 +92,10 @@ function generateCsvExport(sessions) {
   return {
     USERS: usersToCsv(sessions),
     CISS: cissToCsv(sessions),
-    PHISHING: phishingToCsv(sessions),
-    SUMMARY: usersToCsv(sessions) // Summary is now merged with users
+    PHISHING: phishingToCsv(sessions)
   };
 }
 
 module.exports = {
-  generateCsvExport,
-  cissToCsv,
-  phishingToCsv,
-  usersToCsv,
-  escapeCSV
+  generateCsvExport
 };
