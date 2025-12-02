@@ -16,6 +16,10 @@ services:
     name: ciss-phishing-frontend
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
+    routes:
+      - type: rewrite
+        source: /download
+        destination: /index.html
     envVars:
       - key: VITE_API_URL
         value: https://ciss-phishing-backend.onrender.com
