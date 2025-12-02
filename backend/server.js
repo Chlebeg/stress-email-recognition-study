@@ -1,10 +1,19 @@
 // backend/server.js
+require('dotenv').config();
+
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require("path");
 const archiver = require("archiver");
+
+// Use MongoDB or fallback to JSON storage
+const USE_MONGODB = process.env.MONGODB_URI ? true : false;
+const storage = USE_MONGODB 
+  ? require("./utils/mongoStorage")
+  : require("./utils/jsonStorage");
+
 const { 
   getSessionPath, 
   loadSessionFromPath,
@@ -12,7 +21,8 @@ const {
   appendPhishingWithPath, 
   appendSummaryWithPath,
   getAllSessions 
-} = require("./utils/jsonStorage");
+} = storage;
+
 const { generateCsvExport } = require("./utils/csvExport");
 
 const app = express();
@@ -27,6 +37,15 @@ function logEvent(message) {
     fs.appendFile('/tmp/app.log', logMessage, () => {});
   }
 }
+
+// Connect to MongoDB if using it
+if (USE_MONGODB) {
+  storage.connect().catch(err => {
+    console.error('Failed to connect to MongoDB:', err);
+    process.exit(1);
+  });
+}
+
 
 // CORS configuration for Render deployment
 const allowedOrigins = [
@@ -68,7 +87,7 @@ app.post("/api/login", async (req, res) => {
   if (!user_id) return res.status(400).json({ error: "user_id required" });
 
   try {
-    const result = getSessionPath(user_id, device_type, browser);
+    const result = await getSessionPath(user_id, device_type, browser);
     const sessionPath = result.path;
     
     if (result.collision) {
@@ -77,7 +96,7 @@ app.post("/api/login", async (req, res) => {
     }
     
     activeSessions[user_id] = sessionPath;
-    const sessionData = loadSessionFromPath(sessionPath);
+    const sessionData = await loadSessionFromPath(sessionPath);
     
     // Log session start for new session
     logEvent(`User ${user_id} STARTED questionnaire (device: ${device_type}, browser: ${browser})`);
@@ -148,9 +167,9 @@ app.post("/api/summary", async (req, res) => {
 });
 
 // Export all data as CSV files (zipped or individual downloads)
-app.get("/api/export", (req, res) => {
+app.get("/api/export", async (req, res) => {
   try {
-    const sessions = getAllSessions();
+    const sessions = await getAllSessions();
     const csvData = generateCsvExport(sessions);
     
     // Return as JSON object with all CSV strings
@@ -172,7 +191,7 @@ app.get("/api/export", (req, res) => {
 });
 
 // Download individual CSV file
-app.get("/api/export/:sheet", (req, res) => {
+app.get("/api/export/:sheet", async (req, res) => {
   try {
     const { sheet } = req.params;
     const validSheets = ['users', 'ciss', 'phishing', 'summary'];
@@ -181,7 +200,7 @@ app.get("/api/export/:sheet", (req, res) => {
       return res.status(400).json({ error: "invalid sheet" });
     }
     
-    const sessions = getAllSessions();
+    const sessions = await getAllSessions();
     const csvData = generateCsvExport(sessions);
     const sheetKey = sheet.toUpperCase();
     const csv = csvData[sheetKey];
@@ -196,18 +215,12 @@ app.get("/api/export/:sheet", (req, res) => {
 });
 
 // Download all session JSON files as ZIP
-app.get("/api/export/sessions/zip", (req, res) => {
+app.get("/api/export/sessions/zip", async (req, res) => {
   try {
-    const sessionsDir = path.join(__dirname, 'data', 'sessions');
+    const sessions = await getAllSessions();
     
-    if (!fs.existsSync(sessionsDir)) {
-      return res.status(404).json({ error: "sessions directory not found" });
-    }
-    
-    const files = fs.readdirSync(sessionsDir).filter(f => f.endsWith('.json'));
-    
-    if (files.length === 0) {
-      return res.status(404).json({ error: "no session files found" });
+    if (!sessions || sessions.length === 0) {
+      return res.status(404).json({ error: "no sessions found" });
     }
     
     const timestamp = new Date().toISOString().split('T')[0];
@@ -225,15 +238,16 @@ app.get("/api/export/sessions/zip", (req, res) => {
     
     archive.pipe(res);
     
-    // Add each session file to the archive
-    files.forEach(file => {
-      const filePath = path.join(sessionsDir, file);
-      archive.file(filePath, { name: file });
+    // Add each session as JSON file to the archive
+    sessions.forEach((session, index) => {
+      const filename = `${session.user_id}_${session.timestamp_start.replace(/[:.]/g, '-').slice(0, -5)}.json`;
+      const content = JSON.stringify(session, null, 2);
+      archive.append(content, { name: filename });
     });
     
     archive.finalize();
     
-    logEvent(`ZIP export: ${files.length} session files`);
+    logEvent(`ZIP export: ${sessions.length} session files`);
   } catch (e) {
     logEvent(`Error in /api/export/sessions/zip: ${e.message}`);
     res.status(500).json({ error: "export error" });
