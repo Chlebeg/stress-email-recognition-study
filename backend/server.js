@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 const { 
   getSessionPath, 
   loadSessionFromPath,
@@ -13,6 +14,17 @@ const {
 const { generateCsvExport } = require("./utils/csvExport");
 
 const app = express();
+
+// Helper function to log to both stderr and a file
+function logEvent(message) {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${message}\n`;
+  process.stderr.write(logMessage);
+  // Also write to file for Render's log archival
+  if (fs.existsSync && typeof fs.appendFile === 'function') {
+    fs.appendFile('/tmp/app.log', logMessage, () => {});
+  }
+}
 
 // CORS configuration for Render deployment
 const allowedOrigins = [
@@ -50,6 +62,7 @@ const activeSessions = {};
 
 app.post("/api/login", async (req, res) => {
   const { user_id, device_type, browser } = req.body;
+  logEvent(`POST /api/login received`);
   if (!user_id) return res.status(400).json({ error: "user_id required" });
 
   try {
@@ -65,17 +78,17 @@ app.post("/api/login", async (req, res) => {
     const sessionData = loadSessionFromPath(sessionPath);
     
     // Log session start for new session
-    const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] User ${user_id} STARTED questionnaire (device: ${device_type}, browser: ${browser})`);
+    logEvent(`User ${user_id} STARTED questionnaire (device: ${device_type}, browser: ${browser})`);
     
     res.json({ ok: true, user_id, session: sessionData });
   } catch (e) {
-    console.error(e);
+    logEvent(`Error in /api/login: ${e.message}`);
     res.status(500).json({ error: "server error" });
   }
 });
 
 app.post("/api/ciss", async (req, res) => {
+  logEvent(`POST /api/ciss received`);
   const { user_id, answers } = req.body;
   if (!user_id || !answers) return res.status(400).json({ error: "user_id and answers required" });
 
@@ -87,12 +100,13 @@ app.post("/api/ciss", async (req, res) => {
     appendCISSWithPath(sessionPath, answers);
     res.json({ ok: true });
   } catch (e) {
-    console.error(e);
+    logEvent(`Error in /api/ciss: ${e.message}`);
     res.status(500).json({ error: "server error" });
   }
 });
 
 app.post("/api/phishing", async (req, res) => {
+  logEvent(`POST /api/phishing received`);
   const { user_id, answers } = req.body;
   if (!user_id || !answers) return res.status(400).json({ error: "user_id and answers required" });
 
@@ -104,12 +118,13 @@ app.post("/api/phishing", async (req, res) => {
     appendPhishingWithPath(sessionPath, answers);
     res.json({ ok: true });
   } catch (e) {
-    console.error(e);
+    logEvent(`Error in /api/phishing: ${e.message}`);
     res.status(500).json({ error: "server error" });
   }
 });
 
 app.post("/api/summary", async (req, res) => {
+  logEvent(`POST /api/summary received`);
   const { user_id, summary } = req.body;
   if (!user_id || !summary) return res.status(400).json({ error: "user_id and summary required" });
 
@@ -121,12 +136,11 @@ app.post("/api/summary", async (req, res) => {
     appendSummaryWithPath(sessionPath, summary);
     
     // Log completion
-    const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] User ${user_id} FINISHED questionnaire`);
+    logEvent(`User ${user_id} FINISHED questionnaire`);
     
     res.json({ ok: true });
   } catch (e) {
-    console.error(e);
+    logEvent(`Error in /api/summary: ${e.message}`);
     res.status(500).json({ error: "server error" });
   }
 });
@@ -150,7 +164,7 @@ app.get("/api/export", (req, res) => {
       }
     });
   } catch (e) {
-    console.error(e);
+    logEvent(`Error in /api/export: ${e.message}`);
     res.status(500).json({ error: "export error" });
   }
 });
@@ -174,10 +188,10 @@ app.get("/api/export/:sheet", (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="exam_${sheet}_${new Date().toISOString().split('T')[0]}.csv"`);
     res.send(csv);
   } catch (e) {
-    console.error(e);
+    logEvent(`Error in /api/export/:sheet: ${e.message}`);
     res.status(500).json({ error: "export error" });
   }
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server listening on http://localhost:${PORT}`));
+app.listen(PORT, () => process.stderr.write(`Server listening on http://localhost:${PORT}\n`));
