@@ -190,9 +190,3 @@ In `frontend/public/phishing.json`, stressors can be configured per task:
   "stressors": ["timer"]  // stressors for this task
 }
 ```
-
-## Future Enhancements
-- Multi-language support (language selection on login page)
-- Additional stress factors (fake popups, etc.)
-- Advanced statistical analysis dashboard
-- Real-time result visualization
