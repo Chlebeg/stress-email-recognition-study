@@ -1,9 +1,13 @@
 // backend/utils/csvExport.js
 
-// Escape CSV values
+// Escape CSV values and prevent formula injection (OWASP A03)
 function escapeCSV(value) {
   if (value === null || value === undefined) return '';
-  const str = String(value);
+  let str = String(value);
+  // Prefix values that could be interpreted as spreadsheet formulas
+  if (str.length > 0 && ['=', '+', '-', '@', '\t', '\r'].includes(str[0])) {
+    str = `'${str}`;
+  }
   if (str.includes(',') || str.includes('"') || str.includes('\n')) {
     return `"${str.replace(/"/g, '""')}"`;
   }

@@ -18,8 +18,26 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 .timer-box { margin-top:0.75rem; font-weight:bold; }
 .timeout-modal { margin-top:0.75rem; padding:0.75rem; border-radius:0.5rem; background:#fff3f3; border:0.0625rem solid #ffcccc; }
 
+/* DataDownload page buttons */
+.btn-download {
+  padding: 0.75rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.btn-download:hover { background: #5568d3; }
+.btn-download-primary { background: #28A745; width: 100%; margin-bottom: 1rem; }
+.btn-download-primary:hover { background: #218838; }
+.btn-download-disabled { background: #ccc !important; cursor: not-allowed; }
+.btn-download-zip { background: #FFC107; color: #333; width: 100%; }
+.btn-download-zip:hover { background: #FFB300; }
+
 /* Intro pages */
-.card { background:#fff; padding:1.125rem; margin-top:1rem; border-radius:0.5rem; box-shadow:0 0.125rem 0.375rem rgba(0,0,0,0.04); }
 .intro-content { margin:0.75rem 0; line-height:1.6; }
 .intro-content p { margin:0.5rem 0; }
 .intro-content strong { color:#667eea; font-weight: 600; }
@@ -1389,7 +1407,7 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   /* Remove hover effects, use active states instead */
   button:hover {
     box-shadow: none;
-    background: unchanged;
+    background: inherit;
   }
 
   button:active {
@@ -1398,7 +1416,7 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   }
 
   .stress-button:hover {
-    border-color: unchanged;
+    border-color: inherit;
   }
 
   .stress-button:active {

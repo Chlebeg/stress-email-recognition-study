@@ -36,7 +36,7 @@ export default function PermissionPopup({
   const ANIMATION_DURATION = 300;
   
   // Randomly choose between microphone and video (50/50)
-  const randomType = useRef(Math.random() < 1 ? 'microphone' : 'video').current;
+  const randomType = useRef(Math.random() < 0.5 ? 'microphone' : 'video').current;
   const isMicrophone = randomType === 'microphone';
 
   // Helper: Clear all active timeouts

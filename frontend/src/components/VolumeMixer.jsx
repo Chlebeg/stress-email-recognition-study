@@ -28,6 +28,9 @@ export default function VolumeMixer({ isActive, showAfterInteraction }) {
       return;
     }
 
+    // Don't run the rAF loop if the component won't render
+    if (!showAfterInteraction) return;
+
     const animate = () => {
       frameCountRef.current++;
       

@@ -89,7 +89,8 @@ function saveSessionToPath(filePath, sessionData) {
 
 // Append CISS answers using filepath
 function appendCISSWithPath(filePath, answers) {
-  let session = loadSessionFromPath(filePath);
+  const session = loadSessionFromPath(filePath);
+  if (!session) throw new Error(`Failed to load session from ${filePath}`);
   session.ciss_answers = answers;
   session.timestamp_ciss = new Date().toISOString();
   saveSessionToPath(filePath, session);
@@ -97,7 +98,8 @@ function appendCISSWithPath(filePath, answers) {
 
 // Append Phishing answers using filepath
 function appendPhishingWithPath(filePath, answers) {
-  let session = loadSessionFromPath(filePath);
+  const session = loadSessionFromPath(filePath);
+  if (!session) throw new Error(`Failed to load session from ${filePath}`);
   session.phishing_answers = answers;
   session.timestamp_phishing = new Date().toISOString();
   saveSessionToPath(filePath, session);
@@ -105,7 +107,8 @@ function appendPhishingWithPath(filePath, answers) {
 
 // Append Summary data using filepath
 function appendSummaryWithPath(filePath, data) {
-  let session = loadSessionFromPath(filePath);
+  const session = loadSessionFromPath(filePath);
+  if (!session) throw new Error(`Failed to load session from ${filePath}`);
   session.summary_data = data;
   session.timestamp_end = new Date().toISOString();
   saveSessionToPath(filePath, session);

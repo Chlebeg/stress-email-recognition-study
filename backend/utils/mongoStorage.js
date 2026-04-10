@@ -203,7 +203,6 @@ module.exports = {
   connect,
   getSessionPath,
   loadSessionFromPath,
-  saveSessionToPath,
   appendCISSWithPath,
   appendPhishingWithPath,
   appendSummaryWithPath,

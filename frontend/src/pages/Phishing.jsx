@@ -50,8 +50,7 @@ export default function Phishing(){
   const timerRef = useRef(null);
   const feedbackTimerRef = useRef(null);
   const permissionPopupTimeoutRef = useRef(null);
-  const { playTick, playTock } = useClockSound();
-  const soundCounterRef = useRef(0);
+  const { scheduleAllTicks, cancelScheduled } = useClockSound();
   const nav = useNavigate();
 
   useEffect(()=> {
@@ -90,43 +89,23 @@ export default function Phishing(){
     
     // Trigger permission popup if in task stressors
     if ((t.stressors || []).includes('permission_popup')) {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         setPermissionPopup(true);
       }, 300);
+      permissionPopupTimeoutRef.current = timeoutId;
     }
     
     if (settings.task_timer_enabled && (t.stressors || []).includes('timer')) {
       setTimerLeft(settings.task_timer_duration);
-      soundCounterRef.current = 0;
-      timerRef.current = setInterval(()=> {
+      scheduleAllTicks(settings.task_timer_duration);
+      timerRef.current = setInterval(() => {
         setTimerLeft(prev => {
           const currentTime = prev - 1;
-          
           if (currentTime <= 0) {
             clearTimer();
             setTimedOut(true);
             return 0;
           }
-          
-          // Play tick/tock sound for entire duration
-          // Volume: 10% for entire duration except last 10 seconds
-          // Last 10 seconds: linear ramp from 10% to 50%
-          let volume = 0.1; // Base volume
-          
-          if (currentTime <= 10) {
-            // Linear interpolation: 10% at 10 seconds, 50% at 0 seconds
-            // Formula: 0.1 + (50 - 10) / 10 * (10 - currentTime) / 100
-            volume = 0.1 + (0.5 - 0.1) * (10 - currentTime) / 10;
-          }
-          
-          // Play sound every second (alternating tick/tock)
-          soundCounterRef.current += 1;
-          if (soundCounterRef.current % 2 === 0) {
-            playTick(volume);
-          } else {
-            playTock(volume);
-          }
-          
           return currentTime;
         });
       }, 1000);
@@ -135,9 +114,10 @@ export default function Phishing(){
     }
     return () => clearTimer();
     // eslint-disable-next-line
-  }, [index, tasks, playTick, playTock]);
+  }, [index, tasks, scheduleAllTicks]);
 
   const clearTimer = () => {
+    cancelScheduled();
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -271,13 +251,14 @@ export default function Phishing(){
       is_phishing: t.is_phishing,
       user_is_phishing: ans === 'phishing',
       stressors: t.stressors || [],
-      after_timeout: afterTimeout
+      after_timeout: afterTimeout,
+      permission_response: permissionResponse
     };
     const arr = [...phishingAnswers, row];
     setPhishingAnswers(arr);
 
     // Check if this question has negative feedback stressor
-    if ((t.stressors || []).includes('negative_feedback')) {
+    if (settings.stress_negative_feedback_enabled && (t.stressors || []).includes('negative_feedback')) {
       clearTimer(); // Stop the timer
       setFeedbackMessage('Odpowiedziałeś błędnie');
       clearInterval(feedbackTimerRef.current);
@@ -318,7 +299,7 @@ export default function Phishing(){
   };
 
   const buttonStyle = (btnStyle) => {
-    const base = t.style?.button || {};
+    const base = (btnStyle && t.style?.[btnStyle]) || t.style?.button || {};
     return {
       background: base.backgroundColor || '#000',
       backgroundColor: base.backgroundColor || '#000',
@@ -460,7 +441,7 @@ export default function Phishing(){
 
           {/* Timer Display */}
           {(settings.task_timer_enabled && (t.stressors || []).includes('timer')) && (
-            <div className={`timer-box ${timerLeft <= 10 ? 'timer-warning' : ''}`}>
+            <div className={`timer-box ${timerLeft !== null && timerLeft <= 10 ? 'timer-warning' : ''}`}>
               <div className="timer-label">Pozostały czas:</div>
               <div className="timer-value">{timerLeft > 0 ? timerLeft : 0}s</div>
             </div>

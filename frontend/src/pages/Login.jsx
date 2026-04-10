@@ -17,8 +17,7 @@ export default function Login(){
   const [displayId, setDisplayId] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const { setUser, setSettings } = useApp();
+  const { setUser } = useApp();
   const nav = useNavigate();
 
   // Generate ID on mount
@@ -27,6 +26,27 @@ export default function Login(){
     setGeneratedId(id);
     setDisplayId(id);
   }, []);
+
+  // Recursive login attempt to handle user_id collisions without stale closure
+  const attemptLogin = async (userId, attempt) => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    const { device_type, browser } = getBrowserDevice();
+    const response = await fetch(`${API_URL}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId, device_type, browser }),
+    });
+    const data = await response.json();
+    if (data.shouldRetry && attempt < 3) {
+      const newId = generateSessionID();
+      setGeneratedId(newId);
+      setDisplayId(newId);
+      return new Promise(resolve =>
+        setTimeout(() => resolve(attemptLogin(newId, attempt + 1)), 200)
+      );
+    }
+    return { data, userId };
+  };
 
   const start = async () => {
     if (!generatedId) {
@@ -38,73 +58,7 @@ export default function Login(){
     setError('');
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const { device_type, browser } = getBrowserDevice();
-
-      const response = await fetch(`${API_URL}/api/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: generatedId,
-          device_type,
-          browser
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!data.ok && data.shouldRetry && retryCount < 3) {
-        // Silent retry on collision
-        console.log(`Collision detected, retrying... (attempt ${retryCount + 1}/3)`);
-        const newRetryCount = retryCount + 1;
-        setRetryCount(newRetryCount);
-        const newId = generateSessionID();
-        setGeneratedId(newId);
-        setDisplayId(newId);
-        setLoading(false);
-        
-        // Auto-retry after short delay
-        setTimeout(async () => {
-          // Re-attempt login with new ID
-          try {
-            const response2 = await fetch(`${API_URL}/api/login`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                user_id: newId,
-                device_type,
-                browser
-              }),
-            });
-            const data2 = await response2.json();
-            
-            if (!data2.ok && data2.shouldRetry && newRetryCount < 3) {
-              // Continue retry logic
-              console.log(`Collision detected, retrying... (attempt ${newRetryCount + 1}/3)`);
-              setRetryCount(newRetryCount + 1);
-              const newerIdId = generateSessionID();
-              setGeneratedId(newerIdId);
-              setDisplayId(newerIdId);
-              setTimeout(() => start(), 200);
-              return;
-            }
-            
-            if (!data2.ok) {
-              setError('Błąd logowania. Spróbuj ponownie.');
-              setLoading(false);
-              return;
-            }
-            
-            setUser({ user_id: newId });
-            nav('/ciss-intro');
-          } catch (e) {
-            console.error('Retry error:', e);
-            setError('Błąd połączenia z serwerem. Sprawdź czy backend jest uruchomiony.');
-            setLoading(false);
-          }
-        }, 200);
-        return;
-      }
+      const { data, userId } = await attemptLogin(generatedId, 0);
 
       if (!data.ok) {
         setError('Błąd logowania. Spróbuj ponownie.');
@@ -112,10 +66,9 @@ export default function Login(){
         return;
       }
 
-      setUser({ user_id: generatedId });
+      setUser({ user_id: userId });
       nav('/ciss-intro');
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch (e) {
       setError('Błąd połączenia z serwerem. Sprawdź czy backend jest uruchomiony.');
       setLoading(false);
     }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles.css';
 
 export default function DataDownload() {
   const [loading, setLoading] = useState(false);
@@ -86,57 +85,21 @@ export default function DataDownload() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
           <button
             onClick={() => downloadCSV('users')}
-            style={{
-              padding: '0.75rem 1.5rem',
-              background: '#667eea',
-              color: 'white',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              fontSize: '0.9375rem',
-              fontWeight: 500,
-              transition: 'background 0.3s'
-            }}
-            onMouseOver={(e) => e.target.style.background = '#5568d3'}
-            onMouseOut={(e) => e.target.style.background = '#667eea'}
+            className="btn-download"
           >
             Użytkownicy + Podsumowanie (CSV)
           </button>
 
           <button
             onClick={() => downloadCSV('ciss')}
-            style={{
-              padding: '0.75rem 1.5rem',
-              background: '#667eea',
-              color: 'white',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              fontSize: '0.9375rem',
-              fontWeight: 500,
-              transition: 'background 0.3s'
-            }}
-            onMouseOver={(e) => e.target.style.background = '#5568d3'}
-            onMouseOut={(e) => e.target.style.background = '#667eea'}
+            className="btn-download"
           >
             CISS (CSV)
           </button>
 
           <button
             onClick={() => downloadCSV('phishing')}
-            style={{
-              padding: '0.75rem 1.5rem',
-              background: '#667eea',
-              color: 'white',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              fontSize: '0.9375rem',
-              fontWeight: 500,
-              transition: 'background 0.3s'
-            }}
-            onMouseOver={(e) => e.target.style.background = '#5568d3'}
-            onMouseOut={(e) => e.target.style.background = '#667eea'}
+            className="btn-download"
           >
             Phishing (CSV)
           </button>
@@ -145,41 +108,14 @@ export default function DataDownload() {
         <button
           onClick={handleDownloadAll}
           disabled={loading}
-          style={{
-            padding: '0.75rem 1.5rem',
-            background: loading ? '#ccc' : '#28A745',
-            color: 'white',
-            border: 'none',
-            borderRadius: '0.5rem',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontSize: '0.9375rem',
-            fontWeight: 500,
-            width: '100%',
-            transition: 'background 0.3s',
-            marginBottom: '1rem'
-          }}
-          onMouseOver={(e) => !loading && (e.target.style.background = '#218838')}
-          onMouseOut={(e) => !loading && (e.target.style.background = '#28A745')}
+          className={`btn-download btn-download-primary${loading ? ' btn-download-disabled' : ''}`}
         >
           {loading ? 'Ładowanie...' : 'Załaduj wszystkie dane'}
         </button>
 
         <button
           onClick={downloadSessionsZip}
-          style={{
-            padding: '0.75rem 1.5rem',
-            background: '#FFC107',
-            color: '#333',
-            border: 'none',
-            borderRadius: '0.5rem',
-            cursor: 'pointer',
-            fontSize: '0.9375rem',
-            fontWeight: 500,
-            width: '100%',
-            transition: 'background 0.3s'
-          }}
-          onMouseOver={(e) => e.target.style.background = '#FFB300'}
-          onMouseOut={(e) => e.target.style.background = '#FFC107'}
+          className="btn-download btn-download-zip"
         >
           📦 Pobierz wszystkie sesje (ZIP)
         </button>

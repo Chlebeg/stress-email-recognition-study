@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
 
 export default function Summary(){
-  const { user, summary = {}, setSummary, cissAnswers, phishingAnswers } = useApp();
+  const { user, summary = {}, setSummary } = useApp();
   const [age, setAge] = useState((summary && summary.age) || '');
   const [stressRating, setStressRating] = useState((summary && summary.stress_rating) || '');
   const [stressImpactFactor, setStressImpactFactor] = useState((summary && summary.stress_impact_factor) || '');
@@ -38,7 +38,7 @@ export default function Summary(){
       return;
     }
 
-    const s = { age, stress_rating: stressRating, stress_impact_factor: stressImpactFactor, stress_impact_factor_notes: stressImpactNotes, notes: { ciss_count: cissAnswers.length, phishing_count: phishingAnswers.length } };
+    const s = { age, stress_rating: stressRating, stress_impact_factor: stressImpactFactor, stress_impact_factor_notes: stressImpactNotes };
     
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';

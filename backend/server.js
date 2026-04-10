@@ -5,7 +5,6 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
-const path = require("path");
 const archiver = require("archiver");
 
 // Use MongoDB or fallback to JSON storage
@@ -44,6 +43,7 @@ if (USE_MONGODB) {
     console.error('Failed to connect to MongoDB:', err);
     process.exit(1);
   });
+  process.on('SIGTERM', () => storage.closeConnection());
 }
 
 
@@ -118,7 +118,7 @@ app.post("/api/ciss", async (req, res) => {
     if (!sessionPath) {
       return res.status(400).json({ error: "session not initialized" });
     }
-    appendCISSWithPath(sessionPath, answers);
+    await appendCISSWithPath(sessionPath, answers);
     res.json({ ok: true });
   } catch (e) {
     logEvent(`Error in /api/ciss: ${e.message}`);
@@ -136,7 +136,7 @@ app.post("/api/phishing", async (req, res) => {
     if (!sessionPath) {
       return res.status(400).json({ error: "session not initialized" });
     }
-    appendPhishingWithPath(sessionPath, answers);
+    await appendPhishingWithPath(sessionPath, answers);
     res.json({ ok: true });
   } catch (e) {
     logEvent(`Error in /api/phishing: ${e.message}`);
@@ -154,7 +154,7 @@ app.post("/api/summary", async (req, res) => {
     if (!sessionPath) {
       return res.status(400).json({ error: "session not initialized" });
     }
-    appendSummaryWithPath(sessionPath, summary);
+    await appendSummaryWithPath(sessionPath, summary);
     
     // Log completion
     logEvent(`User ${user_id} FINISHED questionnaire`);
@@ -166,7 +166,10 @@ app.post("/api/summary", async (req, res) => {
   }
 });
 
-// Export all data as CSV files (zipped or individual downloads)
+// Export routes — only registered in non-production environments
+// In production, data is accessed directly via MongoDB
+if (process.env.NODE_ENV !== 'production') {
+
 app.get("/api/export", async (req, res) => {
   try {
     const sessions = await getAllSessions();
@@ -186,6 +189,45 @@ app.get("/api/export", async (req, res) => {
     });
   } catch (e) {
     logEvent(`Error in /api/export: ${e.message}`);
+    res.status(500).json({ error: "export error" });
+  }
+});
+
+// Download all session JSON files as ZIP — must be registered before /api/export/:sheet
+app.get("/api/export/sessions/zip", async (req, res) => {
+  try {
+    const sessions = await getAllSessions();
+    
+    if (!sessions || sessions.length === 0) {
+      return res.status(404).json({ error: "no sessions found" });
+    }
+    
+    const timestamp = new Date().toISOString().split('T')[0];
+    const zipFilename = `sessions_${timestamp}.zip`;
+    
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${zipFilename}"`);
+    
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    
+    archive.on('error', (err) => {
+      logEvent(`Error creating ZIP archive: ${err.message}`);
+      res.status(500).json({ error: "archive error" });
+    });
+    
+    archive.pipe(res);
+    
+    sessions.forEach((session) => {
+      const filename = `${session.user_id}_${session.timestamp_start.replace(/[:.]/g, '-').slice(0, -5)}.json`;
+      const content = JSON.stringify(session, null, 2);
+      archive.append(content, { name: filename });
+    });
+    
+    archive.finalize();
+    
+    logEvent(`ZIP export: ${sessions.length} session files`);
+  } catch (e) {
+    logEvent(`Error in /api/export/sessions/zip: ${e.message}`);
     res.status(500).json({ error: "export error" });
   }
 });
@@ -214,45 +256,7 @@ app.get("/api/export/:sheet", async (req, res) => {
   }
 });
 
-// Download all session JSON files as ZIP
-app.get("/api/export/sessions/zip", async (req, res) => {
-  try {
-    const sessions = await getAllSessions();
-    
-    if (!sessions || sessions.length === 0) {
-      return res.status(404).json({ error: "no sessions found" });
-    }
-    
-    const timestamp = new Date().toISOString().split('T')[0];
-    const zipFilename = `sessions_${timestamp}.zip`;
-    
-    res.setHeader('Content-Type', 'application/zip');
-    res.setHeader('Content-Disposition', `attachment; filename="${zipFilename}"`);
-    
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    
-    archive.on('error', (err) => {
-      logEvent(`Error creating ZIP archive: ${err.message}`);
-      res.status(500).json({ error: "archive error" });
-    });
-    
-    archive.pipe(res);
-    
-    // Add each session as JSON file to the archive
-    sessions.forEach((session, index) => {
-      const filename = `${session.user_id}_${session.timestamp_start.replace(/[:.]/g, '-').slice(0, -5)}.json`;
-      const content = JSON.stringify(session, null, 2);
-      archive.append(content, { name: filename });
-    });
-    
-    archive.finalize();
-    
-    logEvent(`ZIP export: ${sessions.length} session files`);
-  } catch (e) {
-    logEvent(`Error in /api/export/sessions/zip: ${e.message}`);
-    res.status(500).json({ error: "export error" });
-  }
-});
+} // end dev-only export routes
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => process.stderr.write(`Server listening on http://localhost:${PORT}\n`));

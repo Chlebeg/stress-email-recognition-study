@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import CISSIntro from './pages/CISSIntro';
@@ -7,9 +7,9 @@ import PhishingIntro from './pages/PhishingIntro';
 import Phishing from './pages/Phishing';
 import Summary from './pages/Summary';
 import End from './pages/End';
-import DataDownload from './pages/DataDownload';
-import VolumeMixer from './components/VolumeMixer';
-import { useApp } from './state/AppContext';
+
+const isDev = import.meta.env.MODE === 'development';
+const DataDownload = isDev ? lazy(() => import('./pages/DataDownload')) : null;
 
 export default function App() {
 
@@ -28,7 +28,9 @@ export default function App() {
           <Route path="/phishing" element={<Phishing />} />
           <Route path="/summary" element={<Summary />} />
           <Route path="/end" element={<End />} />
-          <Route path="/download" element={<DataDownload />} />
+          {isDev && DataDownload && (
+            <Route path="/download" element={<Suspense fallback={null}><DataDownload /></Suspense>} />
+          )}
         </Routes>
       </main>
 
