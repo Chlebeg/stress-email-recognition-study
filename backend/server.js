@@ -37,11 +37,13 @@ function logEvent(message) {
   }
 }
 
-// Connect to MongoDB if using it
+// Connect to MongoDB if using it; fall back to JSON storage if connection fails
 if (USE_MONGODB) {
   storage.connect().catch(err => {
-    console.error('Failed to connect to MongoDB:', err);
-    process.exit(1);
+    console.error('Failed to connect to MongoDB, falling back to JSON storage:', err);
+    // Swap out storage functions to JSON fallback at runtime
+    const jsonStorage = require('./utils/jsonStorage');
+    Object.assign(storage, jsonStorage);
   });
   process.on('SIGTERM', () => storage.closeConnection());
 }

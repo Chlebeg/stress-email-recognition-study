@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
+import { Stressors } from '../constants/Stressors';
 
 export default function Summary(){
   const { user, summary = {}, setSummary } = useApp();
@@ -39,6 +40,7 @@ export default function Summary(){
     }
 
     const s = { age, stress_rating: stressRating, stress_impact_factor: stressImpactFactor, stress_impact_factor_notes: stressImpactNotes };
+    setSummary(s);
     
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
@@ -143,9 +145,9 @@ export default function Summary(){
               </label>
               <div className="stress-factors">
                 {[
-                  { value: 'timer', label: 'Ograniczony czas' },
-                  { value: 'negative_feedback', label: 'Błędna informacja zwrotna (informacja o błędnej odpowiedzi, mimo poprawnej klasyfikacji)' },
-                  { value: 'permission_popup', label: 'Popup-y na stronie' },
+                  { value: Stressors.TIMER, label: 'Ograniczony czas' },
+                  { value: Stressors.NEGATIVE_FEEDBACK, label: 'Błędna informacja zwrotna (informacja o błędnej odpowiedzi, mimo poprawnej klasyfikacji)' },
+                  { value: Stressors.PERMISSION_POPUP, label: 'Popup-y na stronie' },
                   { value: 'other', label: 'Inne' }
                 ].map(factor => (
                   <label key={factor.value} className="factor-option">

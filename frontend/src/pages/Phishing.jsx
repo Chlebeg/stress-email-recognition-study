@@ -4,6 +4,7 @@ import { useApp } from '../state/AppContext';
 import useClockSound from '../hooks/useClockSound';
 import PermissionPopup from '../components/PermissionPopup';
 import VolumeMixer from '../components/VolumeMixer';
+import { Stressors } from '../constants/Stressors';
 
 // Component to try loading image with multiple extensions
 function ImageWithFallback({ basePath, alt, className }) {
@@ -88,14 +89,14 @@ export default function Phishing(){
     if (!t) return;
     
     // Trigger permission popup if in task stressors
-    if ((t.stressors || []).includes('permission_popup')) {
+    if ((t.stressors || []).includes(Stressors.PERMISSION_POPUP)) {
       const timeoutId = setTimeout(() => {
         setPermissionPopup(true);
       }, 300);
       permissionPopupTimeoutRef.current = timeoutId;
     }
     
-    if (settings.task_timer_enabled && (t.stressors || []).includes('timer')) {
+    if (settings.task_timer_enabled && (t.stressors || []).includes(Stressors.TIMER)) {
       setTimerLeft(settings.task_timer_duration);
       scheduleAllTicks(settings.task_timer_duration);
       timerRef.current = setInterval(() => {
@@ -131,11 +132,9 @@ export default function Phishing(){
       logoAlign: null,
       logoUrl: null,
       separatorLine: false,
-      separatorColor: null,
       sections: [],
       buttons: [],
-      banners: [],
-      headerEnd: false
+      banners: []
     };
 
     const lines = bodyText.split('\n');
@@ -164,11 +163,7 @@ export default function Phishing(){
       }
       // Separator line
       else if (line.startsWith('[SEPARATOR_LINE_')) {
-        const match = line.match(/\[SEPARATOR_LINE_(\w+)\]/);
-        if (match) {
-          parts.separatorLine = true;
-          parts.separatorColor = match[1].toLowerCase();
-        }
+        parts.separatorLine = true;
       }
       // Section markers
       else if (line.startsWith('[SECTION:')) {
@@ -184,9 +179,6 @@ export default function Phishing(){
           parts.sections.push(currentSection.join('\n'));
           currentSection = [];
         }
-      }
-      else if (line === '[END_HEADER]') {
-        parts.headerEnd = true;
       }
       // Banner with position
       else if (line.startsWith('[BANNER_')) {
@@ -258,7 +250,7 @@ export default function Phishing(){
     setPhishingAnswers(arr);
 
     // Check if this question has negative feedback stressor
-    if (settings.stress_negative_feedback_enabled && (t.stressors || []).includes('negative_feedback')) {
+    if (settings.stress_negative_feedback_enabled && (t.stressors || []).includes(Stressors.NEGATIVE_FEEDBACK)) {
       clearTimer(); // Stop the timer
       setFeedbackMessage('Odpowiedziałeś błędnie');
       clearInterval(feedbackTimerRef.current);
@@ -440,7 +432,7 @@ export default function Phishing(){
           </div>
 
           {/* Timer Display */}
-          {(settings.task_timer_enabled && (t.stressors || []).includes('timer')) && (
+          {(settings.task_timer_enabled && (t.stressors || []).includes(Stressors.TIMER)) && (
             <div className={`timer-box ${timerLeft !== null && timerLeft <= 10 ? 'timer-warning' : ''}`}>
               <div className="timer-label">Pozostały czas:</div>
               <div className="timer-value">{timerLeft > 0 ? timerLeft : 0}s</div>

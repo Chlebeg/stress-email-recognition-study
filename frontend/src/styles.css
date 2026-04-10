@@ -15,7 +15,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 .muted { color:#666; margin-top:0.5rem; font-size:0.8125rem; }
 .task { margin-top:0.625rem; }
 .task-subject { margin-top:0.5rem; background:#fafafa; padding:0.5rem; border-radius:0.375rem; }
-.timer-box { margin-top:0.75rem; font-weight:bold; }
 .timeout-modal { margin-top:0.75rem; padding:0.75rem; border-radius:0.5rem; background:#fff3f3; border:0.0625rem solid #ffcccc; }
 
 /* DataDownload page buttons */
@@ -67,13 +66,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 
 /* Error message */
 .error-message { background:#ffebee; color:#c62828; padding:0.625rem; border-left:0.25rem solid #c62828; border-radius:0.25rem; margin:0.5rem 0; font-size:0.8125rem; }
-
-/* Single-page CISS questions container */
-.questions-container { max-height:37.5rem; overflow-y:auto; border:0.0625rem solid #ddd; border-radius:0.375rem; padding:0; margin:0.75rem 0; background:#fafafa; }
-.questions-container::-webkit-scrollbar { width:0.5rem; }
-.questions-container::-webkit-scrollbar-track { background:#f1f1f1; }
-.questions-container::-webkit-scrollbar-thumb { background:#888; border-radius:0.25rem; }
-.questions-container::-webkit-scrollbar-thumb:hover { background:#555; }
 
 /* Question block styling */
 .question-block { padding:0.625rem; border-bottom:0.0625rem solid #eee; border-left:0.1875rem solid #ffc107; background:white; margin:0; }
@@ -975,13 +967,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
     margin-top: 0.375rem;
   }
 
-  .task-body {
-    font-size: 0.875rem;
-    line-height: 1.4;
-    padding: 0.375rem 0;
-    margin-top: 0.375rem;
-  }
-
   .task-progress {
     font-size: 0.6875rem;
     margin-top: 0.25rem;
@@ -1005,20 +990,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   .timeout-message {
     font-size: 0.75rem;
     margin-bottom: 0.375rem;
-  }
-
-  .answers {
-    display: flex;
-    gap: 0.375rem;
-    margin-top: 0.625rem;
-    flex-wrap: wrap;
-  }
-
-  .answers button {
-    flex: 1;
-    min-width: 4.0625rem;
-    padding: 0.5625rem 0.375rem;
-    font-size: 0.75rem;
   }
 
   /* ========== End Page ========== */
@@ -1154,18 +1125,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   .info-box p,
   .summary-note p {
     margin: 0.125rem 0;
-  }
-
-  /* ========== Progress Bar ========== */
-
-  .progress-bar {
-    height: 0.375rem;
-    margin: 0.625rem 0;
-  }
-
-  .progress-text {
-    font-size: 0.625rem;
-    margin-top: 0.25rem;
   }
 
   /* ========== Stress Scale ========== */
@@ -1555,20 +1514,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   display: block;
 }
 
-/* Email Logos */
-.email-logos {
-  text-align: center;
-  margin-bottom: 1rem;
-  padding: 0.5rem 0;
-}
-
-.email-logo {
-  max-width: 200px;
-  height: auto;
-  margin-bottom: 0.5rem;
-  display: inline-block;
-}
-
 /* Logo Alignment Containers */
 .email-logo-container {
   margin-bottom: 1rem;
@@ -1585,13 +1530,6 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 
 .email-logo-align-right {
   text-align: right;
-}
-
-/* Email Banners */
-.email-banners {
-  text-align: center;
-  margin: 1rem 0;
-  padding: 0.5rem 0;
 }
 
 .email-banner-container {
