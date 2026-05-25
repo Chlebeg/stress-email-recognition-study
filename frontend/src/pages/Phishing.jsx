@@ -44,10 +44,11 @@ export default function Phishing(){
   const [timedOut, setTimedOut] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const [permissionPopup, setPermissionPopup] = useState(null);
-  const [permissionType, setPermissionType] = useState(null); // 'microphone' or 'video'
+  const [permissionType, setPermissionType] = useState(null); // 'microphone' or 'camera'
   const [permissionTypeForMixer, setPermissionTypeForMixer] = useState(null); // Persist for mixer
   const [permissionResponse, setPermissionResponse] = useState(null);
   const [showMixer, setShowMixer] = useState(false); // Show mixer when confirmation appears
+  const [showCameraLoading, setShowCameraLoading] = useState(false);
   const timerRef = useRef(null);
   const feedbackTimerRef = useRef(null);
   const permissionPopupTimeoutRef = useRef(null);
@@ -82,6 +83,7 @@ export default function Phishing(){
     setShowMixer(false);
     setPermissionType(null);
     setPermissionTypeForMixer(null);
+    setShowCameraLoading(false);
     clearTimer();
     clearInterval(feedbackTimerRef.current);
     clearTimeout(permissionPopupTimeoutRef.current);
@@ -89,8 +91,16 @@ export default function Phishing(){
     if (!t) return;
     
     // Trigger permission popup if in task stressors
-    if ((t.stressors || []).includes(Stressors.PERMISSION_POPUP)) {
+    const stressors = t.stressors || [];
+    const popupType = stressors.includes(Stressors.PERMISSION_POPUP_CAMERA)
+      ? 'camera'
+      : stressors.includes(Stressors.PERMISSION_POPUP_MICROPHONE)
+        ? 'microphone'
+        : null;
+    if (popupType) {
       const timeoutId = setTimeout(() => {
+        setPermissionType(popupType);
+        setPermissionTypeForMixer(popupType);
         setPermissionPopup(true);
       }, 300);
       permissionPopupTimeoutRef.current = timeoutId;
@@ -494,37 +504,56 @@ export default function Phishing(){
           )}
 
           {/* Permission Popup */}
-          {permissionPopup && (
+          {permissionPopup && permissionType && (
             <PermissionPopup
-              onMount={(type) => {
-                setPermissionType(type);
-                setPermissionTypeForMixer(type);
+              type={permissionType}
+              onConfirmationShow={() => {
+                if (permissionType === 'microphone') setShowMixer(true);
               }}
-              onConfirmationShow={() => setShowMixer(true)}
               onAllow={() => {
                 setPermissionResponse('allow');
-                // Wait 7 seconds total (2s popup dismiss + 5s confirmation) before clearing
-                clearTimeout(permissionPopupTimeoutRef.current);
-                permissionPopupTimeoutRef.current = setTimeout(() => {
+                if (permissionType === 'camera') {
+                  setShowCameraLoading(true);
                   setPermissionPopup(null);
-                  setPermissionType(null);
-                }, 7000);
+                } else {
+                  // Microphone: popup already dismissed itself; formally unmount after a beat
+                  clearTimeout(permissionPopupTimeoutRef.current);
+                  permissionPopupTimeoutRef.current = setTimeout(() => {
+                    setPermissionPopup(null);
+                    setPermissionType(null);
+                  }, 500);
+                }
               }}
               onBlock={() => {
                 setPermissionResponse('block');
-                // Wait 7 seconds total (2s popup dismiss + 5s confirmation) before clearing
-                clearTimeout(permissionPopupTimeoutRef.current);
-                permissionPopupTimeoutRef.current = setTimeout(() => {
+                if (permissionType === 'camera') {
+                  setShowCameraLoading(true);
                   setPermissionPopup(null);
-                  setPermissionType(null);
-                }, 7000);
+                } else {
+                  clearTimeout(permissionPopupTimeoutRef.current);
+                  permissionPopupTimeoutRef.current = setTimeout(() => {
+                    setPermissionPopup(null);
+                    setPermissionType(null);
+                  }, 500);
+                }
               }}
               onTimeout={() => {
                 setPermissionResponse('timeout');
+                if (permissionType === 'camera') {
+                  setShowCameraLoading(true);
+                }
                 setPermissionPopup(null);
                 setPermissionType(null);
               }}
             />
+          )}
+
+          {/* Camera loading box — shown after camera permission popup interaction */}
+          {showCameraLoading && (
+            <div className="camera-loading-box">
+              <div className="camera-loading-spinner" />
+              <div className="camera-loading-label">Ładowanie kamery...</div>
+            </div>
           )}
         </div>
         </div>

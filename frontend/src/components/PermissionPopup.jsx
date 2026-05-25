@@ -10,17 +10,17 @@ import './PermissionPopup.css';
  * - User interaction (click): popup dismisses after 2 seconds, confirmation shows for 5 seconds
  * 
  * Props:
+ * - type: 'microphone' | 'camera' — permission type, determines popup icon/text and post-interaction behavior
  * - onAllow: callback when user clicks Allow
  * - onBlock: callback when user clicks Block
  * - onTimeout: callback when popup auto-dismisses after 10 seconds (no interaction)
- * - onMount: callback(permissionType) called when component mounts with 'microphone' or 'video'
- * - onConfirmationShow: callback called when confirmation message appears (after user interaction or timeout)
+ * - onConfirmationShow: callback called when confirmation message appears (microphone only, after user interaction or timeout)
  */
 export default function PermissionPopup({
+  type = 'microphone',
   onAllow,
   onBlock,
   onTimeout,
-  onMount,
   onConfirmationShow
 }) {
   const [showPopup, setShowPopup] = useState(true);
@@ -35,9 +35,7 @@ export default function PermissionPopup({
   const CONFIRMATION_MESSAGE_DURATION = 5;
   const ANIMATION_DURATION = 300;
   
-  // Randomly choose between microphone and video (50/50)
-  const randomType = useRef(Math.random() < 0.5 ? 'microphone' : 'video').current;
-  const isMicrophone = randomType === 'microphone';
+  const isMicrophone = type === 'microphone';
 
   // Helper: Clear all active timeouts
   const clearAllTimeouts = () => {
@@ -60,57 +58,59 @@ export default function PermissionPopup({
   // Helper: Handle interaction (allow/block)
   const handleInteraction = (callback) => {
     clearAllTimeouts();
-    setShowConfirmation(true);
-    
-    // Notify parent that confirmation is showing
-    if (onConfirmationShow) {
-      onConfirmationShow();
-    }
-    
-    // Hide popup after 2 seconds
-    scheduleWithAnimation(
-      POPUP_DISMISS_AFTER_INTERACTION,
-      () => setHidePopup(true),
-      () => setShowPopup(false)
-    );
-    
-    // Hide confirmation after 5 seconds
-    scheduleWithAnimation(
-      CONFIRMATION_MESSAGE_DURATION,
-      () => setHideConfirmation(true),
-      () => {
-        setShowConfirmation(false);
-        callback && callback();
-      }
-    );
-  };
 
-  useEffect(() => {
-    // Notify parent of permission type
-    if (onMount) {
-      onMount(randomType);
-    }
-
-    // Auto-dismiss after 10 seconds if no user interaction
-    const autoTimeoutId = setTimeout(() => {
-      // Show confirmation on timeout
-      setShowPopup(false);
+    if (isMicrophone) {
+      // Microphone: show confirmation bar, then call callback after it fades
       setShowConfirmation(true);
-      
-      // Notify parent that confirmation is showing (timeout case)
-      if (onConfirmationShow) {
-        onConfirmationShow();
-      }
-      
-      // Hide confirmation after 5 seconds
+      if (onConfirmationShow) onConfirmationShow();
+
+      scheduleWithAnimation(
+        POPUP_DISMISS_AFTER_INTERACTION,
+        () => setHidePopup(true),
+        () => setShowPopup(false)
+      );
+
       scheduleWithAnimation(
         CONFIRMATION_MESSAGE_DURATION,
         () => setHideConfirmation(true),
         () => {
           setShowConfirmation(false);
-          onTimeout && onTimeout();
+          callback && callback();
         }
       );
+    } else {
+      // Camera: start dismiss animation immediately, show loading box right away
+      setHidePopup(true);
+      const animId = setTimeout(() => {
+        setShowPopup(false);
+        callback && callback();
+      }, ANIMATION_DURATION);
+      timerRefs.current.push(animId);
+    }
+  };
+
+  useEffect(() => {
+    // Auto-dismiss after 10 seconds if no user interaction
+    const autoTimeoutId = setTimeout(() => {
+      setShowPopup(false);
+
+      if (isMicrophone) {
+        // Microphone: show confirmation bar on timeout
+        setShowConfirmation(true);
+        if (onConfirmationShow) onConfirmationShow();
+
+        scheduleWithAnimation(
+          CONFIRMATION_MESSAGE_DURATION,
+          () => setHideConfirmation(true),
+          () => {
+            setShowConfirmation(false);
+            onTimeout && onTimeout();
+          }
+        );
+      } else {
+        // Camera: call onTimeout directly — parent shows loading box
+        onTimeout && onTimeout();
+      }
     }, PERMISSION_POPUP_NO_INTERACTION * 1000);
     
     timerRefs.current.push(autoTimeoutId);

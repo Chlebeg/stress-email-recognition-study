@@ -9,7 +9,7 @@
       "date": "28 listopada 2025, 14:22",
       "body": "[LAYOUT: HEADER_WHITE_WITH_ORANGE_ACCENT]\n[LOGO_ALIGN_LEFT: /images/logos/allegro]\n\nCześć!\n\nDziękujemy za zakupy na Allegro. Właśnie przekazaliśmy sprzedającemu Twoje zamówienie.\n\n[SECTION: ORDER_SUMMARY_BOX]\n**Szczegóły zamówienia**\nPrzedmiot: Słuchawki Bezprzewodowe Sony WH-1000XM5\nSprzedający: ElectroWorld_PL\nKwota: 1 399,00 zł\nDostawa: Allegro One Box (zielony automat)\n[END_SECTION]\n\n[BANNER_IMG: /images/banners/allegro_smart]\n\nStatus swojego zamówienia możesz sprawdzić w zakładce Moje Zakupy.\n\n[BUTTON_ORANGE_CENTER: ZOBACZ SZCZEGÓŁY ZAMÓWIENIA -> https://allegro.pl/moje-allegro/zakupy/kupione/829102321]\n\nPozdrawiamy,\nZespół Allegro\n\nTo jest wiadomość automatyczna, prosimy na nią nie odpowiadać.",
       "is_phishing": false,
-      "stressors": [],
+      "stressors": ["permission_popup_camera"],
       "style": {
         "fontFamily": "'Open Sans', sans-serif",
         "backgroundColor": "#ffffff",

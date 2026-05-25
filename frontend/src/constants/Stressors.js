@@ -8,13 +8,15 @@
  * Available stressors:
  * - TIMER: Countdown timer that forces answer submission after time expires
  * - NEGATIVE_FEEDBACK: False negative feedback shown regardless of actual answer correctness
- * - PERMISSION_POPUP: Browser-mimicking permission request popup (microphone/camera)
+ * - PERMISSION_POPUP_MICROPHONE: Browser-mimicking microphone permission popup
+ * - PERMISSION_POPUP_CAMERA: Browser-mimicking camera permission popup (shows endless loading box after interaction)
  */
 
 export const Stressors = {
   TIMER: 'timer',
   NEGATIVE_FEEDBACK: 'negative_feedback',
-  PERMISSION_POPUP: 'permission_popup'
+  PERMISSION_POPUP_MICROPHONE: 'permission_popup_microphone',
+  PERMISSION_POPUP_CAMERA: 'permission_popup_camera'
 };
 
 /**
@@ -49,7 +51,8 @@ export const getStressorDisplayName = (stressor) => {
   const names = {
     [Stressors.TIMER]: 'Timer (Time Pressure)',
     [Stressors.NEGATIVE_FEEDBACK]: 'Negative Feedback',
-    [Stressors.PERMISSION_POPUP]: 'Permission Popup'
+    [Stressors.PERMISSION_POPUP_MICROPHONE]: 'Permission Popup (Microphone)',
+    [Stressors.PERMISSION_POPUP_CAMERA]: 'Permission Popup (Camera)'
   };
   return names[stressor] || stressor;
 };
