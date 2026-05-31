@@ -320,6 +320,11 @@ export default function Phishing(){
     };
   };
 
+  const timerStressorActive = settings.task_timer_enabled && (t.stressors || []).includes(Stressors.TIMER);
+  const vignetteIntensity = timerStressorActive && timerLeft !== null
+    ? Math.max(0, 1 - timerLeft / settings.task_timer_duration)
+    : 0;
+
   return (
     <>
       <div className="page-container">
@@ -564,6 +569,15 @@ export default function Phishing(){
         isActive={permissionTypeForMixer === 'microphone'} 
         showAfterInteraction={showMixer}
       />
+
+      {/* Red vignette overlay — activates automatically with timer stressor */}
+      {timerStressorActive && (
+        <div
+          className="timer-vignette"
+          style={{ opacity: vignetteIntensity }}
+          aria-hidden="true"
+        />
+      )}
     </>
   );
 }

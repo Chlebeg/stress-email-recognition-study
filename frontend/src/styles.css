@@ -1598,6 +1598,16 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   max-width: 100%;
 }
 
+/* Timer vignette overlay — red edges that intensify as time runs out */
+.timer-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(180, 0, 0, 0.88) 100%);
+  transition: opacity 0.9s ease;
+}
+
 /* Timer Display - Fixed Alignment */
 .timer-box {
   background: linear-gradient(135deg, #ffeaa7 0%, #ffcc7a 100%);
