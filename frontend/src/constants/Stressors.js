@@ -10,13 +10,15 @@
  * - NEGATIVE_FEEDBACK: False negative feedback shown regardless of actual answer correctness
  * - PERMISSION_POPUP_MICROPHONE: Browser-mimicking microphone permission popup
  * - PERMISSION_POPUP_CAMERA: Browser-mimicking camera permission popup (shows endless loading box after interaction)
+ * - EMAIL_BLUR: Blurs the email body for a configurable window (email_blur_start → email_blur_end seconds from task mount)
  */
 
 export const Stressors = {
   TIMER: 'timer',
   NEGATIVE_FEEDBACK: 'negative_feedback',
   PERMISSION_POPUP_MICROPHONE: 'permission_popup_microphone',
-  PERMISSION_POPUP_CAMERA: 'permission_popup_camera'
+  PERMISSION_POPUP_CAMERA: 'permission_popup_camera',
+  EMAIL_BLUR: 'email_blur'
 };
 
 /**

@@ -49,9 +49,12 @@ export default function Phishing(){
   const [permissionResponse, setPermissionResponse] = useState(null);
   const [showMixer, setShowMixer] = useState(false); // Show mixer when confirmation appears
   const [showCameraLoading, setShowCameraLoading] = useState(false);
+  const [showEmailBlur, setShowEmailBlur] = useState(false);
   const timerRef = useRef(null);
   const feedbackTimerRef = useRef(null);
   const permissionPopupTimeoutRef = useRef(null);
+  const blurStartRef = useRef(null);
+  const blurEndRef = useRef(null);
   const { scheduleAllTicks, cancelScheduled } = useClockSound();
   const nav = useNavigate();
 
@@ -72,6 +75,8 @@ export default function Phishing(){
     return () => {
       clearInterval(feedbackTimerRef.current);
       clearTimeout(permissionPopupTimeoutRef.current);
+      clearTimeout(blurStartRef.current);
+      clearTimeout(blurEndRef.current);
     };
   }, []);
 
@@ -84,9 +89,12 @@ export default function Phishing(){
     setPermissionType(null);
     setPermissionTypeForMixer(null);
     setShowCameraLoading(false);
+    setShowEmailBlur(false);
     clearTimer();
     clearInterval(feedbackTimerRef.current);
     clearTimeout(permissionPopupTimeoutRef.current);
+    clearTimeout(blurStartRef.current);
+    clearTimeout(blurEndRef.current);
     const t = tasks[index];
     if (!t) return;
     
@@ -105,7 +113,19 @@ export default function Phishing(){
       }, 300);
       permissionPopupTimeoutRef.current = timeoutId;
     }
-    
+
+    // Schedule email blur stressor
+    if (stressors.includes(Stressors.EMAIL_BLUR)) {
+      const blurStart = (t.email_blur_start ?? 0) * 1000;
+      const blurEnd = (t.email_blur_end ?? 4) * 1000;
+      blurStartRef.current = setTimeout(() => {
+        setShowEmailBlur(true);
+        blurEndRef.current = setTimeout(() => {
+          setShowEmailBlur(false);
+        }, blurEnd - blurStart);
+      }, blurStart);
+    }
+
     if (settings.task_timer_enabled && (t.stressors || []).includes(Stressors.TIMER)) {
       setTimerLeft(settings.task_timer_duration);
       scheduleAllTicks(settings.task_timer_duration);
@@ -444,6 +464,14 @@ export default function Phishing(){
                 />
               </div>
             ))}
+
+            {/* Email blur loading overlay */}
+            {showEmailBlur && (
+              <div className="email-blur-overlay" aria-hidden="true">
+                <div className="email-blur-spinner" />
+                <div className="email-blur-label">Ładowanie treści...</div>
+              </div>
+            )}
           </div>
 
           {/* Timer Display */}
