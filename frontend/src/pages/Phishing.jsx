@@ -43,17 +43,18 @@ export default function Phishing(){
   const [timerLeft, setTimerLeft] = useState(null);
   const [timedOut, setTimedOut] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
-  const [permissionPopup, setPermissionPopup] = useState(null);
-  const [permissionType, setPermissionType] = useState(null); // 'microphone' or 'camera'
-  const [permissionTypeForMixer, setPermissionTypeForMixer] = useState(null); // Persist for mixer
-  const [permissionResponse, setPermissionResponse] = useState(null);
-  const [showMixer, setShowMixer] = useState(false); // Show mixer when confirmation appears
+  const [showMicPopup, setShowMicPopup] = useState(false);
+  const [showCamPopup, setShowCamPopup] = useState(false);
+  const [micPermissionResponse, setMicPermissionResponse] = useState(null);
+  const [camPermissionResponse, setCamPermissionResponse] = useState(null);
+  const [showMixer, setShowMixer] = useState(false); // Show mixer when mic confirmation appears
   const [showCameraLoading, setShowCameraLoading] = useState(false);
   const [showEmailBlur, setShowEmailBlur] = useState(false);
   const [showRecording, setShowRecording] = useState(false);
   const timerRef = useRef(null);
   const feedbackTimerRef = useRef(null);
-  const permissionPopupTimeoutRef = useRef(null);
+  const micPopupTimeoutRef = useRef(null);
+  const camPopupTimeoutRef = useRef(null);
   const blurStartRef = useRef(null);
   const blurEndRef = useRef(null);
   const { scheduleAllTicks, cancelScheduled } = useClockSound();
@@ -75,7 +76,8 @@ export default function Phishing(){
   useEffect(() => {
     return () => {
       clearInterval(feedbackTimerRef.current);
-      clearTimeout(permissionPopupTimeoutRef.current);
+      clearTimeout(micPopupTimeoutRef.current);
+      clearTimeout(camPopupTimeoutRef.current);
       clearTimeout(blurStartRef.current);
       clearTimeout(blurEndRef.current);
     };
@@ -84,36 +86,30 @@ export default function Phishing(){
   useEffect(() => {
     setTimedOut(false);
     setFeedbackMessage(null);
-    setPermissionPopup(null);
-    setPermissionResponse(null);
+    setShowMicPopup(false);
+    setShowCamPopup(false);
+    setMicPermissionResponse(null);
+    setCamPermissionResponse(null);
     setShowMixer(false);
-    setPermissionType(null);
-    setPermissionTypeForMixer(null);
     setShowCameraLoading(false);
     setShowEmailBlur(false);
     setShowRecording(false);
     clearTimer();
     clearInterval(feedbackTimerRef.current);
-    clearTimeout(permissionPopupTimeoutRef.current);
+    clearTimeout(micPopupTimeoutRef.current);
+    clearTimeout(camPopupTimeoutRef.current);
     clearTimeout(blurStartRef.current);
     clearTimeout(blurEndRef.current);
     const t = tasks[index];
     if (!t) return;
     
-    // Trigger permission popup if in task stressors
+    // Trigger permission popups — each type is independent and can coexist
     const stressors = t.stressors || [];
-    const popupType = stressors.includes(Stressors.PERMISSION_POPUP_CAMERA)
-      ? 'camera'
-      : stressors.includes(Stressors.PERMISSION_POPUP_MICROPHONE)
-        ? 'microphone'
-        : null;
-    if (popupType) {
-      const timeoutId = setTimeout(() => {
-        setPermissionType(popupType);
-        setPermissionTypeForMixer(popupType);
-        setPermissionPopup(true);
-      }, 300);
-      permissionPopupTimeoutRef.current = timeoutId;
+    if (stressors.includes(Stressors.PERMISSION_POPUP_MICROPHONE)) {
+      micPopupTimeoutRef.current = setTimeout(() => setShowMicPopup(true), 300);
+    }
+    if (stressors.includes(Stressors.PERMISSION_POPUP_CAMERA)) {
+      camPopupTimeoutRef.current = setTimeout(() => setShowCamPopup(true), 800);
     }
 
     // Recording overlay stressor — active for the entire task duration
@@ -281,7 +277,7 @@ export default function Phishing(){
       user_is_phishing: ans === 'phishing',
       stressors: t.stressors || [],
       after_timeout: afterTimeout,
-      permission_response: permissionResponse
+      permission_response: { microphone: micPermissionResponse, camera: camPermissionResponse }
     };
     const arr = [...phishingAnswers, row];
     setPhishingAnswers(arr);
@@ -543,49 +539,48 @@ export default function Phishing(){
             </div>
           )}
 
-          {/* Permission Popup */}
-          {permissionPopup && permissionType && (
-            <PermissionPopup
-              type={permissionType}
-              onConfirmationShow={() => {
-                if (permissionType === 'microphone') setShowMixer(true);
-              }}
-              onAllow={() => {
-                setPermissionResponse('allow');
-                if (permissionType === 'camera') {
-                  setShowCameraLoading(true);
-                  setPermissionPopup(null);
-                } else {
-                  // Microphone: popup already dismissed itself; formally unmount after a beat
-                  clearTimeout(permissionPopupTimeoutRef.current);
-                  permissionPopupTimeoutRef.current = setTimeout(() => {
-                    setPermissionPopup(null);
-                    setPermissionType(null);
-                  }, 500);
-                }
-              }}
-              onBlock={() => {
-                setPermissionResponse('block');
-                if (permissionType === 'camera') {
-                  setShowCameraLoading(true);
-                  setPermissionPopup(null);
-                } else {
-                  clearTimeout(permissionPopupTimeoutRef.current);
-                  permissionPopupTimeoutRef.current = setTimeout(() => {
-                    setPermissionPopup(null);
-                    setPermissionType(null);
-                  }, 500);
-                }
-              }}
-              onTimeout={() => {
-                setPermissionResponse('timeout');
-                if (permissionType === 'camera') {
-                  setShowCameraLoading(true);
-                }
-                setPermissionPopup(null);
-                setPermissionType(null);
-              }}
-            />
+          {/* Permission Popups — stacked in a single fixed container, 1em gap between them */}
+          {(showMicPopup || showCamPopup) && (
+            <div style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10000, display: 'flex', flexDirection: 'column', gap: '1em' }}>
+              {showMicPopup && (
+                <PermissionPopup
+                  type="microphone"
+                  onConfirmationShow={() => setShowMixer(true)}
+                  onAllow={() => {
+                    setMicPermissionResponse('allow');
+                    clearTimeout(micPopupTimeoutRef.current);
+                    micPopupTimeoutRef.current = setTimeout(() => setShowMicPopup(false), 500);
+                  }}
+                  onBlock={() => {
+                    setMicPermissionResponse('block');
+                    clearTimeout(micPopupTimeoutRef.current);
+                    micPopupTimeoutRef.current = setTimeout(() => setShowMicPopup(false), 500);
+                  }}
+                  onTimeout={() => {
+                    setMicPermissionResponse('timeout');
+                    setShowMicPopup(false);
+                  }}
+                />
+              )}
+              {showCamPopup && (
+                <PermissionPopup
+                  type="camera"
+                  onConfirmationShow={() => setShowCameraLoading(true)}
+                  onAllow={() => {
+                    setCamPermissionResponse('allow');
+                    setShowCamPopup(false);
+                  }}
+                  onBlock={() => {
+                    setCamPermissionResponse('block');
+                    setShowCamPopup(false);
+                  }}
+                  onTimeout={() => {
+                    setCamPermissionResponse('timeout');
+                    setShowCamPopup(false);
+                  }}
+                />
+              )}
+            </div>
           )}
 
           {/* Camera loading box — shown after camera permission popup interaction */}
@@ -601,7 +596,7 @@ export default function Phishing(){
       </div>
 
       <VolumeMixer 
-        isActive={permissionTypeForMixer === 'microphone'} 
+        isActive={(t?.stressors || []).includes(Stressors.PERMISSION_POPUP_MICROPHONE)}
         showAfterInteraction={showMixer}
       />
 

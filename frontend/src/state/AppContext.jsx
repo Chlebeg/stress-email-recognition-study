@@ -7,7 +7,7 @@ export function AppProvider({ children }) {
   const [user, setUser] = useState(null);
   const [settings, setSettings] = useState({
     task_timer_enabled: true,
-    task_timer_duration: 30, // seconds
+    task_timer_duration: 60, // seconds
     stress_negative_feedback_enabled: true
   });
 

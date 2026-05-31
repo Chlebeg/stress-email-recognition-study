@@ -64,7 +64,7 @@ export default function VolumeMixer({ isActive, showAfterInteraction }) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isActive]);
+  }, [isActive, showAfterInteraction]);
 
   if (!isActive || !showAfterInteraction) return null;
 
@@ -81,9 +81,7 @@ export default function VolumeMixer({ isActive, showAfterInteraction }) {
             <div key={idx} className="mixer-bar-wrapper">
               <div className="mixer-bar-background">
                 <div
-                  className={`mixer-bar-fill ${
-                    level > 50 ? 'spike' : 'baseline'
-                  }`}
+                  className="mixer-bar-fill"
                   style={{ height: `${level}%` }}
                 />
               </div>

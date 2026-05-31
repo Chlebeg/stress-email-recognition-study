@@ -59,34 +59,24 @@ export default function PermissionPopup({
   const handleInteraction = (callback) => {
     clearAllTimeouts();
 
-    if (isMicrophone) {
-      // Microphone: show confirmation bar, then call callback after it fades
-      setShowConfirmation(true);
-      if (onConfirmationShow) onConfirmationShow();
+    // Show confirmation bar, dismiss popup after a beat, then fade confirmation
+    setShowConfirmation(true);
+    if (onConfirmationShow) onConfirmationShow();
 
-      scheduleWithAnimation(
-        POPUP_DISMISS_AFTER_INTERACTION,
-        () => setHidePopup(true),
-        () => setShowPopup(false)
-      );
+    scheduleWithAnimation(
+      POPUP_DISMISS_AFTER_INTERACTION,
+      () => setHidePopup(true),
+      () => setShowPopup(false)
+    );
 
-      scheduleWithAnimation(
-        CONFIRMATION_MESSAGE_DURATION,
-        () => setHideConfirmation(true),
-        () => {
-          setShowConfirmation(false);
-          callback && callback();
-        }
-      );
-    } else {
-      // Camera: start dismiss animation immediately, show loading box right away
-      setHidePopup(true);
-      const animId = setTimeout(() => {
-        setShowPopup(false);
+    scheduleWithAnimation(
+      CONFIRMATION_MESSAGE_DURATION,
+      () => setHideConfirmation(true),
+      () => {
+        setShowConfirmation(false);
         callback && callback();
-      }, ANIMATION_DURATION);
-      timerRefs.current.push(animId);
-    }
+      }
+    );
   };
 
   useEffect(() => {
@@ -94,23 +84,18 @@ export default function PermissionPopup({
     const autoTimeoutId = setTimeout(() => {
       setShowPopup(false);
 
-      if (isMicrophone) {
-        // Microphone: show confirmation bar on timeout
-        setShowConfirmation(true);
-        if (onConfirmationShow) onConfirmationShow();
+      // Show confirmation bar on timeout for both types
+      setShowConfirmation(true);
+      if (onConfirmationShow) onConfirmationShow();
 
-        scheduleWithAnimation(
-          CONFIRMATION_MESSAGE_DURATION,
-          () => setHideConfirmation(true),
-          () => {
-            setShowConfirmation(false);
-            onTimeout && onTimeout();
-          }
-        );
-      } else {
-        // Camera: call onTimeout directly — parent shows loading box
-        onTimeout && onTimeout();
-      }
+      scheduleWithAnimation(
+        CONFIRMATION_MESSAGE_DURATION,
+        () => setHideConfirmation(true),
+        () => {
+          setShowConfirmation(false);
+          onTimeout && onTimeout();
+        }
+      );
     }, PERMISSION_POPUP_NO_INTERACTION * 1000);
     
     timerRefs.current.push(autoTimeoutId);
@@ -124,7 +109,7 @@ export default function PermissionPopup({
   if (!showPopup && !showConfirmation) return null;
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       {showPopup && (
         <div className={`permission-popup-bar ${hidePopup ? 'slide-out' : ''}`}>
           <div className="popup-bar-content">
@@ -174,6 +159,6 @@ export default function PermissionPopup({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

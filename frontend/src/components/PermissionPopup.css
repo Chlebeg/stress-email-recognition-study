@@ -2,9 +2,6 @@
 /* NOTE: Uses rem (root em) for all measurements for consistent, scalable sizing */
 
 .permission-popup-bar {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
   z-index: 10000;
   max-width: 30rem;
   animation: slideInFromRight 0.3s ease-out;
@@ -160,9 +157,6 @@
 
 /* Permission Confirmation Bar - Appears below the permission popup */
 .permission-confirmation-bar {
-  position: fixed;
-  top: 6.5rem;
-  right: 1rem;
   z-index: 10000;
   max-width: 30rem;
   animation: slideInFromRight 0.3s ease-out;

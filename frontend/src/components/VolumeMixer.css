@@ -74,10 +74,6 @@
   border-radius: 0.1875rem;
 }
 
-.mixer-bar-fill.spike {
-  background: #ea4335;
-}
-
 .mixer-labels {
   display: flex;
   justify-content: space-between;
