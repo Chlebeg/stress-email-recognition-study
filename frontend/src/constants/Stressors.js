@@ -11,6 +11,7 @@
  * - PERMISSION_POPUP_MICROPHONE: Browser-mimicking microphone permission popup
  * - PERMISSION_POPUP_CAMERA: Browser-mimicking camera permission popup (shows endless loading box after interaction)
  * - EMAIL_BLUR: Blurs the email body for a configurable window (email_blur_start → email_blur_end seconds from task mount)
+ * - RECORDING: Fixed overlay informing participant they are being recorded; blinking REC dot + red corner brackets framing the screen; active for the entire task duration
  */
 
 export const Stressors = {
@@ -18,7 +19,8 @@ export const Stressors = {
   NEGATIVE_FEEDBACK: 'negative_feedback',
   PERMISSION_POPUP_MICROPHONE: 'permission_popup_microphone',
   PERMISSION_POPUP_CAMERA: 'permission_popup_camera',
-  EMAIL_BLUR: 'email_blur'
+  EMAIL_BLUR: 'email_blur',
+  RECORDING: 'recording'
 };
 
 /**

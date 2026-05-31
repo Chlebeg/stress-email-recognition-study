@@ -105,7 +105,7 @@
       "stressors": [
         "timer",
         "negative_feedback",
-        "permission_popup"
+        "recording"
       ],
       "style": {
         "fontFamily": "'Roboto', 'Arial', sans-serif",
@@ -138,7 +138,7 @@
       "is_phishing": true,
       "stressors": [
         "timer",
-        "permission_popup"
+        "permission_popup_microphone"
       ],
       "style": {
         "fontFamily": "'Helvetica Neue', Helvetica, Arial, sans-serif",

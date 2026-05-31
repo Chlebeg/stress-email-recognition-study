@@ -1644,6 +1644,89 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   font-weight: 500;
 }
 
+/* Recording overlay — fixed viewport frame with blinking REC badge */
+.recording-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+}
+
+/* Red corner brackets framing the screen */
+.recording-corners {
+  position: absolute;
+  inset: 0;
+}
+
+.recording-corner {
+  position: absolute;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-color: #e00;
+  border-style: solid;
+}
+
+.recording-corner-tl {
+  top: 1rem; left: 1rem;
+  border-width: 4px 0 0 4px;
+}
+.recording-corner-tr {
+  top: 1rem; right: 1rem;
+  border-width: 4px 4px 0 0;
+}
+.recording-corner-bl {
+  bottom: 1rem; left: 1rem;
+  border-width: 0 0 4px 4px;
+}
+.recording-corner-br {
+  bottom: 1rem; right: 1rem;
+  border-width: 0 4px 4px 0;
+}
+
+/* REC badge in top-right corner */
+.recording-badge {
+  position: absolute;
+  top: 1.25rem;
+  right: 4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.recording-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #e00;
+  border-radius: 50%;
+  animation: recording-blink 1s ease-in-out infinite;
+}
+
+.recording-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #e00;
+  letter-spacing: 0.05em;
+  font-family: monospace;
+}
+
+.recording-screen-text {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e00;
+  letter-spacing: 0.04em;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+@keyframes recording-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* Timer Display - Fixed Alignment */
 .timer-box {
   background: linear-gradient(135deg, #ffeaa7 0%, #ffcc7a 100%);

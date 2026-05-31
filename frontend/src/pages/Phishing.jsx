@@ -50,6 +50,7 @@ export default function Phishing(){
   const [showMixer, setShowMixer] = useState(false); // Show mixer when confirmation appears
   const [showCameraLoading, setShowCameraLoading] = useState(false);
   const [showEmailBlur, setShowEmailBlur] = useState(false);
+  const [showRecording, setShowRecording] = useState(false);
   const timerRef = useRef(null);
   const feedbackTimerRef = useRef(null);
   const permissionPopupTimeoutRef = useRef(null);
@@ -90,6 +91,7 @@ export default function Phishing(){
     setPermissionTypeForMixer(null);
     setShowCameraLoading(false);
     setShowEmailBlur(false);
+    setShowRecording(false);
     clearTimer();
     clearInterval(feedbackTimerRef.current);
     clearTimeout(permissionPopupTimeoutRef.current);
@@ -112,6 +114,11 @@ export default function Phishing(){
         setPermissionPopup(true);
       }, 300);
       permissionPopupTimeoutRef.current = timeoutId;
+    }
+
+    // Recording overlay stressor — active for the entire task duration
+    if (stressors.includes(Stressors.RECORDING)) {
+      setShowRecording(true);
     }
 
     // Schedule email blur stressor
@@ -605,6 +612,23 @@ export default function Phishing(){
           style={{ opacity: vignetteIntensity }}
           aria-hidden="true"
         />
+      )}
+
+      {/* Recording overlay — blinking REC indicator + red corner brackets */}
+      {showRecording && (
+        <div className="recording-overlay" aria-hidden="true">
+          <div className="recording-corners">
+            <span className="recording-corner recording-corner-tl" />
+            <span className="recording-corner recording-corner-tr" />
+            <span className="recording-corner recording-corner-bl" />
+            <span className="recording-corner recording-corner-br" />
+          </div>
+          <div className="recording-badge">
+            <span className="recording-dot" />
+            <span className="recording-label">REC</span>
+          </div>
+          <div className="recording-screen-text">Ekran jest nagrywany</div>
+        </div>
       )}
     </>
   );
