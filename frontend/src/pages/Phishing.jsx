@@ -51,12 +51,18 @@ export default function Phishing(){
   const [showCameraLoading, setShowCameraLoading] = useState(false);
   const [showEmailBlur, setShowEmailBlur] = useState(false);
   const [showRecording, setShowRecording] = useState(false);
+  const [showSocialComparison, setShowSocialComparison] = useState(false);
+  const [showCognitiveOverload, setShowCognitiveOverload] = useState(false);
   const timerRef = useRef(null);
   const feedbackTimerRef = useRef(null);
   const micPopupTimeoutRef = useRef(null);
   const camPopupTimeoutRef = useRef(null);
   const blurStartRef = useRef(null);
   const blurEndRef = useRef(null);
+  const socialComparisonStartRef = useRef(null);
+  const socialComparisonEndRef = useRef(null);
+  const cognitiveOverloadStartRef = useRef(null);
+  const cognitiveOverloadEndRef = useRef(null);
   const { scheduleAllTicks, cancelScheduled } = useClockSound();
   const nav = useNavigate();
 
@@ -80,6 +86,10 @@ export default function Phishing(){
       clearTimeout(camPopupTimeoutRef.current);
       clearTimeout(blurStartRef.current);
       clearTimeout(blurEndRef.current);
+      clearTimeout(socialComparisonStartRef.current);
+      clearTimeout(socialComparisonEndRef.current);
+      clearTimeout(cognitiveOverloadStartRef.current);
+      clearTimeout(cognitiveOverloadEndRef.current);
     };
   }, []);
 
@@ -94,12 +104,18 @@ export default function Phishing(){
     setShowCameraLoading(false);
     setShowEmailBlur(false);
     setShowRecording(false);
+    setShowSocialComparison(false);
+    setShowCognitiveOverload(false);
     clearTimer();
     clearInterval(feedbackTimerRef.current);
     clearTimeout(micPopupTimeoutRef.current);
     clearTimeout(camPopupTimeoutRef.current);
     clearTimeout(blurStartRef.current);
     clearTimeout(blurEndRef.current);
+    clearTimeout(socialComparisonStartRef.current);
+    clearTimeout(socialComparisonEndRef.current);
+    clearTimeout(cognitiveOverloadStartRef.current);
+    clearTimeout(cognitiveOverloadEndRef.current);
     const t = tasks[index];
     if (!t) return;
     
@@ -127,6 +143,28 @@ export default function Phishing(){
           setShowEmailBlur(false);
         }, blurEnd - blurStart);
       }, blurStart);
+    }
+
+    if (stressors.includes(Stressors.SOCIAL_COMPARISON)) {
+      const comparisonDelay = (t.social_comparison_delay ?? 3) * 1000;
+      const comparisonDuration = (t.social_comparison_duration ?? 5) * 1000;
+      socialComparisonStartRef.current = setTimeout(() => {
+        setShowSocialComparison(true);
+        socialComparisonEndRef.current = setTimeout(() => {
+          setShowSocialComparison(false);
+        }, comparisonDuration);
+      }, comparisonDelay);
+    }
+
+    if (stressors.includes(Stressors.COGNITIVE_OVERLOAD)) {
+      const overloadDelay = (t.cognitive_overload_delay ?? 0) * 1000;
+      const overloadDuration = (t.cognitive_overload_duration ?? 4) * 1000;
+      cognitiveOverloadStartRef.current = setTimeout(() => {
+        setShowCognitiveOverload(true);
+        cognitiveOverloadEndRef.current = setTimeout(() => {
+          setShowCognitiveOverload(false);
+        }, overloadDuration);
+      }, overloadDelay);
     }
 
     if (settings.task_timer_enabled && (t.stressors || []).includes(Stressors.TIMER)) {
@@ -282,10 +320,16 @@ export default function Phishing(){
     const arr = [...phishingAnswers, row];
     setPhishingAnswers(arr);
 
-    // Check if this question has negative feedback stressor
-    if (settings.stress_negative_feedback_enabled && (t.stressors || []).includes(Stressors.NEGATIVE_FEEDBACK)) {
+    const stressors = t.stressors || [];
+    const hasExtendedFeedback = stressors.includes(Stressors.EXTENDED_NEGATIVE_FEEDBACK);
+    const hasNegativeFeedback = stressors.includes(Stressors.NEGATIVE_FEEDBACK);
+
+    // Extended feedback takes precedence when both feedback stressors are configured.
+    if (settings.stress_negative_feedback_enabled && (hasExtendedFeedback || hasNegativeFeedback)) {
       clearTimer(); // Stop the timer
-      setFeedbackMessage('Odpowiedziałeś błędnie');
+      setFeedbackMessage(hasExtendedFeedback
+        ? (t.extended_negative_feedback_message || 'Twoje ostatnie odpowiedzi były mniej trafne niż odpowiedzi większości uczestników.')
+        : 'Odpowiedziałeś błędnie');
       clearInterval(feedbackTimerRef.current);
       feedbackTimerRef.current = setTimeout(() => {
         setFeedbackMessage(null);
@@ -623,6 +667,24 @@ export default function Phishing(){
             <span className="recording-label">REC</span>
           </div>
           <div className="recording-screen-text">Ekran jest nagrywany</div>
+        </div>
+      )}
+
+      {showSocialComparison && (
+        <div className="social-comparison-notice" role="status" aria-live="assertive">
+          {t.social_comparison_message || 'Odpowiadasz wolniej niż 78% uczestników.'}
+        </div>
+      )}
+
+      {showCognitiveOverload && (
+        <div className="cognitive-overload-overlay" role="dialog" aria-modal="true">
+          <div className="cognitive-overload-box">
+            <div className="cognitive-overload-label">Zapamiętaj poniższą informację</div>
+            <div className="cognitive-overload-value">{t.cognitive_overload_value || '4827'}</div>
+            <div className="cognitive-overload-prompt">
+              {t.cognitive_overload_prompt || 'Za chwilę przejdziesz do następnego zadania.'}
+            </div>
+          </div>
         </div>
       )}
     </>

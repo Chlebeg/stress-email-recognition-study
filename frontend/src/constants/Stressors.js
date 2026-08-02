@@ -12,6 +12,9 @@
  * - PERMISSION_POPUP_CAMERA: Browser-mimicking camera permission popup (shows endless loading box after interaction)
  * - EMAIL_BLUR: Blurs the email body for a configurable window (email_blur_start → email_blur_end seconds from task mount)
  * - RECORDING: Fixed overlay informing participant they are being recorded; blinking REC dot + red corner brackets framing the screen; active for the entire task duration
+ * - SOCIAL_COMPARISON: Timed message comparing a participant's speed with other participants
+ * - EXTENDED_NEGATIVE_FEEDBACK: Fabricated cumulative-performance feedback after an answer
+ * - COGNITIVE_OVERLOAD: Timed memorization prompt shown before the email task
  */
 
 export const Stressors = {
@@ -20,7 +23,10 @@ export const Stressors = {
   PERMISSION_POPUP_MICROPHONE: 'permission_popup_microphone',
   PERMISSION_POPUP_CAMERA: 'permission_popup_camera',
   EMAIL_BLUR: 'email_blur',
-  RECORDING: 'recording'
+  RECORDING: 'recording',
+  SOCIAL_COMPARISON: 'social_comparison',
+  EXTENDED_NEGATIVE_FEEDBACK: 'extended_negative_feedback',
+  COGNITIVE_OVERLOAD: 'cognitive_overload'
 };
 
 /**
@@ -56,7 +62,12 @@ export const getStressorDisplayName = (stressor) => {
     [Stressors.TIMER]: 'Timer (Time Pressure)',
     [Stressors.NEGATIVE_FEEDBACK]: 'Negative Feedback',
     [Stressors.PERMISSION_POPUP_MICROPHONE]: 'Permission Popup (Microphone)',
-    [Stressors.PERMISSION_POPUP_CAMERA]: 'Permission Popup (Camera)'
+    [Stressors.PERMISSION_POPUP_CAMERA]: 'Permission Popup (Camera)',
+    [Stressors.EMAIL_BLUR]: 'Email Blur',
+    [Stressors.RECORDING]: 'Recording Notice',
+    [Stressors.SOCIAL_COMPARISON]: 'Social Comparison',
+    [Stressors.EXTENDED_NEGATIVE_FEEDBACK]: 'Extended Negative Feedback',
+    [Stressors.COGNITIVE_OVERLOAD]: 'Cognitive Overload'
   };
   return names[stressor] || stressor;
 };

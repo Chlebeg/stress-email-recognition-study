@@ -48,8 +48,12 @@
       "is_phishing": false,
       "stressors": [
         "timer",
-        "negative_feedback"
+        "negative_feedback",
+        "social_comparison"
       ],
+      "social_comparison_delay": 5,
+      "social_comparison_duration": 5,
+      "social_comparison_message": "Odpowiadasz wolniej niż 74% uczestników.",
       "style": {
         "fontFamily": "Arial, Helvetica, sans-serif",
         "backgroundColor": "#ffffff",
@@ -79,10 +83,15 @@
       "is_phishing": true,
       "stressors": [
         "timer",
-        "email_blur"
+        "email_blur",
+        "cognitive_overload"
       ],
       "email_blur_start": 0,
       "email_blur_end": 4,
+      "cognitive_overload_delay": 0,
+      "cognitive_overload_duration": 5,
+      "cognitive_overload_value": "7 2 9 4",
+      "cognitive_overload_prompt": "Zapamiętaj ten kod. Za chwilę przejdziesz do zadania.",
       "style": {
         "fontFamily": "'Montserrat', 'Verdana', sans-serif",
         "backgroundColor": "#ffffff",
@@ -114,8 +123,10 @@
       "stressors": [
         "timer",
         "negative_feedback",
-        "recording"
+        "recording",
+        "extended_negative_feedback"
       ],
+      "extended_negative_feedback_message": "Twoje ostatnie odpowiedzi były mniej trafne niż odpowiedzi większości uczestników.",
       "style": {
         "fontFamily": "'Roboto', 'Arial', sans-serif",
         "backgroundColor": "#ffffff",
