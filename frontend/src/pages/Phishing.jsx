@@ -422,6 +422,33 @@ export default function Phishing(){
 
         <div className="email-container">
           <div className={`email-view ${timedOut ? 'email-hazed' : ''}`}>
+          {t.htmlPath && (
+            <>
+              <div className="webmail-toolbar" aria-label="Pasek narzędzi wiadomości">
+                <div className="webmail-navigation">
+                  <button className="webmail-icon-button" type="button" disabled aria-label="Wróć do skrzynki" title="Wróć do skrzynki">&larr;</button>
+                  <div className="webmail-location"><span>Odebrane</span><span aria-hidden="true">/</span><strong>Wiadomość</strong></div>
+                </div>
+                <div className="webmail-actions" aria-label="Działania na wiadomości">
+                  <button className="webmail-icon-button" type="button" disabled aria-label="Archiwizuj" title="Archiwizuj">&#9634;</button>
+                  <button className="webmail-icon-button" type="button" disabled aria-label="Oznacz jako spam" title="Oznacz jako spam">!</button>
+                  <button className="webmail-icon-button" type="button" disabled aria-label="Więcej opcji" title="Więcej opcji">&hellip;</button>
+                </div>
+              </div>
+              <div className="email-header">
+                <div className="email-sender-avatar" aria-hidden="true">{t.from.charAt(0)}</div>
+                <div className="email-heading">
+                  <div className="email-subject-line">{t.subject}</div>
+                  <div className="email-sender-line"><strong>{t.from}</strong> <span>&lt;{t.fromEmail}&gt;</span></div>
+                </div>
+                <div className="email-header-date">{t.date}</div>
+                <div className="email-header-row">
+                  <span className="email-label">Do:</span>
+                  <span className="email-value">{t.to}</span>
+                </div>
+              </div>
+            </>
+          )}
           <div className="email-scroll-area">
           {t.htmlPath ? (
             <div className="email-template-frame">
