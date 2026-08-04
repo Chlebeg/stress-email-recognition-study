@@ -15,10 +15,6 @@ export default function App() {
 
   return (
     <div className="app">
-      <header className="header">
-        <h1>Badanie: Analiza wpływu stylu radzenia sobie ze stresem na decyzje związane z cyberbezpieczeństwem</h1>
-      </header>
-
       <main className="main">
         <Routes>
           <Route path="/" element={<Login />} />
