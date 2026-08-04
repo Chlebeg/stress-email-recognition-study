@@ -366,7 +366,7 @@ export default function Phishing(){
     }
   };
 
-  const parsed = parseBodyContent(t.body);
+  const parsed = parseBodyContent(t.body || '');
   
   // Generate inline styles from task.style
   const emailBodyStyle = {
@@ -409,6 +409,7 @@ export default function Phishing(){
     ? Math.max(0, 1 - timerLeft / settings.task_timer_duration)
     : 0;
   const isAllegroParcel = t.template === 'allegro_parcel';
+  const isBookingReservation = t.template === 'booking_reservation';
 
   return (
     <>
@@ -422,6 +423,28 @@ export default function Phishing(){
         <div className="email-container">
           <div className={`email-view ${timedOut ? 'email-hazed' : ''}`}>
           <div className="email-scroll-area">
+          {t.htmlPath ? (
+            <div className="email-template-frame">
+              <iframe
+                key={t.htmlPath}
+                className="email-template-document"
+                src={t.htmlPath}
+                title={t.subject}
+                sandbox="allow-same-origin"
+                onLoad={(event) => {
+                  const documentHeight = event.currentTarget.contentDocument?.documentElement.scrollHeight;
+                  if (documentHeight) event.currentTarget.style.height = `${documentHeight}px`;
+                }}
+              />
+              {showEmailBlur && (
+                <div className="email-blur-overlay" aria-hidden="true">
+                  <div className="email-blur-spinner" />
+                  <div className="email-blur-label">Ładowanie treści...</div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
           <div className="webmail-toolbar" aria-label="Pasek narzędzi wiadomości">
             <div className="webmail-navigation">
               <button className="webmail-icon-button" type="button" disabled aria-label="Wróć do skrzynki" title="Wróć do skrzynki">&larr;</button>
@@ -450,7 +473,7 @@ export default function Phishing(){
           {/* Email Body */}
           <div className="email-body" style={emailBodyStyle}>
             {/* Render logo with alignment */}
-            {parsed.logoUrl && (
+            {parsed.logoUrl && !isBookingReservation && (
               <div className={`email-logo-container email-logo-align-${parsed.logoAlign || 'left'} ${parsed.layout === 'HEADER_FULL_WIDTH_YELLOW' ? 'email-logo-header-yellow' : ''}`}>
                 <ImageWithFallback 
                   basePath={parsed.logoUrl}
@@ -458,6 +481,13 @@ export default function Phishing(){
                   className="email-logo"
                   style={getImageStyle('logo')}
                 />
+              </div>
+            )}
+
+            {isBookingReservation && (
+              <div className="booking-email-masthead">
+                <div className="booking-wordmark">Booking<span>.com</span></div>
+                <div className="booking-confirmation">Potwierdzenie: <strong>{t.reservation.confirmation}</strong><br />PIN: <strong>{t.reservation.pin}</strong> <span>(Poufne)</span></div>
               </div>
             )}
 
@@ -474,7 +504,7 @@ export default function Phishing(){
             {/* Body sections */}
             {parsed.sections.map((section, i) => {
               const sectionLines = section.content.split('\n');
-              const renderedLines = isAllegroParcel
+              const renderedLines = isAllegroParcel || isBookingReservation
                 ? sectionLines.filter(line => line.trim())
                 : sectionLines;
 
@@ -501,6 +531,25 @@ export default function Phishing(){
               </div>
               );
             })}
+
+            {isBookingReservation && (
+              <div className="booking-reservation-details">
+                <h2>Twoja rezerwacja</h2>
+                <p className="booking-arrival-note"><strong>Obiekt oczekuje Cię {t.reservation.arrival}.</strong></p>
+                <section className="booking-safety-note">
+                  <h3>Chroń swoje dane</h3>
+                  <p>Nie udostępniaj kodu PIN ani danych płatności przez e-mail. W razie wątpliwości skontaktuj się z obiektem przez Booking.com.</p>
+                </section>
+                <h2 className="booking-property-name">{t.reservation.property}</h2>
+                <dl className="booking-details-table">
+                  <div><dt>Zameldowanie</dt><dd>{t.reservation.arrival}</dd></div>
+                  <div><dt>Wymeldowanie</dt><dd>{t.reservation.departure}</dd></div>
+                  <div><dt>Twój pobyt</dt><dd>{t.reservation.stay}</dd></div>
+                  <div><dt>Goście</dt><dd>{t.reservation.guests}</dd></div>
+                  <div><dt>Lokalizacja</dt><dd>{t.reservation.location}</dd></div>
+                </dl>
+              </div>
+            )}
 
             {isAllegroParcel && (
               <div className="allegro-parcel-details">
@@ -593,6 +642,8 @@ export default function Phishing(){
               </div>
             )}
           </div>
+          </>
+          )}
           </div>
 
           {/* Timer Display */}

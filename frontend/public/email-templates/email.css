@@ -1,0 +1,45 @@
+:root { color-scheme: light; font-family: Arial, Helvetica, sans-serif; color: #262626; background: #ffffff; }
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: #ffffff; }
+body { font-size: 14px; line-height: 1.5; }
+a { color: inherit; pointer-events: none; text-decoration: none; }
+.email { max-width: 640px; margin: 0 auto; padding: 24px; }
+.masthead { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: -24px -24px 24px; padding: 16px 24px; color: #ffffff; background: #003b95; }
+.wordmark { font-size: 24px; font-weight: 700; }
+.wordmark .dot { color: #febb02; }
+.code { font-size: 12px; line-height: 1.45; text-align: right; }
+.brand-logo { display: block; max-width: 128px; max-height: 40px; margin: 0 0 20px; object-fit: contain; object-position: left center; }
+.brand-logo.right { margin-left: auto; }
+.heading { margin: 0 0 16px; font-size: 23px; line-height: 1.35; }
+p { margin: 0 0 14px; }
+.notice { margin: 20px 0; padding: 16px; border: 1px solid #ffe08a; border-radius: 4px; background: #fefbf0; }
+.notice h2 { margin: 0 0 6px; font-size: 16px; }
+.details { margin: 20px 0; border: 1px solid #e4e4e4; }
+.details > div { display: grid; grid-template-columns: minmax(130px, 0.8fr) minmax(0, 1.2fr); gap: 16px; padding: 13px 16px; border-top: 1px solid #e4e4e4; }
+.details > div:first-child { border-top: 0; }
+.details dt { color: #5a5a5a; }
+.details dd { margin: 0; }
+.cta { display: inline-block; margin: 12px 0 4px; padding: 12px 20px; border-radius: 3px; color: #ffffff; background: #003580; font-weight: 700; text-align: center; }
+.cta.orange { color: #1d1d1d; background: #ffcc00; border-radius: 999px; }
+.cta.red { background: #e50914; }
+.cta.outline-red { color: #e60000; border: 1px solid #e60000; background: #ffffff; }
+.url { display: block; margin: 8px 0 18px; color: #5c7080; font-family: "Courier New", monospace; font-size: 11px; overflow-wrap: anywhere; }
+.banner { display: block; width: 100%; height: auto; max-height: 180px; margin: 18px 0; object-fit: cover; }
+.rule { height: 1px; margin: 16px 0; background: #d9dfe6; }
+.footer { margin: 28px -24px -24px; padding: 18px 24px; border-top: 1px solid #dfe5eb; color: #6c7884; font-size: 11px; }
+.footer.dark { border-top: 8px solid #3a4e58; background: #edeef2; }
+.footer p { margin: 5px 0; }
+.muted { color: #6d6d6d; }
+.teal { color: #00a790; }
+.danger { color: #bd1e2d; font-weight: 700; }
+.product { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: start; padding: 18px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+.product-icon { display: grid; width: 56px; height: 56px; place-items: center; background: #f3f5f6; font-size: 27px; }
+.product h2 { margin: 0 0 5px; font-size: 16px; }
+.parcel-section { padding: 16px 0 0; }
+.parcel-section h2 { margin: 0 0 5px; font-size: 16px; }
+.orange-strip { height: 4px; margin: -24px -24px 20px; background: #ff5a00; }
+.yellow-head { margin: -24px -24px 20px; padding: 18px 24px; background: #ffcc00; text-align: center; }
+.yellow-head .brand-logo { margin: 0 auto; }
+.attachment { display: flex; align-items: center; gap: 12px; margin: 18px 0; padding: 12px; border: 1px solid #d6dde4; border-radius: 4px; background: #f8fafc; }
+.attachment strong { display: block; }
+@media (max-width: 420px) { .email { padding: 16px; font-size: 13px; } .masthead { margin: -16px -16px 18px; padding: 14px 16px; } .wordmark { font-size: 20px; } .code { font-size: 10px; } .heading { font-size: 20px; } .details > div { grid-template-columns: 1fr; gap: 3px; padding: 11px 12px; } .product { grid-template-columns: 56px 1fr; } .product > :last-child { grid-column: 2; } .footer { margin: 22px -16px -16px; padding: 16px; } .orange-strip { margin: -16px -16px 18px; } .yellow-head { margin: -16px -16px 18px; padding: 14px 16px; } }

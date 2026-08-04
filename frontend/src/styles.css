@@ -1541,6 +1541,7 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 
 .email-view.email-hazed .email-header,
 .email-view.email-hazed .email-body,
+.email-view.email-hazed .email-template-frame,
 .email-view.email-hazed .timer-box,
 .email-view.email-hazed .phishing-question-container {
   filter: blur(0.5rem);
@@ -1604,6 +1605,19 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   margin-bottom: 1rem;
 }
 
+.email-template-frame {
+  position: relative;
+  width: 100%;
+}
+
+.email-template-document {
+  display: block;
+  width: 100%;
+  min-height: 9.375rem;
+  border: 0;
+  background: #ffffff;
+}
+
 /* Email Image Support */
 .email-image {
   max-width: 100%;
@@ -1654,6 +1668,101 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
 
 .email-section-order-summary p {
   margin: 0.25rem 0;
+}
+
+.booking-email-masthead {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin: -1.25rem -1.25rem 1.5rem;
+  padding: 1rem 1.25rem;
+  background: #003b95;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.booking-wordmark {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.booking-wordmark span {
+  color: #febb02;
+}
+
+.booking-confirmation {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  text-align: right;
+}
+
+.booking-confirmation span {
+  color: #d9e9ff;
+}
+
+.booking-reservation-details {
+  margin-top: 1.5rem;
+  color: #333333;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.booking-reservation-details h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1.35;
+}
+
+.booking-arrival-note {
+  margin: 0 0 1rem;
+}
+
+.booking-safety-note {
+  margin: 1rem 0 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ffe08a;
+  border-radius: 0.25rem;
+  background: #fefbf0;
+}
+
+.booking-safety-note h3 {
+  margin: 0 0 0.375rem;
+  font-size: 1rem;
+}
+
+.booking-safety-note p {
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+.booking-property-name {
+  color: #0071c2;
+}
+
+.booking-details-table {
+  margin: 0;
+  border: 1px solid #e7e7e7;
+}
+
+.booking-details-table div {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.75fr) minmax(0, 1.25fr);
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  border-top: 1px solid #e7e7e7;
+}
+
+.booking-details-table div:first-child {
+  border-top: 0;
+}
+
+.booking-details-table dt {
+  color: #595959;
+}
+
+.booking-details-table dd {
+  margin: 0;
 }
 
 .allegro-parcel-details {
@@ -2334,6 +2443,25 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   .allegro-email-footer .email-footer-brand {
     margin: -1rem -0.75rem 1rem;
     padding: 1rem 0.75rem;
+  }
+
+  .booking-email-masthead {
+    margin: -0.75rem -0.75rem 1rem;
+    padding: 0.875rem 0.75rem;
+  }
+
+  .booking-wordmark {
+    font-size: 1.25rem;
+  }
+
+  .booking-confirmation {
+    font-size: 0.6875rem;
+  }
+
+  .booking-details-table div {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.75rem;
   }
 
   .email-cta {
