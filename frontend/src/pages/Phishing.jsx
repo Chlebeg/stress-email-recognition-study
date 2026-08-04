@@ -387,6 +387,15 @@ export default function Phishing(){
     };
   };
 
+  const formatUrl = (url) => {
+    try {
+      const parsedUrl = new URL(url);
+      return `${parsedUrl.hostname}${parsedUrl.pathname === '/' ? '' : parsedUrl.pathname}`;
+    } catch {
+      return url;
+    }
+  };
+
   const timerStressorActive = settings.task_timer_enabled && (t.stressors || []).includes(Stressors.TIMER);
   const vignetteIntensity = timerStressorActive && timerLeft !== null
     ? Math.max(0, 1 - timerLeft / settings.task_timer_duration)
@@ -403,23 +412,28 @@ export default function Phishing(){
 
         <div className="email-container">
           <div className={`email-view ${timedOut ? 'email-hazed' : ''}`}>
+          <div className="webmail-toolbar" aria-label="Pasek narzędzi wiadomości">
+            <div className="webmail-navigation">
+              <button className="webmail-icon-button" type="button" disabled aria-label="Wróć do skrzynki" title="Wróć do skrzynki">&larr;</button>
+              <div className="webmail-location"><span>Odebrane</span><span aria-hidden="true">/</span><strong>Wiadomość</strong></div>
+            </div>
+            <div className="webmail-actions" aria-label="Działania na wiadomości">
+              <button className="webmail-icon-button" type="button" disabled aria-label="Archiwizuj" title="Archiwizuj">&#9634;</button>
+              <button className="webmail-icon-button" type="button" disabled aria-label="Oznacz jako spam" title="Oznacz jako spam">!</button>
+              <button className="webmail-icon-button" type="button" disabled aria-label="Więcej opcji" title="Więcej opcji">&hellip;</button>
+            </div>
+          </div>
           {/* Email Header */}
           <div className="email-header">
-            <div className="email-header-row">
-              <span className="email-label">Od:</span>
-              <span className="email-value">{t.from} &lt;{t.fromEmail}&gt;</span>
+            <div className="email-sender-avatar" aria-hidden="true">{t.from.charAt(0)}</div>
+            <div className="email-heading">
+              <div className="email-subject-line">{t.subject}</div>
+              <div className="email-sender-line"><strong>{t.from}</strong> <span>&lt;{t.fromEmail}&gt;</span></div>
             </div>
+            <div className="email-header-date">{t.date}</div>
             <div className="email-header-row">
               <span className="email-label">Do:</span>
               <span className="email-value">{t.to}</span>
-            </div>
-            <div className="email-header-row">
-              <span className="email-label">Data:</span>
-              <span className="email-value">{t.date}</span>
-            </div>
-            <div className="email-header-row email-subject">
-              <span className="email-label">Temat:</span>
-              <span className="email-value">{t.subject}</span>
             </div>
           </div>
 
@@ -470,7 +484,18 @@ export default function Phishing(){
               </div>
             ))}
 
-            {/* Display buttons from body - BEFORE banners */}
+            {/* Inline promotional banners appear within the message, before its call to action. */}
+            {parsed.banners.filter(b => b.position === 'inline').map((banner, i) => (
+              <div key={i} className="email-banner-container">
+                <ImageWithFallback
+                  basePath={banner.url}
+                  alt="Baner promocyjny"
+                  className="email-banner"
+                />
+              </div>
+            ))}
+
+            {/* Display buttons from body */}
             {parsed.buttons.length > 0 && (
               <div className="email-cta" style={{ background: 'transparent', border: 'none', padding: '0' }}>
                 {parsed.buttons.map((btn, i) => (
@@ -482,35 +507,35 @@ export default function Phishing(){
                     >
                       {btn.text}
                     </button>
-                    <div className="cta-url" style={{ fontSize: '11px', marginTop: '5px', color: '#999' }}>
-                      {btn.url}
+                    <div className="cta-url" title={btn.url}>
+                      <span className="cta-url-lock" aria-hidden="true">&#128274;</span>
+                      <span>{formatUrl(btn.url)}</span>
                     </div>
                   </div>
                 ))}
               </div>
             )}
 
-            {/* Inline banners */}
-            {parsed.banners.filter(b => b.position === 'inline').map((banner, i) => (
-              <div key={i} className="email-banner-container" style={{ margin: '15px 0' }}>
+            {/* Bottom banners */}
+            {parsed.banners.filter(b => b.position === 'bottom').map((banner, i) => (
+              <div key={i} className="email-banner-container email-banner-bottom">
                 <ImageWithFallback 
                   basePath={banner.url}
-                  alt="Banner"
+                  alt="Baner promocyjny"
                   className="email-banner"
                 />
               </div>
             ))}
 
-            {/* Bottom banners */}
-            {parsed.banners.filter(b => b.position === 'bottom').map((banner, i) => (
-              <div key={i} className="email-banner-container" style={{ margin: '15px 0', marginTop: '20px' }}>
-                <ImageWithFallback 
-                  basePath={banner.url}
-                  alt="Banner"
-                  className="email-banner"
-                />
-              </div>
-            ))}
+            {t.footer && (
+              <footer className="email-footer">
+                <div className="email-footer-brand">{t.footer.brand}</div>
+                <p>{t.footer.contact}</p>
+                <p>{t.footer.address}</p>
+                <p className="email-footer-legal">{t.footer.legal}</p>
+                <p className="email-footer-preferences">{t.footer.preferences}</p>
+              </footer>
+            )}
 
             {/* Email blur loading overlay */}
             {showEmailBlur && (

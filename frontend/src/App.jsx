@@ -35,7 +35,7 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <p>© Chlebeg 2025</p>
+        <p>© Chlebeg 2026</p>
       </footer>
     </div>
   );

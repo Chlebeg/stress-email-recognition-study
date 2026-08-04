@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" role="img" aria-label="Booking.com podróże">
+  <rect width="800" height="200" fill="#003580"/>
+  <path d="M0 158C150 105 250 210 410 145S650 105 800 145V200H0z" fill="#0071c2"/>
+  <text x="52" y="86" fill="#ffffff" font-family="Arial, sans-serif" font-size="36" font-weight="700">Booking.com</text>
+  <text x="52" y="124" fill="#ffffff" font-family="Arial, sans-serif" font-size="23">Twoja podroz zaczyna sie tutaj</text>
+  <text x="52" y="155" fill="#b9dcff" font-family="Arial, sans-serif" font-size="18">Zarzadzaj rezerwacja w kilka chwil</text>
+  <circle cx="686" cy="80" r="44" fill="#febb02"/>
+  <path d="M670 80h32M686 64v32" stroke="#003580" stroke-width="7" stroke-linecap="round"/>
+</svg>

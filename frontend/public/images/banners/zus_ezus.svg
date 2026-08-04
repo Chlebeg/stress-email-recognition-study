@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" role="img" aria-label="eZUS">
+  <rect width="800" height="200" fill="#f4f7fb"/>
+  <rect width="12" height="200" fill="#0072bc"/>
+  <text x="54" y="90" fill="#0072bc" font-family="Arial, sans-serif" font-size="48" font-weight="700">ZUS</text>
+  <text x="54" y="128" fill="#183c63" font-family="Arial, sans-serif" font-size="25">eZUS - sprawy urzedowe online</text>
+  <text x="54" y="158" fill="#536d85" font-family="Arial, sans-serif" font-size="18">Bezpiecznie i bez wychodzenia z domu</text>
+  <rect x="570" y="62" width="162" height="77" rx="6" fill="#ffffff" stroke="#b8cadd" stroke-width="2"/>
+  <path d="M602 84h98v36h-98z" fill="#d6e9f8"/>
+  <circle cx="620" cy="102" r="10" fill="#0072bc"/>
+  <rect x="638" y="94" width="46" height="7" rx="3" fill="#6c8fac"/>
+  <rect x="638" y="108" width="32" height="7" rx="3" fill="#9eb7cd"/>
+</svg>
