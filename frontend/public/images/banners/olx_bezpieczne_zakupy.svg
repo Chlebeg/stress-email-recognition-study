@@ -3,7 +3,7 @@
   <circle cx="690" cy="55" r="105" fill="#ffffff" opacity="0.22"/>
   <text x="55" y="88" fill="#002f34" font-family="Arial, sans-serif" font-size="46" font-weight="700">OLX</text>
   <text x="55" y="125" fill="#002f34" font-family="Arial, sans-serif" font-size="25" font-weight="700">Bezpieczne zakupy online</text>
-  <text x="55" y="156" fill="#17464b" font-family="Arial, sans-serif" font-size="18">Korzystaj z platnosci i dostawy OLX</text>
+  <text x="55" y="156" fill="#17464b" font-family="Arial, sans-serif" font-size="18">Korzystaj z płatności i dostawy OLX</text>
   <rect x="585" y="115" width="145" height="38" rx="19" fill="#002f34"/>
-  <text x="612" y="140" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">DOWIEDZ SIE</text>
+  <text x="612" y="140" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">DOWIEDZ SIĘ</text>
 </svg>

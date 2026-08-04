@@ -3,7 +3,7 @@
   <path d="M570 0h230v200H518z" fill="#b50f1b"/>
   <text x="52" y="85" fill="#ffffff" font-family="Arial, sans-serif" font-size="44" font-weight="700">empik</text>
   <text x="52" y="122" fill="#ffffff" font-family="Arial, sans-serif" font-size="25">Empik Premium Free</text>
-  <text x="52" y="153" fill="#ffe6e7" font-family="Arial, sans-serif" font-size="18">Dostawa bez ograniczen</text>
+  <text x="52" y="153" fill="#ffe6e7" font-family="Arial, sans-serif" font-size="18">Dostawa bez ograniczeń</text>
   <rect x="568" y="65" width="146" height="68" rx="5" fill="#ffffff"/>
   <path d="M596 94h90M596 111h65" stroke="#e51b23" stroke-width="8" stroke-linecap="round"/>
 </svg>

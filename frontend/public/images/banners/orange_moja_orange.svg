@@ -3,7 +3,7 @@
   <rect x="0" y="0" width="176" height="200" fill="#000000"/>
   <text x="35" y="108" fill="#ffffff" font-family="Arial, sans-serif" font-size="46" font-weight="700">orange</text>
   <text x="225" y="83" fill="#000000" font-family="Arial, sans-serif" font-size="32" font-weight="700">Moje Orange</text>
-  <text x="225" y="120" fill="#1d1d1d" font-family="Arial, sans-serif" font-size="20">Wszystkie uslugi w jednym miejscu</text>
+  <text x="225" y="120" fill="#1d1d1d" font-family="Arial, sans-serif" font-size="20">Wszystkie usługi w jednym miejscu</text>
   <rect x="225" y="145" width="204" height="30" rx="3" fill="#000000"/>
-  <text x="244" y="167" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">SPRAWDZ W APLIKACJI</text>
+  <text x="244" y="167" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">SPRAWDŹ W APLIKACJI</text>
 </svg>

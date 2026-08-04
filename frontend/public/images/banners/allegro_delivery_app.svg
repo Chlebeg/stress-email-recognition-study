@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" role="img" aria-label="Aplikacja Allegro">
+  <rect width="800" height="200" fill="#f4f6f7"/>
+  <rect x="0" y="0" width="14" height="200" fill="#ff5a00"/>
+  <rect x="634" y="22" width="126" height="156" rx="18" fill="#263238"/>
+  <rect x="646" y="40" width="102" height="120" rx="5" fill="#ffffff"/>
+  <rect x="659" y="58" width="76" height="12" rx="6" fill="#ff5a00"/>
+  <rect x="659" y="82" width="54" height="8" rx="4" fill="#c8d0d4"/>
+  <rect x="659" y="98" width="66" height="8" rx="4" fill="#c8d0d4"/>
+  <circle cx="697" cy="169" r="5" fill="#839198"/>
+  <text x="54" y="82" fill="#222222" font-family="Arial, sans-serif" font-size="28" font-weight="700">Śledź zakupy w aplikacji Allegro</text>
+  <text x="54" y="118" fill="#52636b" font-family="Arial, sans-serif" font-size="20">Powiadomienia o przesyłce zawsze pod ręką</text>
+  <rect x="54" y="140" width="202" height="34" rx="3" fill="#ff5a00"/>
+  <text x="72" y="163" fill="#ffffff" font-family="Arial, sans-serif" font-size="15" font-weight="700">OTWÓRZ APLIKACJĘ</text>
+</svg>

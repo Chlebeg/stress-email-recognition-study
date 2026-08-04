@@ -7,7 +7,7 @@ import VolumeMixer from '../components/VolumeMixer';
 import { Stressors } from '../constants/Stressors';
 
 // Component to try loading image with multiple extensions
-function ImageWithFallback({ basePath, alt, className }) {
+function ImageWithFallback({ basePath, alt, className, style }) {
   const extensions = ['.png', '.jpg', '.jpeg', '.svg'];
   const [currentExtIndex, setCurrentExtIndex] = useState(0);
   const [failed, setFailed] = useState(false);
@@ -31,6 +31,7 @@ function ImageWithFallback({ basePath, alt, className }) {
       src={`${cleanBasePath}${extensions[currentExtIndex]}`} 
       alt={alt}
       className={className}
+      style={style}
       onError={handleError}
     />
   );
@@ -210,6 +211,18 @@ export default function Phishing(){
 
     const lines = bodyText.split('\n');
     let currentSection = [];
+    let currentSectionName = null;
+
+    const saveCurrentSection = () => {
+      if (currentSection.length > 0) {
+        parts.sections.push({
+          content: currentSection.join('\n'),
+          name: currentSectionName
+        });
+        currentSection = [];
+        currentSectionName = null;
+      }
+    };
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
@@ -224,10 +237,7 @@ export default function Phishing(){
         const match = line.match(/\[LOGO_ALIGN_(\w+):\s*(.+?)\]/);
         if (match) {
           // Save current section before logo
-          if (currentSection.length > 0) {
-            parts.sections.push(currentSection.join('\n'));
-            currentSection = [];
-          }
+          saveCurrentSection();
           parts.logoAlign = match[1].toLowerCase();
           parts.logoUrl = match[2].trim();
         }
@@ -239,27 +249,20 @@ export default function Phishing(){
       // Section markers
       else if (line.startsWith('[SECTION:')) {
         // Save current section before starting new one
-        if (currentSection.length > 0) {
-          parts.sections.push(currentSection.join('\n'));
-          currentSection = [];
-        }
+        saveCurrentSection();
+        const match = line.match(/\[SECTION:\s*(.+?)\]/);
+        currentSectionName = match ? match[1].trim() : null;
       }
       else if (line === '[END_SECTION]') {
         // End of section - save it
-        if (currentSection.length > 0) {
-          parts.sections.push(currentSection.join('\n'));
-          currentSection = [];
-        }
+        saveCurrentSection();
       }
       // Banner with position
       else if (line.startsWith('[BANNER_')) {
         const match = line.match(/\[BANNER_(?:IMG|BOTTOM):\s*(.+?)\]/);
         if (match) {
           // Save current section before banner
-          if (currentSection.length > 0) {
-            parts.sections.push(currentSection.join('\n'));
-            currentSection = [];
-          }
+          saveCurrentSection();
           parts.banners.push({
             url: match[1].trim(),
             position: line.includes('BOTTOM') ? 'bottom' : 'inline'
@@ -271,10 +274,7 @@ export default function Phishing(){
         const match = line.match(/\[BUTTON_[A-Z_]+:\s*(.+?)\s*->\s*(.+?)\]/);
         if (match) {
           // Save current section before button
-          if (currentSection.length > 0) {
-            parts.sections.push(currentSection.join('\n'));
-            currentSection = [];
-          }
+          saveCurrentSection();
           // Extract button style from marker
           const styleMatch = line.match(/\[BUTTON_([A-Z_]+):/);
           parts.buttons.push({
@@ -295,9 +295,7 @@ export default function Phishing(){
     }
 
     // Push final section if any
-    if (currentSection.length > 0) {
-      parts.sections.push(currentSection.join('\n'));
-    }
+    saveCurrentSection();
 
     return parts;
   };
@@ -306,6 +304,16 @@ export default function Phishing(){
 
   const t = tasks[index];
   if (!t) return <div>Ładowanie zadań phishingowych...</div>;
+
+  const getImageStyle = (imageType) => {
+    const imageStyle = t.style?.[imageType] || {};
+    return {
+      ...(imageStyle.width && { width: imageStyle.width }),
+      ...(imageStyle.maxWidth && { maxWidth: imageStyle.maxWidth }),
+      ...(imageStyle.maxHeight && { maxHeight: imageStyle.maxHeight }),
+      ...(imageStyle.objectFit && { objectFit: imageStyle.objectFit })
+    };
+  };
 
   const answerNow = (ans, afterTimeout=false) => {
     const row = {
@@ -363,7 +371,7 @@ export default function Phishing(){
   // Generate inline styles from task.style
   const emailBodyStyle = {
     fontFamily: t.style?.fontFamily || 'Arial, sans-serif',
-    color: t.style?.primaryColor || '#000',
+    color: t.style?.bodyColor || t.style?.primaryColor || '#000',
     ...(t.style?.containerBorderTop && { borderTop: t.style.containerBorderTop })
   };
 
@@ -400,10 +408,11 @@ export default function Phishing(){
   const vignetteIntensity = timerStressorActive && timerLeft !== null
     ? Math.max(0, 1 - timerLeft / settings.task_timer_duration)
     : 0;
+  const isAllegroParcel = t.template === 'allegro_parcel';
 
   return (
     <>
-      <div className="page-container">
+      <div className="page-container phishing-page-container">
         <div className="page-card">
         <div className="content-header">
           <h2>Zadania: Rozpoznawanie Phishingu</h2>
@@ -412,6 +421,7 @@ export default function Phishing(){
 
         <div className="email-container">
           <div className={`email-view ${timedOut ? 'email-hazed' : ''}`}>
+          <div className="email-scroll-area">
           <div className="webmail-toolbar" aria-label="Pasek narzędzi wiadomości">
             <div className="webmail-navigation">
               <button className="webmail-icon-button" type="button" disabled aria-label="Wróć do skrzynki" title="Wróć do skrzynki">&larr;</button>
@@ -441,11 +451,12 @@ export default function Phishing(){
           <div className="email-body" style={emailBodyStyle}>
             {/* Render logo with alignment */}
             {parsed.logoUrl && (
-              <div className={`email-logo-container email-logo-align-${parsed.logoAlign || 'left'}`}>
+              <div className={`email-logo-container email-logo-align-${parsed.logoAlign || 'left'} ${parsed.layout === 'HEADER_FULL_WIDTH_YELLOW' ? 'email-logo-header-yellow' : ''}`}>
                 <ImageWithFallback 
                   basePath={parsed.logoUrl}
                   alt="Logo"
                   className="email-logo"
+                  style={getImageStyle('logo')}
                 />
               </div>
             )}
@@ -461,9 +472,15 @@ export default function Phishing(){
             )}
 
             {/* Body sections */}
-            {parsed.sections.map((section, i) => (
-              <div key={i} className="email-section">
-                {section.split('\n').map((line, lineIdx) => {
+            {parsed.sections.map((section, i) => {
+              const sectionLines = section.content.split('\n');
+              const renderedLines = isAllegroParcel
+                ? sectionLines.filter(line => line.trim())
+                : sectionLines;
+
+              return (
+              <div key={i} className={`email-section ${section.name === 'ORDER_SUMMARY_BOX' ? 'email-section-order-summary' : ''}`}>
+                {renderedLines.map((line, lineIdx) => {
                   if (!line) return <p key={lineIdx}>&nbsp;</p>;
                   
                   // Handle bold text (**text**) and italic (*text*)
@@ -482,7 +499,36 @@ export default function Phishing(){
                   );
                 })}
               </div>
-            ))}
+              );
+            })}
+
+            {isAllegroParcel && (
+              <div className="allegro-parcel-details">
+                <section className="allegro-parcel-section">
+                  <h3>Przewidywana dostawa</h3>
+                  <p>{t.delivery.estimated}</p>
+                </section>
+                <section className="allegro-parcel-section">
+                  <h3>Przewoźnik i nr przesyłki</h3>
+                  <p>{t.delivery.carrier} <span className="allegro-tracking-number">{t.delivery.trackingNumber}</span></p>
+                </section>
+                <section className="allegro-purchase-row">
+                  <div className="allegro-product-placeholder" aria-hidden="true">&#128230;</div>
+                  <div className="allegro-product-info">
+                    <h3>Twój zakup</h3>
+                    <div className="allegro-product-name">{t.product.name}</div>
+                    <div className="allegro-product-seller">Sprzedający: {t.product.seller}</div>
+                  </div>
+                  <div className="allegro-product-quantity">{t.product.quantity}</div>
+                </section>
+                <ImageWithFallback
+                  basePath="/images/banners/allegro_delivery_app"
+                  alt="Aplikacja Allegro"
+                  className="email-banner allegro-app-banner"
+                  style={getImageStyle('banner')}
+                />
+              </div>
+            )}
 
             {/* Inline promotional banners appear within the message, before its call to action. */}
             {parsed.banners.filter(b => b.position === 'inline').map((banner, i) => (
@@ -491,6 +537,7 @@ export default function Phishing(){
                   basePath={banner.url}
                   alt="Baner promocyjny"
                   className="email-banner"
+                  style={getImageStyle('banner')}
                 />
               </div>
             ))}
@@ -523,12 +570,13 @@ export default function Phishing(){
                   basePath={banner.url}
                   alt="Baner promocyjny"
                   className="email-banner"
+                  style={getImageStyle('banner')}
                 />
               </div>
             ))}
 
             {t.footer && (
-              <footer className="email-footer">
+              <footer className={`email-footer ${isAllegroParcel ? 'allegro-email-footer' : ''}`}>
                 <div className="email-footer-brand">{t.footer.brand}</div>
                 <p>{t.footer.contact}</p>
                 <p>{t.footer.address}</p>
@@ -544,6 +592,7 @@ export default function Phishing(){
                 <div className="email-blur-label">Ładowanie treści...</div>
               </div>
             )}
+          </div>
           </div>
 
           {/* Timer Display */}
