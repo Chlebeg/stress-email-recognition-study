@@ -701,6 +701,80 @@ button:disabled { opacity:0.5; cursor:not-allowed; }
   box-shadow: 0 0.625rem 1.25rem rgba(102, 126, 234, 0.3);
 }
 
+.intro-step-indicator {
+  display: flex;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+}
+
+.intro-step-indicator span {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #e4e7eb;
+  color: #657282;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.intro-step-indicator span.active {
+  background: #667eea;
+  color: #ffffff;
+}
+
+.phishing-intro-card.phishing-intro-example { max-width: 47rem; }
+
+.intro-example-email {
+  overflow: hidden;
+  border: 1px solid #cfd7e0;
+  border-radius: 0.375rem;
+  background: #ffffff;
+  box-shadow: 0 0.5rem 1.5rem rgba(30, 48, 68, 0.1);
+}
+
+.intro-example-email .email-header { border-bottom: 1px solid #e2e7ed; }
+
+.intro-example-document {
+  display: block;
+  width: 100%;
+  height: 32rem;
+  border: 0;
+  background: #ffffff;
+}
+
+.intro-example-question,
+.intro-example-feedback {
+  margin-top: 0.75rem;
+  padding: 0.875rem;
+  border-radius: 0.375rem;
+  background: #f7f8fa;
+}
+
+.intro-example-question p { margin: 0 0 0.75rem; text-align: center; font-weight: 600; }
+.intro-example-feedback { border-left: 0.25rem solid #28a745; }
+.intro-example-feedback p { margin: 0.375rem 0 0; font-size: 0.8125rem; line-height: 1.5; color: #485565; }
+
+.intro-ready-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  margin-top: 1.25rem;
+  padding: 0.875rem;
+  border: 1px solid #d9dfe6;
+  border-radius: 0.375rem;
+  color: #344353;
+  cursor: pointer;
+}
+
+.intro-ready-check input { margin-top: 0.2rem; }
+
+@media (max-width: 48rem) {
+  .phishing-intro-card.phishing-intro-example { max-width: 37.5rem; }
+  .intro-example-document { height: 36rem; }
+}
+
 /* ============================================================================= */
 /* Content Pages - CISS, Phishing, End */
 /* ============================================================================= */
