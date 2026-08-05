@@ -7,6 +7,7 @@ a { color: inherit; pointer-events: none; text-decoration: none; }
 .masthead { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: -24px -24px 24px; padding: 16px 24px; color: #ffffff; background: #003b95; }
 .wordmark { font-size: 24px; font-weight: 700; }
 .wordmark .dot { color: #febb02; }
+.booking-logo { display: block; width: 142px; height: 28px; object-fit: contain; object-position: left center; filter: brightness(0) invert(1); }
 .code { font-size: 12px; line-height: 1.45; text-align: right; }
 .brand-logo { display: block; max-width: 128px; max-height: 40px; margin: 0 0 20px; object-fit: contain; object-position: left center; }
 .brand-logo.right { margin-left: auto; }
@@ -42,6 +43,22 @@ p { margin: 0 0 14px; }
 .yellow-head .brand-logo { margin: 0 auto; }
 .attachment { display: flex; align-items: center; gap: 12px; margin: 18px 0; padding: 12px; border: 1px solid #d6dde4; border-radius: 4px; background: #f8fafc; }
 .attachment strong { display: block; }
+.split-note { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 20px 0; padding: 18px; background: #f4f4f4; }
+.split-note strong { display: block; font-size: 18px; }
+.payment-card { margin: 22px 0; padding: 18px; border-top: 2px solid #00a95c; background: #f7faf8; }
+.payment-card dl { margin: 14px 0 0; }
+.payment-card dl div { display: grid; grid-template-columns: 1fr auto; gap: 16px; padding: 9px 0; border-top: 1px solid #dce7e0; }
+.payment-card dt { color: #5c6a62; }
+.payment-card dd { margin: 0; font-weight: 700; text-align: right; }
+.plus-logo { display: block; width: 130px; height: auto; margin: 0 0 22px; }
+.empik-head { margin: -24px -24px 28px; padding: 20px 24px; background: #ffffff; border-bottom: 1px solid #e6e6e6; }
+.empik-head .brand-logo { margin: 0; }
+.order-status { margin: 20px 0; padding: 18px; border-left: 4px solid #ff6b00; background: #fff7f1; }
+.order-line { display: grid; grid-template-columns: 58px 1fr auto; gap: 12px; align-items: center; padding: 16px 0; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede; }
+.order-icon { display: grid; width: 54px; height: 54px; place-items: center; background: #f2f2f2; color: #ff6b00; font-size: 24px; }
+.order-line h2 { margin: 0 0 3px; font-size: 15px; }
+.orange-head { margin: -24px -24px 24px; padding: 18px 24px 12px; background: #ff7900; }
+.orange-logo { display: block; width: 76px; height: 76px; object-fit: contain; object-position: left top; }
 .olx-page { background: #f2f4f5; color: #002f34; }
 .olx-email { max-width: 600px; margin: 16px auto; padding: 0; background: #ffffff; }
 .olx-header { padding: 18px 32px; background: #ffffff; border-bottom: 1px solid #edf0f0; }
@@ -63,4 +80,4 @@ p { margin: 0 0 14px; }
 .olx-footer { margin: 0; padding: 26px 32px; background: #fafbfb; color: #7f9799; font-size: 12px; line-height: 1.5; text-align: center; }
 .olx-footer nav { display: flex; justify-content: center; gap: 28px; margin-bottom: 24px; color: #002f34; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 .olx-footer p { margin: 5px 0; }
-@media (max-width: 420px) { .email { padding: 16px; font-size: 13px; } .masthead { margin: -16px -16px 18px; padding: 14px 16px; } .wordmark { font-size: 20px; } .code { font-size: 10px; } .heading { font-size: 20px; } .details > div { grid-template-columns: 1fr; gap: 3px; padding: 11px 12px; } .product { grid-template-columns: 56px 1fr; } .product > :last-child { grid-column: 2; } .footer { margin: 22px -16px -16px; padding: 16px; } .orange-strip { margin: -16px -16px 18px; } .yellow-head { margin: -16px -16px 18px; padding: 14px 16px; } }
+@media (max-width: 420px) { .email { padding: 16px; font-size: 13px; } .masthead { margin: -16px -16px 18px; padding: 14px 16px; } .wordmark { font-size: 20px; } .code { font-size: 10px; } .heading { font-size: 20px; } .details > div { grid-template-columns: 1fr; gap: 3px; padding: 11px 12px; } .product { grid-template-columns: 56px 1fr; } .product > :last-child { grid-column: 2; } .footer { margin: 22px -16px -16px; padding: 16px; } .orange-strip { margin: -16px -16px 18px; } .yellow-head { margin: -16px -16px 18px; padding: 14px 16px; } .empik-head, .orange-head { margin: -16px -16px 20px; padding: 16px; } .split-note, .payment-card dl div { grid-template-columns: 1fr; gap: 5px; } .payment-card dd { text-align: left; } .order-line { grid-template-columns: 54px 1fr; } .order-line > :last-child { grid-column: 2; } }
