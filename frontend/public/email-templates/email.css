@@ -53,6 +53,21 @@ p { margin: 0 0 14px; }
 .gov-signoff { margin-top: 36px; }
 .gov-footer { padding: 15px 30px; background: #f4f4f4; border-bottom: 1px solid #ffffff; color: #313131; font-size: 12px; text-align: center; }
 .gov-footer p { margin: 6px 0; }
+.netflix-page { background: #e5e5e5; color: #232323; }
+.netflix-email { max-width: 500px; margin: 0 auto; background: #ffffff; font-family: Arial, Helvetica, sans-serif; }
+.netflix-content { padding: 34px 40px 38px; }
+.netflix-logo { display: block; width: 26px; height: 26px; object-fit: contain; object-position: left center; margin: 0 0 28px; }
+.netflix-content h1 { margin: 0 0 24px; color: #232323; font-size: 30px; line-height: 1.18; }
+.netflix-content p { margin: 0 0 18px; font-size: 15px; line-height: 1.45; }
+.netflix-payment-card { margin: 24px 0; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px; }
+.netflix-payment-card h2 { margin: 0 0 14px; font-size: 14px; }
+.netflix-card-row { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+.netflix-visa { display: inline-grid; min-width: 42px; min-height: 26px; place-items: center; border-radius: 3px; background: #1a4f9d; color: #ffffff; font-size: 10px; font-weight: 800; font-style: italic; }
+.netflix-cta { width: 100%; margin-top: 8px; background: #e50914; border-radius: 4px; }
+.netflix-content .url { margin: 10px 0 24px; color: #6a6a6a; text-align: center; }
+.netflix-footer { display: grid; grid-template-columns: 26px 1fr; gap: 14px; padding: 28px 40px; border-top: 2px solid #221f1f; color: #8a8a8a; font-size: 11px; line-height: 1.45; }
+.netflix-footer-logo { display: block; width: 24px; height: 24px; object-fit: contain; object-position: left top; }
+.netflix-footer p { margin: 0 0 6px; }
 .split-note { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 20px 0; padding: 18px; background: #f4f4f4; }
 .split-note strong { display: block; font-size: 18px; }
 .payment-card { margin: 22px 0; padding: 18px; border-top: 2px solid #00a95c; background: #f7faf8; }
@@ -90,4 +105,4 @@ p { margin: 0 0 14px; }
 .olx-footer { margin: 0; padding: 26px 32px; background: #fafbfb; color: #7f9799; font-size: 12px; line-height: 1.5; text-align: center; }
 .olx-footer nav { display: flex; justify-content: center; gap: 28px; margin-bottom: 24px; color: #002f34; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 .olx-footer p { margin: 5px 0; }
-@media (max-width: 420px) { .email { padding: 16px; font-size: 13px; } .masthead { margin: -16px -16px 18px; padding: 14px 16px; } .wordmark { font-size: 20px; } .code { font-size: 10px; } .heading { font-size: 20px; } .details > div { grid-template-columns: 1fr; gap: 3px; padding: 11px 12px; } .product { grid-template-columns: 56px 1fr; } .product > :last-child { grid-column: 2; } .footer { margin: 22px -16px -16px; padding: 16px; } .orange-strip { margin: -16px -16px 18px; } .yellow-head { margin: -16px -16px 18px; padding: 14px 16px; } .empik-head, .orange-head { margin: -16px -16px 20px; padding: 16px; } .split-note, .payment-card dl div { grid-template-columns: 1fr; gap: 5px; } .payment-card dd { text-align: left; } .order-line { grid-template-columns: 54px 1fr; } .order-line > :last-child { grid-column: 2; } .gov-email { padding: 0; } .gov-masthead { padding: 14px 16px; } .gov-wordmark { font-size: 18px; } .gov-masthead span { font-size: 11px; } .gov-content { padding: 22px 18px; } .gov-footer { padding: 14px 18px; } }
+@media (max-width: 420px) { .email { padding: 16px; font-size: 13px; } .masthead { margin: -16px -16px 18px; padding: 14px 16px; } .wordmark { font-size: 20px; } .code { font-size: 10px; } .heading { font-size: 20px; } .details > div { grid-template-columns: 1fr; gap: 3px; padding: 11px 12px; } .product { grid-template-columns: 56px 1fr; } .product > :last-child { grid-column: 2; } .footer { margin: 22px -16px -16px; padding: 16px; } .orange-strip { margin: -16px -16px 18px; } .yellow-head { margin: -16px -16px 18px; padding: 14px 16px; } .empik-head, .orange-head { margin: -16px -16px 20px; padding: 16px; } .split-note, .payment-card dl div { grid-template-columns: 1fr; gap: 5px; } .payment-card dd { text-align: left; } .order-line { grid-template-columns: 54px 1fr; } .order-line > :last-child { grid-column: 2; } .gov-email { padding: 0; } .gov-masthead { padding: 14px 16px; } .gov-wordmark { font-size: 18px; } .gov-masthead span { font-size: 11px; } .gov-content { padding: 22px 18px; } .gov-footer { padding: 14px 18px; } .netflix-content { padding: 28px 22px 30px; } .netflix-content h1 { font-size: 25px; } .netflix-footer { padding: 24px 22px; } }
