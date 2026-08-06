@@ -739,7 +739,7 @@ export default function Phishing(){
 
           {/* Permission Popups — stacked in a single fixed container, 1em gap between them */}
           {(showMicPopup || showCamPopup) && (
-            <div style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10000, display: 'flex', flexDirection: 'column', gap: '1em' }}>
+            <div className="permission-popup-stack">
               {showMicPopup && (
                 <PermissionPopup
                   type="microphone"

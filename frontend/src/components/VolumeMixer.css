@@ -4,8 +4,9 @@
   flex-shrink: 0;
   position: fixed;
   right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
+  top: auto;
+  bottom: calc(var(--phishing-control-clearance) + 18rem);
+  transform: none;
 }
 
 .volume-mixer {
@@ -84,6 +85,12 @@
 
 /* Mobile responsive - adjust sizing */
 @media (max-width: 48rem) {
+  .volume-mixer-container {
+    top: 4.5rem;
+    right: 0.75rem;
+    bottom: auto;
+  }
+
   .volume-mixer {
     padding: 0.75rem;
     min-width: 4rem;

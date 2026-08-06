@@ -8,12 +8,13 @@ export default function PhishingIntro() {
   const [step, setStep] = useState(1);
   const [exampleAnswer, setExampleAnswer] = useState(null);
   const [isReady, setIsReady] = useState(false);
+  const isCompactStep = step !== 2;
 
   if (!user) return <div>Nie jesteś zalogowany. <Link to="/">Wróć</Link></div>;
 
   return (
-    <div className="intro-container">
-      <div className={`intro-card phishing-intro-card ${step === 2 ? 'phishing-intro-example' : ''}`}>
+    <div className={`intro-container phishing-intro-container ${isCompactStep ? 'phishing-intro-container-compact' : ''}`}>
+      <div className={`intro-card phishing-intro-card ${step === 2 ? 'phishing-intro-example' : ''} ${isCompactStep ? 'phishing-intro-card-compact' : ''}`}>
         <div className="intro-header">
           <h2>Przygotowanie — Zadania Phishingowe</h2>
           <div className="intro-step-indicator" aria-label={`Krok ${step} z 3`}>
@@ -23,17 +24,13 @@ export default function PhishingIntro() {
           </div>
         </div>
 
+        <div className="phishing-intro-scroll">
         {step === 1 && (
-          <>
-            <div className="intro-content">
-              <p>Zaraz będziesz klasyfikować wiadomości e-mail jako phishing lub wiadomości normalne.</p>
-              <p><strong>Twoja rola:</strong> przeanalizuj każdą wiadomość i zdecyduj, czy jest to próba phishingu czy normalna wiadomość.</p>
-              <p>Dostaniesz serię wiadomości do przeklasyfikowania. Nie będziesz mógł(a) wrócić do poprzedniej wiadomości.</p>
-            </div>
-            <div className="nav">
-              <button onClick={() => setStep(2)}>Zobacz przykład</button>
-            </div>
-          </>
+          <div className="intro-content">
+            <p>Zaraz będziesz klasyfikować wiadomości e-mail jako phishing lub wiadomości normalne.</p>
+            <p><strong>Twoja rola:</strong> przeanalizuj każdą wiadomość i zdecyduj, czy jest to próba phishingu czy normalna wiadomość.</p>
+            <p>Dostaniesz serię wiadomości do przeklasyfikowania. Nie będziesz mógł(a) wrócić do poprzedniej wiadomości.</p>
+          </div>
         )}
 
         {step === 2 && (
@@ -69,20 +66,8 @@ export default function PhishingIntro() {
               />
             </section>
             {!exampleAnswer ? (
-              <div className="phishing-question-container">
-                <div className="phishing-question">Czy to jest Phishing?</div>
-                <div className="phishing-answers">
-                  <button className="btn-phishing" onClick={() => setExampleAnswer('phishing')}>Tak</button>
-                  <button className="btn-legitimate" onClick={() => setExampleAnswer('legitimate')}>Nie</button>
-                </div>
-              </div>
-            ) : (
-              <div className="intro-example-feedback">
-                <strong>To normalna wiadomość.</strong>
-                <p>Ma charakter informacyjny, nie wywiera presji i nie prosi o wykonanie działania przez podejrzany link lub załącznik.</p>
-                <div className="nav"><button onClick={() => setStep(3)}>Dalej</button></div>
-              </div>
-            )}
+              null
+            ) : null}
           </>
         )}
 
@@ -95,11 +80,36 @@ export default function PhishingIntro() {
                 <span>Jestem gotowy(a) rozpocząć rozpoznawanie wiadomości.</span>
               </label>
             </div>
-            <div className="nav">
-              <button disabled={!isReady} onClick={() => nav('/phishing')}>Rozpocznij zadania</button>
-            </div>
           </>
         )}
+        </div>
+
+        <div className="phishing-intro-actions">
+          {step === 1 && (
+            <div className="nav"><button onClick={() => setStep(2)}>Zobacz przykład</button></div>
+          )}
+          {step === 2 && !exampleAnswer && (
+            <div className="phishing-question-container">
+              <div className="phishing-question">Czy to jest Phishing?</div>
+              <div className="phishing-answers">
+                <button className="btn-phishing" onClick={() => setExampleAnswer('phishing')}>Tak</button>
+                <button className="btn-legitimate" onClick={() => setExampleAnswer('legitimate')}>Nie</button>
+              </div>
+            </div>
+          )}
+          {step === 2 && exampleAnswer && (
+            <>
+              <div className="intro-example-feedback">
+                <strong>To normalna wiadomość.</strong>
+                <p>Ma charakter informacyjny, nie wywiera presji i nie prosi o wykonanie działania przez podejrzany link lub załącznik.</p>
+              </div>
+              <div className="nav"><button onClick={() => setStep(3)}>Dalej</button></div>
+            </>
+          )}
+          {step === 3 && (
+            <div className="nav"><button disabled={!isReady} onClick={() => nav('/phishing')}>Rozpocznij zadania</button></div>
+          )}
+        </div>
       </div>
     </div>
   );
