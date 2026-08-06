@@ -169,8 +169,9 @@ export default function Phishing(){
     }
 
     if (settings.task_timer_enabled && (t.stressors || []).includes(Stressors.TIMER)) {
-      setTimerLeft(settings.task_timer_duration);
-      scheduleAllTicks(settings.task_timer_duration);
+      const timerDuration = t.timer_duration ?? settings.task_timer_duration;
+      setTimerLeft(timerDuration);
+      scheduleAllTicks(timerDuration);
       timerRef.current = setInterval(() => {
         setTimerLeft(prev => {
           const currentTime = prev - 1;
@@ -404,9 +405,10 @@ export default function Phishing(){
     }
   };
 
+  const timerDuration = t.timer_duration ?? settings.task_timer_duration;
   const timerStressorActive = settings.task_timer_enabled && (t.stressors || []).includes(Stressors.TIMER);
   const vignetteIntensity = timerStressorActive && timerLeft !== null
-    ? Math.max(0, 1 - timerLeft / settings.task_timer_duration)
+    ? Math.max(0, 1 - timerLeft / timerDuration)
     : 0;
   const isAllegroParcel = t.template === 'allegro_parcel';
   const isBookingReservation = t.template === 'booking_reservation';
