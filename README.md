@@ -1,192 +1,155 @@
 # Study: The Impact of Stress Coping Style on Cybersecurity Decision-Making
 
-## Project Description
-A web-based application for conducting a research study consisting of three parts:
-1. **CISS** - Coping Inventory for Stressful Situations questionnaire
-2. **Phishing** - Email phishing recognition task (with optional stress-inducing factors)
-3. **Summary** - Post-study survey
+## Overview
 
-## Project Structure
-```
-├── backend/                   # Express.js server
-│   ├── server.js              # Main server file with API endpoints
-│   ├── package.json           # Backend dependencies
-│   ├── utils/
-│   │   └── excel.js           # Excel file writing utilities
-│   ├── data/                  # Data storage directory
-│   └── save-test.js           # Test file for saving functionality
-├── frontend/                  # React application
-│   ├── index.html             # Main HTML entry point
-│   ├── package.json           # Frontend dependencies
-│   ├── vite.config.js         # Vite configuration
-│   ├── public/
-│   │   ├── ciss.json          # CISS questionnaire items
-│   │   └── phishing.json      # Phishing email tasks
-│   └── src/
-│       ├── App.jsx            # Main application component
-│       ├── main.jsx           # React entry point
-│       ├── styles.css         # Global styles
-│       ├── pages/             # Application pages
-│       │   ├── Login.jsx
-│       │   ├── CISS.jsx
-│       │   ├── Phishing.jsx
-│       │   ├── Summary.jsx
-│       │   └── End.jsx
-│       └── state/             # Context API
-│           └── AppContext.jsx # Global application state
-```
+This React and Express application runs a single-session research study in Polish:
 
-## Installation and Setup
+1. **CISS**: 48-item Coping Inventory for Stressful Situations questionnaire.
+2. **Phishing tasks**: classification of realistic email messages under task-configured stressors.
+3. **Summary**: age, IT work/education background, self-reported stress, and stressor-related feelings.
 
-### Backend
-```bash
+The participant flow is linear: Login -> CISS intro -> CISS -> phishing intro -> phishing -> Summary -> completion. Participant state is held in React context and is intentionally lost when the page is refreshed.
+
+## Setup
+
+Install dependencies independently for the frontend and backend.
+
+```powershell
 cd backend
 npm install
-npm start
+npm run dev
 ```
-Backend will be available at: http://localhost:4000
 
-### Frontend
-```bash
+The API runs at `http://localhost:4000` by default.
+
+```powershell
 cd frontend
 npm install
 npm run dev
 ```
-Frontend will be available at: http://localhost:3000
 
-## Development Commands
+The Vite application runs at `http://localhost:3000`.
 
-### Backend
-- `npm start` - Start the server in production mode
-- `npm run dev` - Start the server with nodemon (hot reload)
+## Commands
 
-## API Endpoints
+| Location | Command | Purpose |
+|---|---|---|
+| `backend` | `npm start` | Start the Express server. |
+| `backend` | `npm run dev` | Start Express with nodemon. |
+| `frontend` | `npm run dev` | Start the Vite development server. |
+| `frontend` | `npm run build` | Create a production build in `frontend/dist`. |
+| `frontend` | `npm run preview` | Serve the production build locally. |
 
-### POST /api/login
-Saves user_id to USERS sheet.
-```json
-{
-  "user_id": "participant_01"
-}
-```
-**Response:**
-```json
-{
-  "ok": true,
-  "user_id": "participant_01"
-}
-```
+## Architecture
 
-### POST /api/ciss
-Saves CISS questionnaire answers to CISS sheet.
-```json
-{
-  "user_id": "participant_01",
-  "answers": [
-    { "pytanie_id": 1, "odpowiedz": "Frequently" }
-  ]
-}
-```
-**Response:**
-```json
-{
-  "ok": true
-}
+```text
+frontend/                         React 18 + Vite application
+  public/ciss.json                CISS item definitions
+  public/phishing.json            Email tasks and task stressor configuration
+  src/constants/Stressors.js      Canonical stressor identifiers
+  src/pages/                      Participant pages
+  src/state/AppContext.jsx        In-memory participant/session state
+
+backend/                          Express API
+  server.js                       Session endpoints and development exports
+  utils/jsonStorage.js            Local JSON session persistence
+  utils/mongoStorage.js           MongoDB session persistence
+  utils/csvExport.js              USERS, CISS, and PHISHING CSV generation
 ```
 
-### POST /api/phishing
-Saves phishing task answers to PHISHING sheet.
-```json
-{
-  "user_id": "participant_01",
-  "answers": [
-    {
-      "zadanie_id": "p1",
-      "subject": "Your account has been locked",
-      "correct_answer": "phishing",
-      "user_answer": "phishing",
-      "stress_timer_active": true,
-      "stress_timer_duration": 8,
-      "stressors_per_question": ["timer"],
-      "czy_odpowiedziano_po_timeout": false
-    }
-  ]
-}
-```
-**Response:**
-```json
-{
-  "ok": true
-}
-```
+## Storage
 
-### POST /api/summary
-Saves post-study survey responses to SUMMARY sheet.
+The backend stores one consolidated session record per participant per day. It uses MongoDB when `MONGODB_URI` is available; otherwise it stores JSON session files in `backend/data/sessions/`.
+
+Each session contains participant metadata, CISS answers, phishing answers, the Summary response, and section timestamps. The backend's in-memory `activeSessions` map links a logged-in participant to the storage record for subsequent submissions, so a page refresh requires a new login/session flow.
+
+## API
+
+All participant endpoints accept JSON and return `{ "ok": true }` on success.
+
+| Endpoint | Request body | Result |
+|---|---|---|
+| `POST /api/login` | `user_id`, `device_type`, `browser` | Creates or initializes the participant session. Same-day ID collisions return `shouldRetry: true`. |
+| `POST /api/ciss` | `user_id`, `answers` | Saves `{ q1: 1, ..., q48: 5 }`. |
+| `POST /api/phishing` | `user_id`, `answers` | Saves one response per email task. |
+| `POST /api/summary` | `user_id`, `summary` | Saves demographics and subjective-stress data. |
+
+Example Summary payload:
+
 ```json
 {
   "user_id": "participant_01",
   "summary": {
-    "wiek": "28",
-    "ocena_stresu": "5",
-    "inne": {}
+    "age": "28",
+    "technical_background": "yes",
+    "stress_rating": "7",
+    "stress_impact_factor": ["timer", "email_blur"],
+    "stress_impact_factor_notes": ""
   }
 }
 ```
-**Response:**
-```json
-{
-  "ok": true
-}
-```
 
-## Excel Output Structure (wyniki.xlsx)
+Development-only export routes are available while `NODE_ENV` is not `production`:
 
-### USERS Sheet
-- `user_id` - Unique participant identifier
-- `timestamp` - Login timestamp
+- `GET /api/export`: returns all CSV strings in JSON.
+- `GET /api/export/users`, `/api/export/ciss`, and `/api/export/phishing`: download individual CSV files.
+- `GET /api/export/sessions/zip`: download raw session records as a ZIP archive.
 
-### CISS Sheet
-- `user_id` - Participant identifier
-- `question_id` - Question ID (1-48)
-- `answer` - Selected answer option
-- `timestamp` - Response timestamp
+Production exports are intentionally not registered; access production data through MongoDB.
 
-### PHISHING Sheet
-- `user_id` - Participant identifier
-- `task_id` - Task ID (p1-p4)
-- `subject` - Email subject
-- `correct_answer` - Ground truth label ("phishing" or "normalny")
-- `user_answer` - Participant's classification
-- `stress_timer_active` - Whether timer was active
-- `stress_timer_duration` - Timer duration in seconds
-- `stressors_per_question` - Applied stressors (e.g., ["timer"])
-- `answered_after_timeout` - Whether answer was given after timeout
-- `timestamp` - Response timestamp
+## Stressors
 
-### SUMMARY Sheet
-- `user_id` - Participant identifier
-- `age` - Age
-- `stress_rating` - Self-reported stress rating
-- `additional_data` - Additional responses (JSON format)
-- `timestamp` - Submission timestamp
+Configure stressors per phishing task in `frontend/public/phishing.json`. Valid values are defined in `frontend/src/constants/Stressors.js`:
 
-## Stress Factor Configuration
+- `timer`
+- `negative_feedback`
+- `permission_popup_microphone`
+- `permission_popup_camera`
+- `email_blur`
+- `recording`
+- `social_comparison`
+- `extended_negative_feedback`
+- `cognitive_overload`
 
-### Global Settings
-In `frontend/src/state/AppContext.jsx`, you can modify default stress settings:
-```javascript
-stress_timer_enabled: true,     // enable/disable timer globally
-stress_timer_duration: 8        // duration in seconds
-```
+The global development settings in `AppContext.jsx` control timer enablement/duration and negative-feedback enablement. The full research sequence and task-specific choices are maintained in [RESEARCH_PLAN.md](RESEARCH_PLAN.md).
 
-### Per-Task Stressors
-In `frontend/public/phishing.json`, stressors can be configured per task:
-```json
-{
-  "id": "p1",
-  "subject": "Your account has been locked",
-  "body": "...",
-  "correct": "phishing",
-  "stressors": ["timer"]  // stressors for this task
-}
-```
+## Deployment
+
+The repository contains a Render Blueprint in [`render.yaml`](render.yaml) with two services:
+
+| Service | Type | Build | Runtime |
+|---|---|---|---|
+| `stress-email-recognition-study-backend` | Node web service | `cd backend && npm install` | `cd backend && node server.js` |
+| `stress-email-recognition-study` | Static site | `cd frontend && npm install && npm run build` | Publishes `frontend/dist` |
+
+### First deployment
+
+1. Push the repository to GitHub or another Git provider supported by Render.
+2. In Render, choose **New +** -> **Blueprint** and select the repository.
+3. Review the two services detected from `render.yaml`.
+4. Set the secret `MONGODB_URI` for `stress-email-recognition-study-backend`.
+5. Deploy the Blueprint and wait for the backend to become healthy before testing the frontend.
+
+The backend listens on Render's assigned port through the `PORT` environment variable. The Blueprint sets `NODE_ENV=production`, which disables the development data-export endpoints.
+
+### Environment variables
+
+#### Backend service
+
+| Variable | Required | Value |
+|---|---|---|
+| `NODE_ENV` | Yes | `production` |
+| `PORT` | Yes | `4000` in the Blueprint; Render may provide its own service port. |
+| `MONGODB_URI` | Yes for persistent production data | MongoDB Atlas connection string. Keep this secret and set it in Render, not in Git. |
+| `FRONTEND_URL` | Optional | Full frontend origin, useful when restricting CORS for a custom domain. |
+
+When `MONGODB_URI` is present, the backend uses the `ciss_research` database and `sessions` collection. Without it, the backend falls back to JSON files, which should not be treated as durable production storage on a free or ephemeral host.
+
+#### Frontend service
+
+| Variable | Required | Value |
+|---|---|---|
+| `VITE_API_URL` | Yes | The public backend URL, for example `https://stress-email-recognition-study-backend.onrender.com`. |
+
+`VITE_API_URL` is embedded into the frontend during `npm run build`. Changing it requires a new frontend build/deploy; restarting only the backend is not enough.
+

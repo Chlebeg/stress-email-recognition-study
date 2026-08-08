@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ciss-phishing-backend
+    name: stress-email-recognition-study-backend
     runtime: node
     plan: free
     buildCommand: cd backend && npm install
@@ -15,13 +15,13 @@ services:
 
   - type: web
     runtime: static
-    name: ciss-phishing-frontend
+    name: stress-email-recognition-study
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     routes:
       - type: rewrite
-        source: /download
+        source: /*
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://ciss-phishing-backend.onrender.com
+        value: https://stress-email-recognition-study-backend.onrender.com
