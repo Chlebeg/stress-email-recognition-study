@@ -37,7 +37,7 @@ function ImageWithFallback({ basePath, alt, className, style }) {
   );
 }
 
-export default function Phishing(){
+export default function Tasks(){
   const { user, settings, phishingAnswers, setPhishingAnswers } = useApp();
   const [tasks, setTasks] = useState([]);
   const [index, setIndex] = useState(0);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
 
-export default function PhishingIntro() {
+export default function TasksIntro() {
   const { user } = useApp();
   const nav = useNavigate();
   const [step, setStep] = useState(1);

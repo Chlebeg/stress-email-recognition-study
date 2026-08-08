@@ -6,8 +6,8 @@ export default function DevBottomBanner() {
     { path: '/', label: 'Login' },
     { path: '/ciss-intro', label: 'CISS Intro' },
     { path: '/ciss', label: 'CISS' },
-    { path: '/phishing-intro', label: 'Phishing Intro' },
-    { path: '/phishing', label: 'Phishing' },
+    { path: '/email-tasks-intro', label: 'Email Tasks Intro' },
+    { path: '/email-tasks', label: 'Email Tasks' },
     { path: '/summary', label: 'Summary' },
     { path: '/end', label: 'End' },
     { path: '/download', label: 'Download' }

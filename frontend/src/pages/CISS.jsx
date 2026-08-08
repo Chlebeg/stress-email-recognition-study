@@ -62,7 +62,7 @@ export default function CISS(){
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ user_id: user.user_id, answers: answersObject })
       });
-      nav('/phishing-intro');
+      nav('/email-tasks-intro');
     } catch (error) {
       console.error('CISS submit error:', error);
       alert('Błąd podczas zapisywania odpowiedzi. Sprawdź połączenie z serwerem.');

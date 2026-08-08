@@ -3,8 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import CISSIntro from './pages/CISSIntro';
 import CISS from './pages/CISS';
-import PhishingIntro from './pages/PhishingIntro';
-import Phishing from './pages/Phishing';
+import TasksIntro from './pages/TasksIntro';
+import Tasks from './pages/Tasks';
 import Summary from './pages/Summary';
 import End from './pages/End';
 
@@ -20,8 +20,8 @@ export default function App() {
           <Route path="/" element={<Login />} />
           <Route path="/ciss-intro" element={<CISSIntro />} />
           <Route path="/ciss" element={<CISS />} />
-          <Route path="/phishing-intro" element={<PhishingIntro />} />
-          <Route path="/phishing" element={<Phishing />} />
+          <Route path="/email-tasks-intro" element={<TasksIntro />} />
+          <Route path="/email-tasks" element={<Tasks />} />
           <Route path="/summary" element={<Summary />} />
           <Route path="/end" element={<End />} />
           {isDev && DataDownload && (
