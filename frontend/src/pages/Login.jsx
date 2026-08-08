@@ -79,11 +79,12 @@ export default function Login(){
       <div className="login-card">
         <div className="login-header">
           <h1>Badanie: Analiza wpływu stylu radzenia sobie ze stresem na decyzje związane z cyberbezpieczeństwem</h1>
-          <p className="login-subtitle">Ankieta ta jest częścią badania realizowanego w ramach pracy magisterskiej pod tytułem: Analiza wpływu stylu radzenia sobie ze stresem na decyzje związane z cyberbezpieczeństwem. Proszę odpowiedzieć na wszystkie pytania zgodnie z własnymi odczuciami i doświadczeniami.</p>
-          <p className='login-subtitle'>Badanie prowadzone jest w ramach studiów 2 stopnia na kierunku Cyberbezpieczeństwo w Instytucie Telekomunikacji na Wydziale Informatyki, Elektroniki i Telekomunikacji na Akademii Górniczo-Hutniczej im. Stanisława Staszica w Krakowie. <br /> Kontakt - mplich@student.agh.edu.pl</p>
+          <p className="login-subtitle">Badanie jest realizowane w ramach pracy magisterskiej na kierunku Cyberbezpieczeństwo w Akademii Górniczo-Hutniczej im. Stanisława Staszica w Krakowie.</p>
+          <p className="login-contact">Kontakt w sprawie badania: mplich@student.agh.edu.pl</p>
         </div>
 
-        <div className="login-form">
+        <div className="login-scroll">
+          <div className="login-form">
           <div className="form-section">
             {isDev && (
               <>
@@ -100,37 +101,34 @@ export default function Login(){
                 </div>
               </>
             )}
-
-            {error && (
-              <div className="form-error">
-                <span>⚠️</span> {error}
-              </div>
-            )}
-
-            <button 
-              onClick={start} 
-              className="btn-primary btn-large"
-              disabled={loading}
-            >
-              {loading ? 'Inicjowanie sesji...' : 'Rozpocznij badanie'}
-            </button>
           </div>
 
           <div className="login-info">
             <div className="info-box">
-              <h3>Co Cię czeka?</h3>
-              <ul>
-                <li><strong>Krok 1:</strong> Kwestionariusz CISS (48 pytań, ~8 min)</li>
-                <li><strong>Krok 2:</strong> Zadania phishingowe (5 email-i, ~3 min)</li>
-                <li><strong>Krok 3:</strong> Ankieta podsumowująca (1 min)</li>
-              </ul>
-              <p className="info-note">Całe badanie zajmie do <strong>15 minut</strong>. Twoje odpowiedzi będą anonimowe i będą wykorzystane wyłącznie do badań naukowych.</p>
+              <h3>Informacje o badaniu</h3>
+              <p>Udział w badaniu jest dobrowolny. Możesz z niego zrezygnować w dowolnym momencie, po prostu zamykając stronę.</p>
+              <p className="info-note">Wypełnienie ankiety zajmuje około <strong>15 minut</strong>. Wiadomości e-mail i pozostałe elementy widoczne w badaniu są symulacją. Nie klikaj w linki ani nie podawaj żadnych danych - wystarczy zaznaczać odpowiedzi.</p>
+              <p className="info-note">Nie zbieramy danych osobowych ani kontaktowych. Nie pytamy o imię i nazwisko, adres e-mail, numer telefonu ani inne informacje pozwalające Cię zidentyfikować. Zebrane odpowiedzi posłużą wyłącznie do celów naukowych.</p>
+              <p className="info-note">Niektóre zadania mogą wywołać chwilowe napięcie. Jeśli poczujesz, że badanie jest dla Ciebie zbyt obciążające lub pogorszy się Twoje samopoczucie, przerwij udział.</p>
             </div>
+          </div>
+
           </div>
         </div>
 
-        <div className="login-footer">
-          <p className="footer-text">Ankieta jest w pełni anonimowa i nie są zbierane ani przechowywane dane osobiste ani kontaktowe osób ankietowanych.</p>
+        <div className="login-actions">
+          {error && (
+            <div className="form-error">
+              <span>⚠️</span> {error}
+            </div>
+          )}
+          <button 
+            onClick={start} 
+            className="btn-primary btn-large"
+            disabled={loading}
+          >
+            {loading ? 'Inicjowanie sesji...' : 'Rozpocznij badanie'}
+          </button>
         </div>
       </div>
     </div>

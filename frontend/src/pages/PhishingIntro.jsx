@@ -16,7 +16,7 @@ export default function PhishingIntro() {
     <div className={`intro-container phishing-intro-container ${isCompactStep ? 'phishing-intro-container-compact' : ''}`}>
       <div className={`intro-card phishing-intro-card ${step === 2 ? 'phishing-intro-example' : ''} ${isCompactStep ? 'phishing-intro-card-compact' : ''}`}>
         <div className="intro-header">
-          <h2>Przygotowanie — Zadania Phishingowe</h2>
+          <h2>Wstęp - Rozpoznawanie Phishingu</h2>
           <div className="intro-step-indicator" aria-label={`Krok ${step} z 3`}>
             <span className={step >= 1 ? 'active' : ''}>1</span>
             <span className={step >= 2 ? 'active' : ''}>2</span>
@@ -27,9 +27,9 @@ export default function PhishingIntro() {
         <div className="phishing-intro-scroll">
         {step === 1 && (
           <div className="intro-content">
-            <p>Zaraz będziesz klasyfikować wiadomości e-mail jako phishing lub wiadomości normalne.</p>
-            <p><strong>Twoja rola:</strong> przeanalizuj każdą wiadomość i zdecyduj, czy jest to próba phishingu czy normalna wiadomość.</p>
-            <p>Dostaniesz serię wiadomości do przeklasyfikowania. Nie będziesz mógł(a) wrócić do poprzedniej wiadomości.</p>
+            <p>Zaraz dostaniesz serię wiadomości e-mail. Twoim zadaniem będzie klasyfikowanie wiadomości e-mail jako normalne wiadomości lub phishing.</p>
+            <p>Staraj się dokładnie analizować każdą wiadomość i zdecyduj, czy jest to próba phishingu.</p>
+            <p>Po zapoznaniu się z przykładem przejdziesz do właściwych zadań badania.</p>
           </div>
         )}
 
@@ -74,10 +74,11 @@ export default function PhishingIntro() {
         {step === 3 && (
           <>
             <div className="intro-content">
-              <p>Przykład został zakończony. Kolejne wiadomości będą właściwymi zadaniami badania.</p>
+              <p>Przykład został zakończony. Kolejne wiadomości będą właściwymi zadaniami badania. Staraj się uważnie analizować każdą wiadomość.</p>
+              <p><strong>Uwaga:</strong> Podczas badania po udzieleniu odpowiedzi nie będziesz mógł(a) wrócić do poprzedniej wiadomości.</p>
               <label className="intro-ready-check">
                 <input type="checkbox" checked={isReady} onChange={(event) => setIsReady(event.target.checked)} />
-                <span>Jestem gotowy(a) rozpocząć rozpoznawanie wiadomości.</span>
+                <span>Jestem gotowy(a) rozpocząć właściwą część badania.</span>
               </label>
             </div>
           </>

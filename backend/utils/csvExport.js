@@ -70,7 +70,7 @@ function phishingToCsv(sessions) {
 function usersToCsv(sessions) {
   if (sessions.length === 0) return '';
 
-  const headers = ['user_id', 'age', 'stress_rating', 'stress_impact_factor', 'stress_impact_factor_notes', 'device_type', 'browser', 'timestamp_start', 'timestamp_end'];
+  const headers = ['user_id', 'age', 'technical_background', 'stress_rating', 'stress_impact_factor', 'stress_impact_factor_notes', 'device_type', 'browser', 'timestamp_start', 'timestamp_end'];
   let rows = [headers.map(escapeCSV).join(',')];
 
   sessions.forEach(session => {
@@ -78,8 +78,9 @@ function usersToCsv(sessions) {
     rows.push([
       escapeCSV(session.user_id),
       escapeCSV(summary.age || ''),
+      escapeCSV(summary.technical_background || ''),
       escapeCSV(summary.stress_rating || ''),
-      escapeCSV(summary.stress_impact_factor || ''),
+      escapeCSV(Array.isArray(summary.stress_impact_factor) ? JSON.stringify(summary.stress_impact_factor) : summary.stress_impact_factor || ''),
       escapeCSV(summary.stress_impact_factor_notes || ''),
       escapeCSV(session.device_type || 'unknown'),
       escapeCSV(session.browser || 'unknown'),

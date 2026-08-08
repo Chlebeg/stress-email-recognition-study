@@ -3,11 +3,59 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
 import { Stressors } from '../constants/Stressors';
 
+const NO_STRESS = 'no_stress';
+const FEELING_OPTIONS = [
+  {
+    value: Stressors.TIMER,
+    label: 'Poczucie szybko uciekającego czasu wywoływało we mnie niepokój.'
+  },
+  {
+    value: Stressors.NEGATIVE_FEEDBACK,
+    label: 'Otrzymywanie informacji o błędnej odpowiedzi, mimo poprawnej klasyfikacji, wywoływało we mnie frustrację lub zwątpienie.'
+  },
+  {
+    value: Stressors.PERMISSION_POPUP_MICROPHONE,
+    label: 'Prośba o dostęp do mikrofonu wywoływała we mnie niepewność lub rozpraszała mnie podczas wykonywania zadania.'
+  },
+  {
+    value: Stressors.PERMISSION_POPUP_CAMERA,
+    label: 'Prośba o dostęp do kamery wywoływała we mnie niepewność lub rozpraszała mnie podczas wykonywania zadania.'
+  },
+  {
+    value: Stressors.EMAIL_BLUR,
+    label: 'Zamazanie treści wiadomości utrudniało mi analizę i powodowało napięcie.'
+  },
+  {
+    value: Stressors.RECORDING,
+    label: 'Informacja o nagrywaniu mojej aktywności powodowała, że czułem się obserwowany lub oceniany.'
+  },
+  {
+    value: Stressors.SOCIAL_COMPARISON,
+    label: 'Porównanie mojego tempa z innymi osobami wywoływało we mnie presję.'
+  },
+  {
+    value: Stressors.EXTENDED_NEGATIVE_FEEDBACK,
+    label: 'Podsumowanie sugerujące słaby wynik wywoływało we mnie frustrację lub zwątpienie.'
+  },
+  {
+    value: Stressors.COGNITIVE_OVERLOAD,
+    label: 'Konieczność zapamiętania dodatkowych informacji przed zadaniem utrudniała mi skupienie.'
+  },
+  {
+    value: NO_STRESS,
+    label: 'Nie odczuwałem stresu podczas wykonywanego badania.'
+  }
+];
+
 export default function Summary(){
   const { user, summary = {}, setSummary } = useApp();
   const [age, setAge] = useState((summary && summary.age) || '');
+  const [technicalBackground, setTechnicalBackground] = useState((summary && summary.technical_background) || '');
   const [stressRating, setStressRating] = useState((summary && summary.stress_rating) || '');
-  const [stressImpactFactor, setStressImpactFactor] = useState((summary && summary.stress_impact_factor) || '');
+  const [stressImpactFactors, setStressImpactFactors] = useState(() => {
+    const savedFactors = summary && summary.stress_impact_factor;
+    return Array.isArray(savedFactors) ? savedFactors : savedFactors ? [savedFactors] : [];
+  });
   const [stressImpactNotes, setStressImpactNotes] = useState((summary && summary.stress_impact_factor_notes) || '');
   const [error, setError] = useState('');
   const nav = useNavigate();
@@ -23,6 +71,11 @@ export default function Summary(){
       return;
     }
 
+    if (!technicalBackground) {
+      setError('Wybierz odpowiedź dotyczącą doświadczenia technicznego');
+      return;
+    }
+
     // Validate stress rating
     if (!stressRating.trim()) {
       setError('Oceń swój poziom stresu, aby kontynuować');
@@ -33,13 +86,12 @@ export default function Summary(){
       return;
     }
 
-    // Validate stress impact factor
-    if (!stressImpactFactor.trim()) {
-      setError('Wybierz czynnik wpływający na stres, aby kontynuować');
+    if (stressImpactFactors.length === 0) {
+      setError('Wybierz co najmniej jedną odpowiedź dotyczącą swoich odczuć');
       return;
     }
 
-    const s = { age, stress_rating: stressRating, stress_impact_factor: stressImpactFactor, stress_impact_factor_notes: stressImpactNotes };
+    const s = { age, technical_background: technicalBackground, stress_rating: stressRating, stress_impact_factor: stressImpactFactors, stress_impact_factor_notes: stressImpactNotes };
     setSummary(s);
     
     try {
@@ -60,6 +112,26 @@ export default function Summary(){
     if (e.key === 'Enter') submit();
   };
 
+  const toggleFeeling = (value) => {
+    if (value === NO_STRESS) {
+      setStressImpactFactors(stressImpactFactors.includes(NO_STRESS) ? [] : [NO_STRESS]);
+      setError('');
+      return;
+    }
+
+    const selectedFactors = stressImpactFactors.filter((factor) => factor !== NO_STRESS);
+    if (selectedFactors.includes(value)) {
+      setStressImpactFactors(selectedFactors.filter((factor) => factor !== value));
+    } else if (selectedFactors.length < 3) {
+      setStressImpactFactors([...selectedFactors, value]);
+    } else {
+      setError('Możesz wybrać maksymalnie trzy odpowiedzi');
+      return;
+    }
+
+    setError('');
+  };
+
   if (!user) return <div>Nie jesteś zalogowany. <Link to="/">Wróć</Link></div>;
 
   return (
@@ -67,31 +139,11 @@ export default function Summary(){
       <div className="summary-card">
         <div className="summary-header">
           <h2>Podsumowanie Badania</h2>
-          <p className="summary-subtitle">Prawie gotowe! Wypełnij ostatnie informacje</p>
         </div>
 
-        <div className="summary-content">
-          <div className="summary-progress">
-            <div className="progress-item completed">
-              <div className="progress-number">✓</div>
-              <div className="progress-text">
-                <strong>Kwestionariusz CISS</strong>
-              </div>
-            </div>
-            <div className="progress-item completed">
-              <div className="progress-number">✓</div>
-              <div className="progress-text">
-                <strong>Zadania Phishingowe</strong> 
-              </div>
-            </div>
-            <div className="progress-item active">
-              <div className="progress-number">3</div>
-              <div className="progress-text">
-                <strong>Ankieta Końcowa</strong>
-                <span>Uzupełnianie teraz</span>
-              </div>
-            </div>
-          </div>
+        <div className="summary-scroll">
+          <div className="summary-content">
+          <p className="summary-intro">Prawie gotowe! Do zakończenia badania pozostało uzupełnić ostatnie informacje.</p>
 
           <form className="summary-form">
             <div className="form-group">
@@ -115,6 +167,38 @@ export default function Summary(){
             </div>
 
             <div className="form-group">
+              <span className="form-label">Czy pracujesz zawodowo w obszarze szeroko pojętego IT lub posiadasz wykształcenie związane z tym obszarem?</span>
+              <div className="technical-background-options">
+                <label className="technical-background-option">
+                  <input
+                    type="radio"
+                    name="technical-background"
+                    value="yes"
+                    checked={technicalBackground === 'yes'}
+                    onChange={(e) => {
+                      setTechnicalBackground(e.target.value);
+                      setError('');
+                    }}
+                  />
+                  <span>Tak</span>
+                </label>
+                <label className="technical-background-option">
+                  <input
+                    type="radio"
+                    name="technical-background"
+                    value="no"
+                    checked={technicalBackground === 'no'}
+                    onChange={(e) => {
+                      setTechnicalBackground(e.target.value);
+                      setError('');
+                    }}
+                  />
+                  <span>Nie</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="form-group">
               <label htmlFor="stress-rating" className="form-label">
                 Oceń swój poziom stresu podczas badania (1-10):
               </label>
@@ -134,32 +218,23 @@ export default function Summary(){
                 ))}
               </div>
               <div className="scale-labels">
-                <span>Bez stresu</span>
-                <span>Maksymalny stres</span>
+                <span>Brak stresu</span>
+                <span>Wysoki poziom stresu</span>
               </div>
             </div>
 
             <div className="form-group">
               <label className="form-label">
-                Który czynnik wpłynął na Twój stres najbardziej?
+                Które z poniższych zdań najlepiej opisuje Twoje odczucia podczas badania? Wybierz maksymalnie trzy odpowiedzi:
               </label>
               <div className="stress-factors">
-                {[
-                  { value: Stressors.TIMER, label: 'Ograniczony czas' },
-                  { value: Stressors.NEGATIVE_FEEDBACK, label: 'Błędna informacja zwrotna (informacja o błędnej odpowiedzi, mimo poprawnej klasyfikacji)' },
-                  { value: Stressors.PERMISSION_POPUP, label: 'Popup-y na stronie' },
-                  { value: 'other', label: 'Inne' }
-                ].map(factor => (
+                {FEELING_OPTIONS.map(factor => (
                   <label key={factor.value} className="factor-option">
                     <input
-                      type="radio"
-                      name="stress-factor"
+                      type="checkbox"
                       value={factor.value}
-                      checked={stressImpactFactor === factor.value}
-                      onChange={(e) => {
-                        setStressImpactFactor(e.target.value);
-                        setError('');
-                      }}
+                      checked={stressImpactFactors.includes(factor.value)}
+                      onChange={() => toggleFeeling(factor.value)}
                     />
                     <span>{factor.label}</span>
                   </label>
@@ -167,26 +242,7 @@ export default function Summary(){
               </div>
             </div>
 
-            {stressImpactFactor === 'other' && (
-              <div className="form-group">
-                <label htmlFor="stress-notes" className="form-label">
-                  Opisz jaki był inny czynnik (opcjonalne):
-                </label>
-                <textarea
-                  id="stress-notes"
-                  className="form-input"
-                  value={stressImpactNotes}
-                  onChange={(e) => {
-                    setStressImpactNotes(e.target.value);
-                    setError('');
-                  }}
-                  placeholder="Opisz inny czynnik wpływający na stres..."
-                  rows="4"
-                />
-              </div>
-            )}
-
-            {stressImpactFactor && stressImpactFactor !== 'other' && (
+            {stressImpactFactors.length > 0 && (
               <div className="form-group">
                 <label htmlFor="stress-notes" className="form-label">
                   Dodatkowe uwagi (opcjonalne):
@@ -205,23 +261,24 @@ export default function Summary(){
               </div>
             )}
 
-            {error && (
-              <div className="form-error">
-                <span>⚠️</span> {error}
-              </div>
-            )}
-
-            <button type="button" onClick={submit} className="btn-primary btn-large">
-              Zakończ badanie i zapisz wyniki
-            </button>
-
             <div className="summary-note">
               <p>
-                Dziękujemy za udział w badaniu! Twoje odpowiedzi będą anonimowe 
-                i będą wykorzystane do analizy wpływu stresu na decyzje bezpieczeństwa.
+                Twoje odpowiedzi będą anonimowe i będą jednynie wykorzystane do analizy badawczej.
               </p>
             </div>
           </form>
+          </div>
+        </div>
+
+        <div className="summary-actions">
+          {error && (
+            <div className="form-error">
+              <span>⚠️</span> {error}
+            </div>
+          )}
+          <button type="button" onClick={submit} className="btn-primary btn-large">
+            Zakończ badanie i zapisz wyniki
+          </button>
         </div>
       </div>
     </div>

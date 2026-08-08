@@ -72,35 +72,36 @@ export default function CISS(){
   const answeredCount = Object.keys(cissAnswers).length;
 
   return (
-    <div className="page-container">
+    <div className="page-container ciss-page-container">
       <div className="page-card">
         <div className="content-header">
-          <h2>CISS — Kwestionariusz</h2>
+          <h2>Kwestionariusz CISS</h2>
         </div>
 
-        <div className="content-body">
+        <div className="content-body ciss-content-body">
 
-        <div className="instruction">
-          <p>
-            <strong>Instrukcja:</strong> Poniższe zadania opisują różne reakcje ludzi na trudne, 
-            przykre, stresujące sytuacje. Wybierz najbardziej pasującą odpowiedź przy każdym stwierdzeniu.
-            Określ w ten sposób, jak bardzo angażujesz się w te czynności, gdy znajdujesz się w trudnej, przykrej, stresującej sytuacji.
-          </p>
-        </div>
-
-        <div className="progress-info">
-          Odpowiadasz na <strong>{answeredCount}</strong> z <strong>{questions.length}</strong> pytań
-        </div>
-
-        {validationError && (
-          <div className="error-message">
-            {validationError}
+        <div className="ciss-context">
+          <div className="progress-info">
+            Odpowiadasz na <strong>{answeredCount}</strong> z <strong>{questions.length}</strong> pytań
           </div>
-        )}
+
+          {validationError && (
+            <div className="error-message">
+              {validationError}
+            </div>
+          )}
+        </div>
 
         {questions.length > 0 ? (
           <>
             <div className="questions-full-page">
+              <div className="instruction ciss-scroll-instruction">
+                <p>
+                  <strong>Instrukcja:</strong> Poniższe zadania opisują różne reakcje ludzi na trudne,
+                  przykre, stresujące sytuacje. Wybierz najbardziej pasującą odpowiedź przy każdym stwierdzeniu. <br />
+                  Określ w ten sposób, <strong>jak bardzo angażujesz się w te czynności</strong>, gdy znajdujesz się w <strong>trudnej, przykrej, stresującej sytuacji.</strong>
+                </p>
+              </div>
               {questions.map((q, idx) => {
                 const isAnswered = !!cissAnswers[q.id];
                 return (
