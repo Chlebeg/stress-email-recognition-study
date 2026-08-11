@@ -3604,3 +3604,131 @@ body:has(.phishing-intro-container) {
     opacity: 1;
   }
 }
+
+/* Midnight Cyan theme */
+:root {
+  --midnight: #172554;
+  --midnight-deep: #0f172a;
+  --cyan: #0891b2;
+  --cyan-dark: #155e75;
+  --blue: #2563eb;
+  --surface: #f8fafc;
+  --surface-muted: #e2e8f0;
+  --border: #cbd5e1;
+  --text: #18212b;
+  --text-muted: #526170;
+  --page-gradient: linear-gradient(135deg, #e2e8f0 0%, #cffafe 48%, #e0e7ff 100%);
+  --primary-gradient: linear-gradient(135deg, #172554 0%, #155e75 52%, #0891b2 100%);
+  --selected-gradient: linear-gradient(135deg, #155e75 0%, #2563eb 100%);
+}
+
+body {
+  background: var(--page-gradient);
+  color: var(--text);
+}
+
+.login-container,
+.summary-container,
+.intro-container,
+.end-page-container {
+  background: var(--page-gradient);
+}
+
+.header,
+.card,
+.page-card,
+.login-card,
+.summary-card,
+.intro-card {
+  background: #ffffff;
+}
+
+.login-header {
+  background: var(--primary-gradient);
+}
+
+.summary-header,
+.intro-header,
+.page-container .content-header {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn-primary,
+.btn-secondary,
+.intro-card .nav button,
+.stress-button.selected,
+.selected {
+  background: var(--selected-gradient);
+  border-color: var(--blue);
+  color: #ffffff;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.intro-card .nav button:hover {
+  background: linear-gradient(135deg, #0f172a 0%, #164e63 52%, #0e7490 100%);
+  box-shadow: 0 0.625rem 1.25rem rgba(8, 145, 178, 0.28);
+}
+
+.submit-btn,
+.btn-download,
+.btn-download-primary {
+  background: var(--selected-gradient);
+  border-color: var(--blue);
+}
+
+.submit-btn:hover:not(:disabled),
+.btn-download:hover,
+.btn-download-primary:hover {
+  background: linear-gradient(135deg, #155e75 0%, #1d4ed8 100%);
+  border-color: #1d4ed8;
+}
+
+.instruction,
+.page-card .instruction,
+.summary-note,
+.info-box {
+  background: linear-gradient(135deg, #e0f2fe 0%, #ecfeff 100%);
+  border-left-color: var(--cyan);
+}
+
+.progress-info strong,
+.intro-content strong,
+.footer a,
+.session-id-display code,
+.factor-option input[type="checkbox"]:checked + span {
+  color: var(--blue);
+}
+
+.form-input:focus,
+.technical-background-option:has(input:checked),
+.factor-option:has(input[type="checkbox"]:checked),
+.factor-option.selected,
+.stress-button:hover {
+  border-color: var(--cyan);
+  background: #ecfeff;
+}
+
+.form-input:focus {
+  box-shadow: 0 0 0 0.1875rem rgba(8, 145, 178, 0.16);
+}
+
+.question-block.answered {
+  background: #f0fdf4;
+}
+
+.question-block.unanswered {
+  background: #ffffff;
+}
+
+.webmail-toolbar,
+.email-header,
+.task-subject,
+.login-actions,
+.summary-actions,
+.phishing-intro-actions,
+.ciss-submit {
+  background: var(--surface);
+  border-color: var(--border);
+}
