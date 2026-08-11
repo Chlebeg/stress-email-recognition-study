@@ -290,6 +290,13 @@
   letter-spacing: 0.01em;
 }
 
+@media (min-width: 48.0625rem) {
+  .camera-loading-box {
+    left: 1.25rem;
+    right: auto;
+  }
+}
+
 @media (max-width: 30rem) {
   .camera-loading-box {
     top: 5rem;
