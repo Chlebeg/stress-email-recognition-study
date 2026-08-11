@@ -14,6 +14,7 @@ export function AppProvider({ children }) {
   // Temporary answer collections
   const [cissAnswers, setCissAnswers] = useState({}); // {questionId: answer, ...}
   const [phishingAnswers, setPhishingAnswers] = useState([]); // per-task objects
+  const [preExperimentData, setPreExperimentData] = useState({});
   const [summary, setSummary] = useState({});
 
   return (
@@ -22,6 +23,7 @@ export function AppProvider({ children }) {
       settings, setSettings,
       cissAnswers, setCissAnswers,
       phishingAnswers, setPhishingAnswers,
+      preExperimentData, setPreExperimentData,
       summary, setSummary
     }}>
       {children}

@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
+import PreExperiment from './pages/PreExperiment';
 import CISSIntro from './pages/CISSIntro';
 import CISS from './pages/CISS';
 import TasksIntro from './pages/TasksIntro';
@@ -18,6 +19,7 @@ export default function App() {
       <main className="main">
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/pre-experiment" element={<PreExperiment />} />
           <Route path="/ciss-intro" element={<CISSIntro />} />
           <Route path="/ciss" element={<CISS />} />
           <Route path="/email-tasks-intro" element={<TasksIntro />} />

@@ -70,21 +70,25 @@ function phishingToCsv(sessions) {
 function usersToCsv(sessions) {
   if (sessions.length === 0) return '';
 
-  const headers = ['user_id', 'age', 'technical_background', 'stress_rating', 'stress_impact_factor', 'stress_impact_factor_notes', 'device_type', 'browser', 'timestamp_start', 'timestamp_end'];
+  const headers = ['user_id', 'age', 'gender', 'technical_background', 'pre_stress_rating', 'post_stress_rating', 'stress_impact_factor', 'stress_impact_factor_notes', 'device_type', 'browser', 'timestamp_start', 'timestamp_pre_experiment', 'timestamp_end'];
   let rows = [headers.map(escapeCSV).join(',')];
 
   sessions.forEach(session => {
     const summary = session.summary_data || {};
+    const preExperiment = session.pre_experiment_data || {};
     rows.push([
       escapeCSV(session.user_id),
-      escapeCSV(summary.age || ''),
-      escapeCSV(summary.technical_background || ''),
-      escapeCSV(summary.stress_rating || ''),
+      escapeCSV(preExperiment.age || ''),
+      escapeCSV(preExperiment.gender || ''),
+      escapeCSV(preExperiment.technical_background || ''),
+      escapeCSV(preExperiment.pre_stress_rating || ''),
+      escapeCSV(summary.post_stress_rating || ''),
       escapeCSV(Array.isArray(summary.stress_impact_factor) ? JSON.stringify(summary.stress_impact_factor) : summary.stress_impact_factor || ''),
       escapeCSV(summary.stress_impact_factor_notes || ''),
       escapeCSV(session.device_type || 'unknown'),
       escapeCSV(session.browser || 'unknown'),
       escapeCSV(session.timestamp_start),
+      escapeCSV(session.timestamp_pre_experiment || ''),
       escapeCSV(session.timestamp_end || '')
     ].join(','));
   });

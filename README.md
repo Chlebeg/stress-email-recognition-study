@@ -6,9 +6,9 @@ This React and Express application runs a single-session research study in Polis
 
 1. **CISS**: 48-item Coping Inventory for Stressful Situations questionnaire.
 2. **Phishing tasks**: classification of realistic email messages under task-configured stressors.
-3. **Summary**: age, IT work/education background, self-reported stress, and stressor-related feelings.
+3. **Summary**: post-study self-reported stress and stressor-related feelings.
 
-The participant flow is linear: Login -> CISS intro -> CISS -> phishing intro -> phishing -> Summary -> completion. Participant state is held in React context and is intentionally lost when the page is refreshed.
+The participant flow is linear: Login -> pre-experiment questions -> CISS intro -> CISS -> phishing intro -> phishing -> Summary -> completion. Participant state is held in React context and is intentionally lost when the page is refreshed.
 
 ## Setup
 
@@ -61,7 +61,7 @@ backend/                          Express API
 
 The backend stores one consolidated session record per participant per day. It uses MongoDB when `MONGODB_URI` is available; otherwise it stores JSON session files in `backend/data/sessions/`.
 
-Each session contains participant metadata, CISS answers, phishing answers, the Summary response, and section timestamps. The backend's in-memory `activeSessions` map links a logged-in participant to the storage record for subsequent submissions, so a page refresh requires a new login/session flow.
+Each session contains participant metadata, pre-experiment data, CISS answers, phishing answers, the Summary response, and section timestamps. The backend's in-memory `activeSessions` map links a logged-in participant to the storage record for subsequent submissions, so a page refresh requires a new login/session flow.
 
 ## API
 
@@ -70,19 +70,24 @@ All participant endpoints accept JSON and return `{ "ok": true }` on success.
 | Endpoint | Request body | Result |
 |---|---|---|
 | `POST /api/login` | `user_id`, `device_type`, `browser` | Creates or initializes the participant session. Same-day ID collisions return `shouldRetry: true`. |
+| `POST /api/pre-experiment` | `user_id`, `pre_experiment_data` | Saves age, gender, IT background, and pre-study stress. |
 | `POST /api/ciss` | `user_id`, `answers` | Saves `{ q1: 1, ..., q48: 5 }`. |
 | `POST /api/phishing` | `user_id`, `answers` | Saves one response per email task. |
-| `POST /api/summary` | `user_id`, `summary` | Saves demographics and subjective-stress data. |
+| `POST /api/summary` | `user_id`, `summary` | Saves post-study stress and stressor-related data. |
 
 Example Summary payload:
 
 ```json
 {
   "user_id": "participant_01",
-  "summary": {
+  "pre_experiment_data": {
     "age": "28",
+    "gender": "female",
     "technical_background": "yes",
-    "stress_rating": "7",
+    "pre_stress_rating": "4"
+  },
+  "summary": {
+    "post_stress_rating": "7",
     "stress_impact_factor": ["timer", "email_blur"],
     "stress_impact_factor_notes": ""
   }

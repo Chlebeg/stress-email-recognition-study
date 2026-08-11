@@ -720,6 +720,13 @@ body:has(.login-container) {
   background: #f0f3ff;
 }
 
+.pre-gender-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.625rem;
+}
+
 .stress-scale {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -934,6 +941,10 @@ body:has(.end-page-container) {
   }
 
   .technical-background-options {
+    gap: 0.5rem;
+  }
+
+  .pre-gender-options {
     gap: 0.5rem;
   }
 

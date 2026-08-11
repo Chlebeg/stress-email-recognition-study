@@ -58,6 +58,7 @@ async function getSessionPath(user_id, device_type = null, browser = null) {
       timestamp_start: new Date().toISOString(),
       device_type: device_type || 'unknown',
       browser: browser || 'unknown',
+      pre_experiment_data: null,
       ciss_answers: {},
       phishing_answers: null,
       summary_data: null,
@@ -108,6 +109,26 @@ async function saveSessionToPath(sessionId, sessionData) {
     );
   } catch (error) {
     console.error('Error saving session:', error);
+    throw error;
+  }
+}
+
+// Append pre-experiment data
+async function appendPreExperimentWithPath(sessionId, data) {
+  await connect();
+  try {
+    const { ObjectId } = require('mongodb');
+    await sessionsCollection.updateOne(
+      { _id: new ObjectId(sessionId) },
+      {
+        $set: {
+          pre_experiment_data: data,
+          timestamp_pre_experiment: new Date().toISOString()
+        }
+      }
+    );
+  } catch (error) {
+    console.error('Error appending pre-experiment data:', error);
     throw error;
   }
 }
@@ -203,6 +224,7 @@ module.exports = {
   connect,
   getSessionPath,
   loadSessionFromPath,
+  appendPreExperimentWithPath,
   appendCISSWithPath,
   appendPhishingWithPath,
   appendSummaryWithPath,

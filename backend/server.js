@@ -16,6 +16,7 @@ const storage = USE_MONGODB
 const { 
   getSessionPath, 
   loadSessionFromPath,
+  appendPreExperimentWithPath,
   appendCISSWithPath, 
   appendPhishingWithPath, 
   appendSummaryWithPath,
@@ -124,6 +125,26 @@ app.post("/api/ciss", async (req, res) => {
     res.json({ ok: true });
   } catch (e) {
     logEvent(`Error in /api/ciss: ${e.message}`);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
+app.post("/api/pre-experiment", async (req, res) => {
+  logEvent(`POST /api/pre-experiment received`);
+  const { user_id, pre_experiment_data } = req.body;
+  if (!user_id || !pre_experiment_data) {
+    return res.status(400).json({ error: "user_id and pre_experiment_data required" });
+  }
+
+  try {
+    const sessionPath = activeSessions[user_id];
+    if (!sessionPath) {
+      return res.status(400).json({ error: "session not initialized" });
+    }
+    await appendPreExperimentWithPath(sessionPath, pre_experiment_data);
+    res.json({ ok: true });
+  } catch (e) {
+    logEvent(`Error in /api/pre-experiment: ${e.message}`);
     res.status(500).json({ error: "server error" });
   }
 });

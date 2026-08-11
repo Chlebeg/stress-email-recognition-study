@@ -46,6 +46,7 @@ function getSessionPath(user_id, device_type = null, browser = null) {
       timestamp_start: new Date().toISOString(),
       device_type: device_type || 'unknown',
       browser: browser || 'unknown',
+      pre_experiment_data: null,
       ciss_answers: {},
       phishing_answers: null,
       summary_data: null,
@@ -85,6 +86,15 @@ function saveSessionToPath(filePath, sessionData) {
     console.error('Error saving session:', e);
     throw e;
   }
+}
+
+// Append pre-experiment data using filepath
+function appendPreExperimentWithPath(filePath, data) {
+  const session = loadSessionFromPath(filePath);
+  if (!session) throw new Error(`Failed to load session from ${filePath}`);
+  session.pre_experiment_data = data;
+  session.timestamp_pre_experiment = new Date().toISOString();
+  saveSessionToPath(filePath, session);
 }
 
 // Append CISS answers using filepath
@@ -141,6 +151,7 @@ function getAllSessions() {
 module.exports = {
   getSessionPath,
   loadSessionFromPath,
+  appendPreExperimentWithPath,
   appendCISSWithPath,
   appendPhishingWithPath,
   appendSummaryWithPath,

@@ -67,7 +67,7 @@ export default function Login(){
       }
 
       setUser({ user_id: userId });
-      nav('/ciss-intro');
+      nav('/pre-experiment');
     } catch (e) {
       setError('Błąd połączenia z serwerem. Sprawdź czy backend jest uruchomiony.');
       setLoading(false);

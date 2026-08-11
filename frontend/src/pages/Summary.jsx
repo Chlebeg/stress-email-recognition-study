@@ -49,9 +49,7 @@ const FEELING_OPTIONS = [
 
 export default function Summary(){
   const { user, summary = {}, setSummary } = useApp();
-  const [age, setAge] = useState((summary && summary.age) || '');
-  const [technicalBackground, setTechnicalBackground] = useState((summary && summary.technical_background) || '');
-  const [stressRating, setStressRating] = useState((summary && summary.stress_rating) || '');
+  const [postStressRating, setPostStressRating] = useState((summary && summary.post_stress_rating) || '');
   const [stressImpactFactors, setStressImpactFactors] = useState(() => {
     const savedFactors = summary && summary.stress_impact_factor;
     return Array.isArray(savedFactors) ? savedFactors : savedFactors ? [savedFactors] : [];
@@ -61,27 +59,12 @@ export default function Summary(){
   const nav = useNavigate();
 
   const submit = async () => {
-    // Validate age
-    if (!age.trim()) {
-      setError('Wpisz swój wiek, aby kontynuować');
-      return;
-    }
-    if (isNaN(age) || parseInt(age) < 1 || parseInt(age) > 100) {
-      setError('Wiek musi być liczbą od 1 do 100');
-      return;
-    }
-
-    if (!technicalBackground) {
-      setError('Wybierz odpowiedź dotyczącą doświadczenia technicznego');
-      return;
-    }
-
     // Validate stress rating
-    if (!stressRating.trim()) {
+    if (!postStressRating.trim()) {
       setError('Oceń swój poziom stresu, aby kontynuować');
       return;
     }
-    if (isNaN(stressRating) || parseInt(stressRating) < 1 || parseInt(stressRating) > 10) {
+    if (isNaN(postStressRating) || parseInt(postStressRating) < 1 || parseInt(postStressRating) > 10) {
       setError('Ocena stresu musi być liczbą od 1 do 10');
       return;
     }
@@ -91,7 +74,7 @@ export default function Summary(){
       return;
     }
 
-    const s = { age, technical_background: technicalBackground, stress_rating: stressRating, stress_impact_factor: stressImpactFactors, stress_impact_factor_notes: stressImpactNotes };
+    const s = { post_stress_rating: postStressRating, stress_impact_factor: stressImpactFactors, stress_impact_factor_notes: stressImpactNotes };
     setSummary(s);
     
     try {
@@ -106,10 +89,6 @@ export default function Summary(){
       console.error('Summary submit error:', error);
       setError('Błąd połączenia z serwerem. Sprawdź czy backend jest uruchomiony.');
     }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') submit();
   };
 
   const toggleFeeling = (value) => {
@@ -147,69 +126,17 @@ export default function Summary(){
 
           <form className="summary-form">
             <div className="form-group">
-              <label htmlFor="age" className="form-label">
-                Wiek (lata):
-              </label>
-              <input
-                id="age"
-                type="number"
-                className="form-input"
-                value={age}
-                onChange={(e) => {
-                  setAge(e.target.value);
-                  setError('');
-                }}
-                onKeyPress={handleKeyPress}
-                placeholder="np. 28"
-                min="1"
-                max="100"
-              />
-            </div>
-
-            <div className="form-group">
-              <span className="form-label">Czy pracujesz zawodowo w obszarze szeroko pojętego IT lub posiadasz wykształcenie związane z tym obszarem?</span>
-              <div className="technical-background-options">
-                <label className="technical-background-option">
-                  <input
-                    type="radio"
-                    name="technical-background"
-                    value="yes"
-                    checked={technicalBackground === 'yes'}
-                    onChange={(e) => {
-                      setTechnicalBackground(e.target.value);
-                      setError('');
-                    }}
-                  />
-                  <span>Tak</span>
-                </label>
-                <label className="technical-background-option">
-                  <input
-                    type="radio"
-                    name="technical-background"
-                    value="no"
-                    checked={technicalBackground === 'no'}
-                    onChange={(e) => {
-                      setTechnicalBackground(e.target.value);
-                      setError('');
-                    }}
-                  />
-                  <span>Nie</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="stress-rating" className="form-label">
-                Oceń swój poziom stresu podczas badania (1-10):
+              <label htmlFor="post-stress-rating" className="form-label">
+                Oceń swój poziom stresu po zakończeniu badania (1-10):
               </label>
               <div className="stress-scale">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                   <button
                     key={num}
                     type="button"
-                    className={`stress-button ${parseInt(stressRating) === num ? 'selected' : ''}`}
+                    className={`stress-button ${parseInt(postStressRating) === num ? 'selected' : ''}`}
                     onClick={() => {
-                      setStressRating(String(num));
+                      setPostStressRating(String(num));
                       setError('');
                     }}
                   >

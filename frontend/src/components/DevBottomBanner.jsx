@@ -4,6 +4,7 @@ import './DevBanners.css';
 export default function DevBottomBanner() {
   const links = [
     { path: '/', label: 'Login' },
+    { path: '/pre-experiment', label: 'Pre-experiment' },
     { path: '/ciss-intro', label: 'CISS Intro' },
     { path: '/ciss', label: 'CISS' },
     { path: '/email-tasks-intro', label: 'Email Tasks Intro' },
