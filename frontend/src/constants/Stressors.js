@@ -7,13 +7,12 @@
  *
  * Available stressors:
  * - TIMER: Countdown timer that forces answer submission after time expires
- * - NEGATIVE_FEEDBACK: False negative feedback shown regardless of actual answer correctness
+ * - NEGATIVE_FEEDBACK: Fabricated feedback shown after submission regardless of actual answer correctness
  * - PERMISSION_POPUP_MICROPHONE: Browser-mimicking microphone permission popup
  * - PERMISSION_POPUP_CAMERA: Browser-mimicking camera permission popup (shows endless loading box after interaction)
  * - EMAIL_BLUR: Blurs the email body for a configurable window (email_blur_start → email_blur_end seconds from task mount)
  * - RECORDING: Fixed overlay informing participant they are being recorded; blinking REC dot + red corner brackets framing the screen; active for the entire task duration
  * - SOCIAL_COMPARISON: Timed message comparing a participant's speed with other participants
- * - EXTENDED_NEGATIVE_FEEDBACK: Fabricated cumulative-performance feedback after an answer
  * - COGNITIVE_OVERLOAD: Timed memorization prompt shown before the email task
  */
 
@@ -25,7 +24,6 @@ export const Stressors = {
   EMAIL_BLUR: 'email_blur',
   RECORDING: 'recording',
   SOCIAL_COMPARISON: 'social_comparison',
-  EXTENDED_NEGATIVE_FEEDBACK: 'extended_negative_feedback',
   COGNITIVE_OVERLOAD: 'cognitive_overload'
 };
 
@@ -66,7 +64,6 @@ export const getStressorDisplayName = (stressor) => {
     [Stressors.EMAIL_BLUR]: 'Email Blur',
     [Stressors.RECORDING]: 'Recording Notice',
     [Stressors.SOCIAL_COMPARISON]: 'Social Comparison',
-    [Stressors.EXTENDED_NEGATIVE_FEEDBACK]: 'Extended Negative Feedback',
     [Stressors.COGNITIVE_OVERLOAD]: 'Cognitive Overload'
   };
   return names[stressor] || stressor;

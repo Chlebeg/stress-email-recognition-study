@@ -113,10 +113,9 @@ Configure stressors per phishing task in `frontend/public/phishing.json`. Valid 
 - `email_blur`
 - `recording`
 - `social_comparison`
-- `extended_negative_feedback`
 - `cognitive_overload`
 
-The global development settings in `AppContext.jsx` control timer enablement/duration and negative-feedback enablement. The full research sequence and task-specific choices are maintained in [RESEARCH_PLAN.md](RESEARCH_PLAN.md).
+The `negative_feedback` stressor displays fabricated feedback after submission. Tasks may provide an optional `negative_feedback_message`; when it is absent, the generic feedback message is used. The global development settings in `AppContext.jsx` control timer enablement/duration and negative-feedback enablement. The full research sequence and task-specific choices are maintained in [RESEARCH_PLAN.md](RESEARCH_PLAN.md).
 
 ## Deployment
 

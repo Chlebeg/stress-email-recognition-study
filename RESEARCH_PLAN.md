@@ -2,7 +2,7 @@
 
 ## Study Configuration
 
-All participants receive the same fixed order. Every task has the timer enabled. The task timer automatically submits an unanswered task when it reaches zero. Social-comparison and extended-feedback messages are fixed per task and are never randomized.
+All participants receive the same fixed order. Every task has the timer enabled. The task timer automatically submits an unanswered task when it reaches zero. Social-comparison and negative-feedback messages are fixed per task and are never randomized.
 
 | Task | Email label | Timer | Itemized stressors | Indicator of compromise / legitimacy cue |
 |---:|---|---:|---|---|
@@ -12,10 +12,10 @@ All participants receive the same fixed order. Every task has the timer enabled.
 | 4 | Legitimate | 30 s | Timer<br>Social comparison<br>Email blur (6-9 s)<br>Recording notice | Matching `orange.pl` sender, normal account-access context, and no sensitive-data request. |
 | 5 | Phishing | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`7 2 9 4`) | Incorrect sender and payment domains: `olx-platnosci24.com` and `olx-platnosc-odbior.com`; recipient-detail request; 30-minute deadline. |
 | 6 | Phishing | 30 s | Timer<br>Social comparison<br>Email blur (6-9 s)<br>Recording notice<br>Cognitive reminder about task 5's code | Executable attachment: `Wyciag_listopad_2025.exe`. The matching `mbank.pl` sender is intentional; the attachment is the sole phishing clue. |
-| 7 | Legitimate | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`Ola ma kota`)<br>Extended negative feedback | Matching `plus.pl` sender and payment destination; ordinary billing/contact context; no sensitive-data request. |
-| 8 | Phishing | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`Mivora teskul`)<br>Extended negative feedback<br>Microphone permission popup | Incorrect sender and CTA domains: `netflix-support-payments.com` and `netflix-secure-billing.com`; card-update demand within 24 hours. |
-| 9 | Legitimate | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`KSIĄŻKA 8`)<br>Extended negative feedback<br>Camera permission popup | Matching `empik.com` sender and order-status destination; ordinary delivery context; no sensitive-data request. |
-| 10 | Phishing | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`Turmel foska`)<br>Extended negative feedback<br>Microphone permission popup<br>Camera permission popup | Incorrect sender and CTA domains: `booking-card-confirmation.net` and `booking-secure-card-check.net`; two-hour card-verification demand; contradiction about sharing payment data. |
+| 7 | Legitimate | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`Ola ma kota`)<br>Negative feedback | Matching `plus.pl` sender and payment destination; ordinary billing/contact context; no sensitive-data request. |
+| 8 | Phishing | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`Mivora teskul`)<br>Negative feedback<br>Microphone permission popup | Incorrect sender and CTA domains: `netflix-support-payments.com` and `netflix-secure-billing.com`; card-update demand within 24 hours. |
+| 9 | Legitimate | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`KSIĄŻKA 8`)<br>Negative feedback<br>Camera permission popup | Matching `empik.com` sender and order-status destination; ordinary delivery context; no sensitive-data request. |
+| 10 | Phishing | 30 s | Timer<br>Social comparison<br>Recording notice<br>Cognitive overload (`Turmel foska`)<br>Negative feedback<br>Microphone permission popup<br>Camera permission popup | Incorrect sender and CTA domains: `booking-card-confirmation.net` and `booking-secure-card-check.net`; two-hour card-verification demand; contradiction about sharing payment data. |
 
 Email blur is only enabled on tasks with a timer of at least 30 seconds. It is delayed until the participant has had time to inspect the sender and subject, then shown for three seconds.
 
@@ -125,7 +125,7 @@ Email blur is only enabled on tasks with a timer of at least 30 seconds. It is d
   - Social comparison, displayed after 4 seconds for 4 seconds: `Pozostało Ci mniej czasu niż większości uczestników.`
   - Recording notice
   - Cognitive overload: remember `Ola ma kota` for 4 seconds before the task
-  - Extended negative feedback after submission: `Twoje ostatnie odpowiedzi były mniej trafne niż odpowiedzi większości uczestników.`
+  - Negative feedback after submission: `Twoje ostatnie odpowiedzi były mniej trafne niż odpowiedzi większości uczestników.`
 - **Legitimacy indicators:**
   - Sender domain matches Plus: `plus.pl`.
   - The payment destination remains on `plus.pl`.
@@ -142,7 +142,7 @@ Email blur is only enabled on tasks with a timer of at least 30 seconds. It is d
   - Social comparison, displayed after 4 seconds for 4 seconds: `78% uczestników podjęło już decyzję.`
   - Recording notice
   - Cognitive overload: remember `Mivora teskul` for 4 seconds before the task
-  - Extended negative feedback after submission: `W tej części badania Twoje odpowiedzi odbiegają od wyników większości.`
+  - Negative feedback after submission: `W tej części badania Twoje odpowiedzi odbiegają od wyników większości.`
   - Microphone permission popup, shown 300 ms after task start
 - **Indicators of compromise:**
   - Sender uses `netflix-support-payments.com`, not `netflix.com`.
@@ -160,7 +160,7 @@ Email blur is only enabled on tasks with a timer of at least 30 seconds. It is d
   - Social comparison, displayed after 4 seconds for 4 seconds: `Jesteś wśród wolniejszych odpowiedzi w tej serii.`
   - Recording notice
   - Cognitive overload: remember `KSIĄŻKA 8` for 4 seconds before the task
-  - Extended negative feedback after submission: `Twoje tempo i trafność są obecnie poniżej średniej uczestników.`
+  - Negative feedback after submission: `Twoje tempo i trafność są obecnie poniżej średniej uczestników.`
   - Camera permission popup, shown 800 ms after task start
 - **Legitimacy indicators:**
   - Sender domain matches Empik: `empik.com`.
@@ -178,7 +178,7 @@ Email blur is only enabled on tasks with a timer of at least 30 seconds. It is d
   - Social comparison, displayed after 4 seconds for 4 seconds: `Większość uczestników zakończyła już podobne zadanie.`
   - Recording notice
   - Cognitive overload: remember `Turmel foska` for 4 seconds before the task
-  - Extended negative feedback after submission: `Ostatnie decyzje były oceniane jako mniej trafne niż przeciętne.`
+  - Negative feedback after submission: `Ostatnie decyzje były oceniane jako mniej trafne niż przeciętne.`
   - Microphone permission popup, shown 300 ms after task start
   - Camera permission popup, shown 800 ms after task start
 - **Indicators of compromise:**
@@ -198,6 +198,6 @@ Email blur is only enabled on tasks with a timer of at least 30 seconds. It is d
 | Email blur | Temporary loading overlay and blur over the email content. |
 | Recording notice | Persistent fake recording frame, blinking REC indicator, and recording message. |
 | Cognitive overload | Pre-task instruction to remember a code, sentence, fixed nonsense-word set, or a reminder about a preceding code; it never collects an answer. |
-| Extended negative feedback | Fabricated poor-performance message after the participant submits an answer. |
+| Negative feedback | Fabricated feedback message after the participant submits an answer; the task may use a generic or poor-performance message. |
 | Microphone popup | Fake browser microphone-permission request; interaction may show a volume-mixer display. |
 | Camera popup | Fake browser camera-permission request; allowing it shows a persistent camera-loading box. |

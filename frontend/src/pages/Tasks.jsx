@@ -330,15 +330,11 @@ export default function Tasks(){
     setPhishingAnswers(arr);
 
     const stressors = t.stressors || [];
-    const hasExtendedFeedback = stressors.includes(Stressors.EXTENDED_NEGATIVE_FEEDBACK);
     const hasNegativeFeedback = stressors.includes(Stressors.NEGATIVE_FEEDBACK);
 
-    // Extended feedback takes precedence when both feedback stressors are configured.
-    if (settings.stress_negative_feedback_enabled && (hasExtendedFeedback || hasNegativeFeedback)) {
+    if (settings.stress_negative_feedback_enabled && hasNegativeFeedback) {
       clearTimer(); // Stop the timer
-      setFeedbackMessage(hasExtendedFeedback
-        ? (t.extended_negative_feedback_message || 'Twoje ostatnie odpowiedzi były mniej trafne niż odpowiedzi większości uczestników.')
-        : 'Odpowiedziałeś błędnie');
+      setFeedbackMessage(t.negative_feedback_message || 'Odpowiedziałeś błędnie');
       clearInterval(feedbackTimerRef.current);
       feedbackTimerRef.current = setTimeout(() => {
         setFeedbackMessage(null);

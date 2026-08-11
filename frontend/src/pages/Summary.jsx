@@ -11,7 +11,7 @@ const FEELING_OPTIONS = [
   },
   {
     value: Stressors.NEGATIVE_FEEDBACK,
-    label: 'Otrzymywanie informacji o błędnej odpowiedzi, mimo poprawnej klasyfikacji, wywoływało we mnie frustrację lub zwątpienie.'
+    label: 'Otrzymywanie informacji sugerujących błędną lub słabszą odpowiedź wywoływało we mnie frustrację lub zwątpienie.'
   },
   {
     value: Stressors.PERMISSION_POPUP_MICROPHONE,
@@ -32,10 +32,6 @@ const FEELING_OPTIONS = [
   {
     value: Stressors.SOCIAL_COMPARISON,
     label: 'Porównanie mojego tempa z innymi osobami wywoływało we mnie presję.'
-  },
-  {
-    value: Stressors.EXTENDED_NEGATIVE_FEEDBACK,
-    label: 'Podsumowanie sugerujące słaby wynik wywoływało we mnie frustrację lub zwątpienie.'
   },
   {
     value: Stressors.COGNITIVE_OVERLOAD,
