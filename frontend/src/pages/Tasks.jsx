@@ -123,10 +123,12 @@ export default function Tasks(){
     // Trigger permission popups — each type is independent and can coexist
     const stressors = t.stressors || [];
     if (stressors.includes(Stressors.PERMISSION_POPUP_MICROPHONE)) {
-      micPopupTimeoutRef.current = setTimeout(() => setShowMicPopup(true), 300);
+      const microphoneDelay = (t.permission_popup_microphone_delay ?? 5) * 1000;
+      micPopupTimeoutRef.current = setTimeout(() => setShowMicPopup(true), microphoneDelay);
     }
     if (stressors.includes(Stressors.PERMISSION_POPUP_CAMERA)) {
-      camPopupTimeoutRef.current = setTimeout(() => setShowCamPopup(true), 800);
+      const cameraDelay = (t.permission_popup_camera_delay ?? 5) * 1000;
+      camPopupTimeoutRef.current = setTimeout(() => setShowCamPopup(true), cameraDelay);
     }
 
     // Recording overlay stressor — active for the entire task duration

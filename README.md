@@ -117,6 +117,8 @@ Configure stressors per phishing task in `frontend/public/phishing.json`. Valid 
 
 The `negative_feedback` stressor displays fabricated feedback after submission. Tasks may provide an optional `negative_feedback_message`; when it is absent, the generic feedback message is used. The global development settings in `AppContext.jsx` control timer enablement/duration and negative-feedback enablement. The full research sequence and task-specific choices are maintained in [RESEARCH_PLAN.md](RESEARCH_PLAN.md).
 
+Timed email stressors use task-level offsets measured in seconds from task start: `email_blur_start` and `email_blur_end`, `social_comparison_delay`, `permission_popup_microphone_delay`, and `permission_popup_camera_delay`. The active study plan uses predefined offsets, not runtime randomness; each requested popup or notice first appears after 5 seconds and before 20 seconds.
+
 ## Deployment
 
 The repository contains a Render Blueprint in [`render.yaml`](render.yaml) with two services:
